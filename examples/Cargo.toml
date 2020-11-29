@@ -36,3 +36,6 @@ name = "composite_template"
 
 [[bin]]
 name = "entry_undo"
+
+[[bin]]
+name = "video_player"
