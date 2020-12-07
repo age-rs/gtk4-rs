@@ -26,4 +26,16 @@ pub use crate::tree_store::TreeStoreExtManual;
 pub use crate::widget::WidgetExtManual;
 
 #[doc(hidden)]
+pub use gdk::prelude::*;
+#[doc(hidden)]
+pub use gdk_pixbuf::prelude::*;
+#[doc(hidden)]
+pub use gio::prelude::*;
+#[doc(hidden)]
 pub use glib::prelude::*;
+#[doc(hidden)]
+pub use graphene::prelude::*;
+#[doc(hidden)]
+pub use gsk::prelude::*;
+#[doc(hidden)]
+pub use pango::prelude::*;

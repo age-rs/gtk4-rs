@@ -4,8 +4,8 @@
 
 use glib::subclass::prelude::*;
 use glib::{glib_object_subclass, glib_wrapper};
-use gtk::gio::{self, prelude::*};
-use gtk::{glib, prelude::*, CompositeTemplate};
+use gtk::prelude::*;
+use gtk::{gio, glib, CompositeTemplate};
 
 mod imp {
     use super::*;
