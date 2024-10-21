@@ -10,7 +10,7 @@ GDK X11 contains functions specific to the X11 backend.
 
 ## Minimum supported Rust version
 
-Currently, the minimum supported Rust version is `1.70`.
+Currently, the minimum supported Rust version is `1.80`.
 
 ## Documentation
 
@@ -43,6 +43,7 @@ gdk-wayland = { git = "https://github.com/gtk-rs/gtk4-rs.git", package = "gdk4-w
 
 | Feature | Description |
 | ---     | ----------- |
+| `v4_16` | Enable the new APIs part of GTK 4.16 |
 | `v4_10` | Enable the new APIs part of GTK 4.10 |
 | `v4_4` | Enable the new APIs part of GTK 4.4 |
 | `egl` | Integration with the [khronos-egl](https://crates.io/crates/khronos-egl) crate |

@@ -1,10 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 #![doc = include_str!("../README.md")]
+#![allow(deprecated)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-pub use ffi;
+#[cfg(not(all(feature = "win32", windows)))]
+use std::ffi::c_void;
+
 pub use gdk;
+pub use gdk4_win32_sys as ffi;
 pub use gio;
 pub use glib;
 #[cfg(feature = "win32")]
@@ -28,23 +32,23 @@ pub use win32_display::Win32DisplayFilterHandle;
 mod win32_hcursor;
 mod win32_surface;
 
-#[cfg(not(feature = "win32"))]
-pub struct HANDLE(pub isize);
-#[cfg(not(feature = "win32"))]
-pub struct HCURSOR(pub isize);
-#[cfg(not(feature = "win32"))]
-pub struct HICON(pub isize);
-#[cfg(not(feature = "win32"))]
-pub struct HWND(pub isize);
+#[cfg(not(all(feature = "win32", windows)))]
+pub struct HANDLE(pub *mut c_void);
+#[cfg(not(all(feature = "win32", windows)))]
+pub struct HCURSOR(pub *mut c_void);
+#[cfg(not(all(feature = "win32", windows)))]
+pub struct HICON(pub *mut c_void);
+#[cfg(not(all(feature = "win32", windows)))]
+pub struct HWND(pub *mut c_void);
 
-#[cfg(not(feature = "win32"))]
+#[cfg(not(all(feature = "win32", windows)))]
 #[repr(transparent)]
 pub struct WPARAM(pub usize);
-#[cfg(not(feature = "win32"))]
+#[cfg(not(all(feature = "win32", windows)))]
 #[repr(transparent)]
 pub struct LPARAM(pub isize);
 
-#[cfg(not(feature = "win32"))]
+#[cfg(not(all(feature = "win32", windows)))]
 #[repr(C)]
 pub struct POINT {
     pub x: i32,
@@ -52,7 +56,7 @@ pub struct POINT {
 }
 
 #[allow(non_snake_case)]
-#[cfg(not(feature = "win32"))]
+#[cfg(not(all(feature = "win32", windows)))]
 #[repr(C)]
 pub struct MSG {
     pub hwnd: HWND,
@@ -63,7 +67,7 @@ pub struct MSG {
     pub pt: POINT,
 }
 
-#[cfg(feature = "win32")]
+#[cfg(all(feature = "win32", windows))]
 pub use windows::Win32::Foundation::{HANDLE, HWND};
-#[cfg(feature = "win32")]
+#[cfg(all(feature = "win32", windows))]
 pub use windows::Win32::UI::WindowsAndMessaging::{HCURSOR, HICON, MSG};

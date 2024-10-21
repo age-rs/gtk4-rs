@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Adjustment, Align, Buildable, ConstraintTarget, LayoutManager,
+    ffi, Accessible, AccessibleRole, Adjustment, Align, Buildable, ConstraintTarget, LayoutManager,
     ListBase, ListItemFactory, Orientable, Orientation, Overflow, Scrollable, ScrollablePolicy,
     SelectionModel, Widget,
 };
@@ -52,6 +52,7 @@ impl GridView {
 
     #[doc(alias = "gtk_grid_view_get_enable_rubberband")]
     #[doc(alias = "get_enable_rubberband")]
+    #[doc(alias = "enable-rubberband")]
     pub fn enables_rubberband(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_grid_view_get_enable_rubberband(
@@ -68,12 +69,14 @@ impl GridView {
 
     #[doc(alias = "gtk_grid_view_get_max_columns")]
     #[doc(alias = "get_max_columns")]
+    #[doc(alias = "max-columns")]
     pub fn max_columns(&self) -> u32 {
         unsafe { ffi::gtk_grid_view_get_max_columns(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_grid_view_get_min_columns")]
     #[doc(alias = "get_min_columns")]
+    #[doc(alias = "min-columns")]
     pub fn min_columns(&self) -> u32 {
         unsafe { ffi::gtk_grid_view_get_min_columns(self.to_glib_none().0) }
     }
@@ -86,6 +89,7 @@ impl GridView {
 
     #[doc(alias = "gtk_grid_view_get_single_click_activate")]
     #[doc(alias = "get_single_click_activate")]
+    #[doc(alias = "single-click-activate")]
     pub fn is_single_click_activate(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_grid_view_get_single_click_activate(
@@ -98,6 +102,7 @@ impl GridView {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_grid_view_get_tab_behavior")]
     #[doc(alias = "get_tab_behavior")]
+    #[doc(alias = "tab-behavior")]
     pub fn tab_behavior(&self) -> ListTabBehavior {
         unsafe { from_glib(ffi::gtk_grid_view_get_tab_behavior(self.to_glib_none().0)) }
     }
@@ -117,6 +122,7 @@ impl GridView {
     }
 
     #[doc(alias = "gtk_grid_view_set_enable_rubberband")]
+    #[doc(alias = "enable-rubberband")]
     pub fn set_enable_rubberband(&self, enable_rubberband: bool) {
         unsafe {
             ffi::gtk_grid_view_set_enable_rubberband(
@@ -127,6 +133,7 @@ impl GridView {
     }
 
     #[doc(alias = "gtk_grid_view_set_factory")]
+    #[doc(alias = "factory")]
     pub fn set_factory(&self, factory: Option<&impl IsA<ListItemFactory>>) {
         unsafe {
             ffi::gtk_grid_view_set_factory(
@@ -137,6 +144,7 @@ impl GridView {
     }
 
     #[doc(alias = "gtk_grid_view_set_max_columns")]
+    #[doc(alias = "max-columns")]
     pub fn set_max_columns(&self, max_columns: u32) {
         unsafe {
             ffi::gtk_grid_view_set_max_columns(self.to_glib_none().0, max_columns);
@@ -144,6 +152,7 @@ impl GridView {
     }
 
     #[doc(alias = "gtk_grid_view_set_min_columns")]
+    #[doc(alias = "min-columns")]
     pub fn set_min_columns(&self, min_columns: u32) {
         unsafe {
             ffi::gtk_grid_view_set_min_columns(self.to_glib_none().0, min_columns);
@@ -151,6 +160,7 @@ impl GridView {
     }
 
     #[doc(alias = "gtk_grid_view_set_model")]
+    #[doc(alias = "model")]
     pub fn set_model(&self, model: Option<&impl IsA<SelectionModel>>) {
         unsafe {
             ffi::gtk_grid_view_set_model(
@@ -161,6 +171,7 @@ impl GridView {
     }
 
     #[doc(alias = "gtk_grid_view_set_single_click_activate")]
+    #[doc(alias = "single-click-activate")]
     pub fn set_single_click_activate(&self, single_click_activate: bool) {
         unsafe {
             ffi::gtk_grid_view_set_single_click_activate(
@@ -173,6 +184,7 @@ impl GridView {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_grid_view_set_tab_behavior")]
+    #[doc(alias = "tab-behavior")]
     pub fn set_tab_behavior(&self, tab_behavior: ListTabBehavior) {
         unsafe {
             ffi::gtk_grid_view_set_tab_behavior(self.to_glib_none().0, tab_behavior.into_glib());
@@ -183,7 +195,7 @@ impl GridView {
     pub fn connect_activate<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn activate_trampoline<F: Fn(&GridView, u32) + 'static>(
             this: *mut ffi::GtkGridView,
-            position: libc::c_uint,
+            position: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -194,7 +206,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -220,7 +232,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-rubberband\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_rubberband_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -243,7 +255,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::factory\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_factory_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -266,7 +278,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-columns\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_columns_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -289,7 +301,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-columns\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_columns_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -312,7 +324,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_model_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -338,7 +350,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::single-click-activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_single_click_activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -363,7 +375,7 @@ impl GridView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tab-behavior\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tab_behavior_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

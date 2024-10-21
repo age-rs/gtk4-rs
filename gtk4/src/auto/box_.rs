@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, BaselinePosition, Buildable, ConstraintTarget,
+    ffi, Accessible, AccessibleRole, Align, BaselinePosition, Buildable, ConstraintTarget,
     LayoutManager, Orientable, Orientation, Overflow, Widget,
 };
 use glib::{
@@ -290,12 +290,7 @@ impl BoxBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Box>> Sealed for T {}
-}
-
-pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
+pub trait BoxExt: IsA<Box> + 'static {
     #[doc(alias = "gtk_box_append")]
     fn append(&self, child: &impl IsA<Widget>) {
         unsafe {
@@ -310,12 +305,14 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_box_get_baseline_child")]
     #[doc(alias = "get_baseline_child")]
+    #[doc(alias = "baseline-child")]
     fn baseline_child(&self) -> i32 {
         unsafe { ffi::gtk_box_get_baseline_child(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_box_get_baseline_position")]
     #[doc(alias = "get_baseline_position")]
+    #[doc(alias = "baseline-position")]
     fn baseline_position(&self) -> BaselinePosition {
         unsafe {
             from_glib(ffi::gtk_box_get_baseline_position(
@@ -326,6 +323,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_box_get_homogeneous")]
     #[doc(alias = "get_homogeneous")]
+    #[doc(alias = "homogeneous")]
     fn is_homogeneous(&self) -> bool {
         unsafe { from_glib(ffi::gtk_box_get_homogeneous(self.as_ref().to_glib_none().0)) }
     }
@@ -381,6 +379,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_box_set_baseline_child")]
+    #[doc(alias = "baseline-child")]
     fn set_baseline_child(&self, child: i32) {
         unsafe {
             ffi::gtk_box_set_baseline_child(self.as_ref().to_glib_none().0, child);
@@ -388,6 +387,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_box_set_baseline_position")]
+    #[doc(alias = "baseline-position")]
     fn set_baseline_position(&self, position: BaselinePosition) {
         unsafe {
             ffi::gtk_box_set_baseline_position(
@@ -398,6 +398,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_box_set_homogeneous")]
+    #[doc(alias = "homogeneous")]
     fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
             ffi::gtk_box_set_homogeneous(self.as_ref().to_glib_none().0, homogeneous.into_glib());
@@ -405,6 +406,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_box_set_spacing")]
+    #[doc(alias = "spacing")]
     fn set_spacing(&self, spacing: i32) {
         unsafe {
             ffi::gtk_box_set_spacing(self.as_ref().to_glib_none().0, spacing);
@@ -428,7 +430,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::baseline-child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_baseline_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -454,7 +456,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::baseline-position\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_baseline_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -477,7 +479,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_homogeneous_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -500,7 +502,7 @@ pub trait BoxExt: IsA<Box> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spacing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

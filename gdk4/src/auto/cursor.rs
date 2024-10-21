@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::Texture;
+use crate::{ffi, Texture};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -63,12 +63,14 @@ impl Cursor {
 
     #[doc(alias = "gdk_cursor_get_hotspot_x")]
     #[doc(alias = "get_hotspot_x")]
+    #[doc(alias = "hotspot-x")]
     pub fn hotspot_x(&self) -> i32 {
         unsafe { ffi::gdk_cursor_get_hotspot_x(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gdk_cursor_get_hotspot_y")]
     #[doc(alias = "get_hotspot_y")]
+    #[doc(alias = "hotspot-y")]
     pub fn hotspot_y(&self) -> i32 {
         unsafe { ffi::gdk_cursor_get_hotspot_y(self.to_glib_none().0) }
     }

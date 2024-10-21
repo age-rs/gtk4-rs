@@ -2,16 +2,11 @@
 
 use std::borrow::Borrow;
 
-use glib::{translate::*, IntoGStr};
+use glib::translate::*;
 
-use crate::{prelude::*, Snapshot};
+use crate::{ffi, prelude::*, Snapshot};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Snapshot>> Sealed for T {}
-}
-
-pub trait SnapshotExtManual: sealed::Sealed + IsA<Snapshot> + 'static {
+pub trait SnapshotExtManual: IsA<Snapshot> + 'static {
     #[doc(alias = "gtk_snapshot_append_border")]
     fn append_border(
         &self,

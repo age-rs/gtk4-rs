@@ -3,8 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Application, Buildable, ConstraintTarget, LayoutManager,
-    Native, Overflow, Root, ShortcutManager, ShortcutsWindow, Widget, Window,
+    ffi, Accessible, AccessibleRole, Align, Application, Buildable, ConstraintTarget,
+    LayoutManager, Native, Overflow, Root, ShortcutManager, ShortcutsWindow, Widget, Window,
 };
 use glib::{
     prelude::*,
@@ -421,12 +421,7 @@ impl ApplicationWindowBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ApplicationWindow>> Sealed for T {}
-}
-
-pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'static {
+pub trait ApplicationWindowExt: IsA<ApplicationWindow> + 'static {
     #[doc(alias = "gtk_application_window_get_help_overlay")]
     #[doc(alias = "get_help_overlay")]
     fn help_overlay(&self) -> Option<ShortcutsWindow> {
@@ -445,6 +440,7 @@ pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'stati
 
     #[doc(alias = "gtk_application_window_get_show_menubar")]
     #[doc(alias = "get_show_menubar")]
+    #[doc(alias = "show-menubar")]
     fn shows_menubar(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_application_window_get_show_menubar(
@@ -464,6 +460,7 @@ pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'stati
     }
 
     #[doc(alias = "gtk_application_window_set_show_menubar")]
+    #[doc(alias = "show-menubar")]
     fn set_show_menubar(&self, show_menubar: bool) {
         unsafe {
             ffi::gtk_application_window_set_show_menubar(
@@ -491,7 +488,7 @@ pub trait ApplicationWindowExt: IsA<ApplicationWindow> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-menubar\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_menubar_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

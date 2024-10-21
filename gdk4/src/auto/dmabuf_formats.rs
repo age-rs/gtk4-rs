@@ -2,10 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::translate::*;
 
 glib::wrapper! {
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[derive(Debug, PartialOrd, Ord, Hash)]
     pub struct DmabufFormats(Shared<ffi::GdkDmabufFormats>);
 
     match fn {
@@ -23,6 +24,16 @@ impl DmabufFormats {
                 self.to_glib_none().0,
                 fourcc,
                 modifier,
+            ))
+        }
+    }
+
+    #[doc(alias = "gdk_dmabuf_formats_equal")]
+    fn equal(&self, formats2: &DmabufFormats) -> bool {
+        unsafe {
+            from_glib(ffi::gdk_dmabuf_formats_equal(
+                self.to_glib_none().0,
+                formats2.to_glib_none().0,
             ))
         }
     }
@@ -49,3 +60,12 @@ impl DmabufFormats {
         unsafe { ffi::gdk_dmabuf_formats_get_n_formats(self.to_glib_none().0) }
     }
 }
+
+impl PartialEq for DmabufFormats {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.equal(other)
+    }
+}
+
+impl Eq for DmabufFormats {}

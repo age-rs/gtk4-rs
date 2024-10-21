@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{Buildable, CellArea, CellLayout, CellRenderer, Orientable, Orientation};
+use crate::{ffi, Buildable, CellArea, CellLayout, CellRenderer, Orientable, Orientation};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -90,6 +90,7 @@ impl CellAreaBox {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_area_box_set_spacing")]
+    #[doc(alias = "spacing")]
     pub fn set_spacing(&self, spacing: i32) {
         unsafe {
             ffi::gtk_cell_area_box_set_spacing(self.to_glib_none().0, spacing);
@@ -111,7 +112,7 @@ impl CellAreaBox {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spacing_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

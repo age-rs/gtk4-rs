@@ -1,26 +1,20 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the [`Scrollable`](crate::Scrollable)
-//! interface.
+//! Traits intended for implementing the [`Scrollable`] interface.
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Border, Scrollable};
+use crate::{ffi, prelude::*, subclass::prelude::*, Border, Scrollable};
 
-pub trait ScrollableImpl: WidgetImpl {
+pub trait ScrollableImpl: WidgetImpl + ObjectSubclass<Type: IsA<Scrollable>> {
     #[doc(alias = "get_border")]
     fn border(&self) -> Option<Border> {
         self.parent_border()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ScrollableImplExt> Sealed for T {}
-}
-
-pub trait ScrollableImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ScrollableImplExt: ScrollableImpl {
     fn parent_border(&self) -> Option<Border> {
         unsafe {
             let type_data = Self::type_data();

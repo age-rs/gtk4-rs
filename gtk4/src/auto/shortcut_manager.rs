@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::prelude::*;
 
 glib::wrapper! {
@@ -17,11 +18,6 @@ impl ShortcutManager {
     pub const NONE: Option<&'static ShortcutManager> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ShortcutManager>> Sealed for T {}
-}
-
-pub trait ShortcutManagerExt: IsA<ShortcutManager> + sealed::Sealed + 'static {}
+pub trait ShortcutManagerExt: IsA<ShortcutManager> + 'static {}
 
 impl<O: IsA<ShortcutManager>> ShortcutManagerExt for O {}

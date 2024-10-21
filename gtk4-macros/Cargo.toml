@@ -21,13 +21,11 @@ xml_validation = ["quick-xml"]
 blueprint = []
 
 [dependencies]
-anyhow = "1.0"
-quick-xml = {version = "0.31", optional = true}
+quick-xml = {version = "0.36", optional = true}
 proc-macro-crate = "3.0"
-proc-macro-error = "1.0"
 proc-macro2 = "1.0"
 quote = "1.0"
-syn = {version = "1.0", features = ["full"]}
+syn = {version = "2.0", features = ["full"]}
 
 [dev-dependencies]
 futures-channel = "0.3"

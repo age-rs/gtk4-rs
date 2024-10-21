@@ -1,16 +1,18 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`PrintOperation`](crate::PrintOperation).
+//! Traits intended for subclassing [`PrintOperation`].
 
 use glib::translate::*;
 
 use crate::{
-    prelude::*, subclass::prelude::*, PageSetup, PrintContext, PrintOperation,
+    ffi, prelude::*, subclass::prelude::*, PageSetup, PrintContext, PrintOperation,
     PrintOperationPreview, PrintOperationResult, PrintSettings, Widget, Window,
 };
 
-pub trait PrintOperationImpl: PrintOperationImplExt + PrintOperationPreviewImpl {
+pub trait PrintOperationImpl:
+    PrintOperationPreviewImpl + ObjectSubclass<Type: IsA<PrintOperation>>
+{
     fn begin_print(&self, context: &PrintContext) {
         self.parent_begin_print(context)
     }
@@ -61,12 +63,7 @@ pub trait PrintOperationImpl: PrintOperationImplExt + PrintOperationPreviewImpl 
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::PrintOperationImplExt> Sealed for T {}
-}
-
-pub trait PrintOperationImplExt: sealed::Sealed + ObjectSubclass {
+pub trait PrintOperationImplExt: PrintOperationImpl {
     fn parent_begin_print(&self, context: &PrintContext) {
         unsafe {
             let data = Self::type_data();

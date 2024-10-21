@@ -3,8 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, DirectionType, LayoutManager,
-    NotebookPage, NotebookTab, Overflow, PackType, PositionType, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, DirectionType,
+    LayoutManager, NotebookPage, NotebookTab, Overflow, PackType, PositionType, Widget,
 };
 use glib::{
     prelude::*,
@@ -57,6 +57,7 @@ impl Notebook {
 
     #[doc(alias = "gtk_notebook_get_group_name")]
     #[doc(alias = "get_group_name")]
+    #[doc(alias = "group-name")]
     pub fn group_name(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gtk_notebook_get_group_name(self.to_glib_none().0)) }
     }
@@ -102,18 +103,21 @@ impl Notebook {
 
     #[doc(alias = "gtk_notebook_get_scrollable")]
     #[doc(alias = "get_scrollable")]
+    #[doc(alias = "scrollable")]
     pub fn is_scrollable(&self) -> bool {
         unsafe { from_glib(ffi::gtk_notebook_get_scrollable(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_notebook_get_show_border")]
     #[doc(alias = "get_show_border")]
+    #[doc(alias = "show-border")]
     pub fn shows_border(&self) -> bool {
         unsafe { from_glib(ffi::gtk_notebook_get_show_border(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_notebook_get_show_tabs")]
     #[doc(alias = "get_show_tabs")]
+    #[doc(alias = "show-tabs")]
     pub fn shows_tabs(&self) -> bool {
         unsafe { from_glib(ffi::gtk_notebook_get_show_tabs(self.to_glib_none().0)) }
     }
@@ -153,6 +157,7 @@ impl Notebook {
 
     #[doc(alias = "gtk_notebook_get_tab_pos")]
     #[doc(alias = "get_tab_pos")]
+    #[doc(alias = "tab-pos")]
     pub fn tab_pos(&self) -> PositionType {
         unsafe { from_glib(ffi::gtk_notebook_get_tab_pos(self.to_glib_none().0)) }
     }
@@ -208,6 +213,7 @@ impl Notebook {
     }
 
     #[doc(alias = "gtk_notebook_set_group_name")]
+    #[doc(alias = "group-name")]
     pub fn set_group_name(&self, group_name: Option<&str>) {
         unsafe {
             ffi::gtk_notebook_set_group_name(self.to_glib_none().0, group_name.to_glib_none().0);
@@ -237,6 +243,7 @@ impl Notebook {
     }
 
     #[doc(alias = "gtk_notebook_set_scrollable")]
+    #[doc(alias = "scrollable")]
     pub fn set_scrollable(&self, scrollable: bool) {
         unsafe {
             ffi::gtk_notebook_set_scrollable(self.to_glib_none().0, scrollable.into_glib());
@@ -244,6 +251,7 @@ impl Notebook {
     }
 
     #[doc(alias = "gtk_notebook_set_show_border")]
+    #[doc(alias = "show-border")]
     pub fn set_show_border(&self, show_border: bool) {
         unsafe {
             ffi::gtk_notebook_set_show_border(self.to_glib_none().0, show_border.into_glib());
@@ -251,6 +259,7 @@ impl Notebook {
     }
 
     #[doc(alias = "gtk_notebook_set_show_tabs")]
+    #[doc(alias = "show-tabs")]
     pub fn set_show_tabs(&self, show_tabs: bool) {
         unsafe {
             ffi::gtk_notebook_set_show_tabs(self.to_glib_none().0, show_tabs.into_glib());
@@ -291,6 +300,7 @@ impl Notebook {
     }
 
     #[doc(alias = "gtk_notebook_set_tab_pos")]
+    #[doc(alias = "tab-pos")]
     pub fn set_tab_pos(&self, pos: PositionType) {
         unsafe {
             ffi::gtk_notebook_set_tab_pos(self.to_glib_none().0, pos.into_glib());
@@ -318,10 +328,6 @@ impl Notebook {
         ObjectExt::set_property(self, "enable-popup", enable_popup)
     }
 
-    pub fn set_page(&self, page: i32) {
-        ObjectExt::set_property(self, "page", page)
-    }
-
     #[doc(alias = "change-current-page")]
     pub fn connect_change_current_page<F: Fn(&Self, i32) -> bool + 'static>(
         &self,
@@ -331,18 +337,18 @@ impl Notebook {
             F: Fn(&Notebook, i32) -> bool + 'static,
         >(
             this: *mut ffi::GtkNotebook,
-            object: libc::c_int,
+            page: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), object).into_glib()
+            f(&from_glib_borrow(this), page).into_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"change-current-page\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     change_current_page_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -350,8 +356,8 @@ impl Notebook {
         }
     }
 
-    pub fn emit_change_current_page(&self, object: i32) -> bool {
-        self.emit_by_name("change-current-page", &[&object])
+    pub fn emit_change_current_page(&self, page: i32) -> bool {
+        self.emit_by_name("change-current-page", &[&page])
     }
 
     #[doc(alias = "create-window")]
@@ -376,7 +382,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-window\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     create_window_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -393,18 +399,18 @@ impl Notebook {
             F: Fn(&Notebook, NotebookTab) -> bool + 'static,
         >(
             this: *mut ffi::GtkNotebook,
-            object: ffi::GtkNotebookTab,
+            tab: ffi::GtkNotebookTab,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), from_glib(object)).into_glib()
+            f(&from_glib_borrow(this), from_glib(tab)).into_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-tab\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     focus_tab_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -412,8 +418,8 @@ impl Notebook {
         }
     }
 
-    pub fn emit_focus_tab(&self, object: NotebookTab) -> bool {
-        self.emit_by_name("focus-tab", &[&object])
+    pub fn emit_focus_tab(&self, tab: NotebookTab) -> bool {
+        self.emit_by_name("focus-tab", &[&tab])
     }
 
     #[doc(alias = "move-focus-out")]
@@ -425,18 +431,18 @@ impl Notebook {
             F: Fn(&Notebook, DirectionType) + 'static,
         >(
             this: *mut ffi::GtkNotebook,
-            object: ffi::GtkDirectionType,
+            direction: ffi::GtkDirectionType,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), from_glib(object))
+            f(&from_glib_borrow(this), from_glib(direction))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-focus-out\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     move_focus_out_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -444,8 +450,8 @@ impl Notebook {
         }
     }
 
-    pub fn emit_move_focus_out(&self, object: DirectionType) {
-        self.emit_by_name::<()>("move-focus-out", &[&object]);
+    pub fn emit_move_focus_out(&self, direction: DirectionType) {
+        self.emit_by_name::<()>("move-focus-out", &[&direction]);
     }
 
     #[doc(alias = "page-added")]
@@ -456,7 +462,7 @@ impl Notebook {
         unsafe extern "C" fn page_added_trampoline<F: Fn(&Notebook, &Widget, u32) + 'static>(
             this: *mut ffi::GtkNotebook,
             child: *mut ffi::GtkWidget,
-            page_num: libc::c_uint,
+            page_num: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -467,7 +473,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     page_added_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -483,7 +489,7 @@ impl Notebook {
         unsafe extern "C" fn page_removed_trampoline<F: Fn(&Notebook, &Widget, u32) + 'static>(
             this: *mut ffi::GtkNotebook,
             child: *mut ffi::GtkWidget,
-            page_num: libc::c_uint,
+            page_num: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -494,7 +500,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     page_removed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -510,7 +516,7 @@ impl Notebook {
         unsafe extern "C" fn page_reordered_trampoline<F: Fn(&Notebook, &Widget, u32) + 'static>(
             this: *mut ffi::GtkNotebook,
             child: *mut ffi::GtkWidget,
-            page_num: libc::c_uint,
+            page_num: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -521,7 +527,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-reordered\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     page_reordered_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -538,19 +544,24 @@ impl Notebook {
             F: Fn(&Notebook, DirectionType, bool) -> bool + 'static,
         >(
             this: *mut ffi::GtkNotebook,
-            object: ffi::GtkDirectionType,
-            p0: glib::ffi::gboolean,
+            direction: ffi::GtkDirectionType,
+            move_to_last: glib::ffi::gboolean,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), from_glib(object), from_glib(p0)).into_glib()
+            f(
+                &from_glib_borrow(this),
+                from_glib(direction),
+                from_glib(move_to_last),
+            )
+            .into_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"reorder-tab\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     reorder_tab_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -558,8 +569,8 @@ impl Notebook {
         }
     }
 
-    pub fn emit_reorder_tab(&self, object: DirectionType, p0: bool) -> bool {
-        self.emit_by_name("reorder-tab", &[&object, &p0])
+    pub fn emit_reorder_tab(&self, direction: DirectionType, move_to_last: bool) -> bool {
+        self.emit_by_name("reorder-tab", &[&direction, &move_to_last])
     }
 
     #[doc(alias = "select-page")]
@@ -569,18 +580,18 @@ impl Notebook {
     ) -> SignalHandlerId {
         unsafe extern "C" fn select_page_trampoline<F: Fn(&Notebook, bool) -> bool + 'static>(
             this: *mut ffi::GtkNotebook,
-            object: glib::ffi::gboolean,
+            move_focus: glib::ffi::gboolean,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), from_glib(object)).into_glib()
+            f(&from_glib_borrow(this), from_glib(move_focus)).into_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-page\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     select_page_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -588,8 +599,8 @@ impl Notebook {
         }
     }
 
-    pub fn emit_select_page(&self, object: bool) -> bool {
-        self.emit_by_name("select-page", &[&object])
+    pub fn emit_select_page(&self, move_focus: bool) -> bool {
+        self.emit_by_name("select-page", &[&move_focus])
     }
 
     #[doc(alias = "switch-page")]
@@ -600,7 +611,7 @@ impl Notebook {
         unsafe extern "C" fn switch_page_trampoline<F: Fn(&Notebook, &Widget, u32) + 'static>(
             this: *mut ffi::GtkNotebook,
             page: *mut ffi::GtkWidget,
-            page_num: libc::c_uint,
+            page_num: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -611,7 +622,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"switch-page\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     switch_page_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -634,7 +645,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-popup\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_popup_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -657,7 +668,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::group-name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_group_name_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -680,7 +691,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_page_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -703,7 +714,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pages\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pages_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -726,7 +737,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scrollable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scrollable_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -749,7 +760,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-border\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_border_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -772,7 +783,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-tabs\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_tabs_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -795,7 +806,7 @@ impl Notebook {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tab-pos\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tab_pos_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

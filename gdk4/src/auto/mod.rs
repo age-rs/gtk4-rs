@@ -11,6 +11,13 @@ pub use self::button_event::ButtonEvent;
 mod cairo_context;
 pub use self::cairo_context::CairoContext;
 
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+mod cicp_params;
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+pub use self::cicp_params::CicpParams;
+
 mod clipboard;
 pub use self::clipboard::Clipboard;
 
@@ -149,8 +156,17 @@ pub use self::touch_event::TouchEvent;
 mod touchpad_event;
 pub use self::touchpad_event::TouchpadEvent;
 
+#[cfg_attr(feature = "v4_14", deprecated = "Since 4.14")]
 mod vulkan_context;
+#[cfg_attr(feature = "v4_14", deprecated = "Since 4.14")]
 pub use self::vulkan_context::VulkanContext;
+
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+mod color_state;
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+pub use self::color_state::ColorState;
 
 mod content_formats;
 pub use self::content_formats::ContentFormats;
@@ -199,6 +215,9 @@ pub use self::toplevel_layout::ToplevelLayout;
 
 mod enums;
 pub use self::enums::AxisUse;
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+pub use self::enums::CicpRange;
 pub use self::enums::CrossingMode;
 pub use self::enums::DevicePadFeature;
 pub use self::enums::DeviceToolType;

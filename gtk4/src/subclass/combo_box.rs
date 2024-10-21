@@ -1,15 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`ComboBox`](crate::ComboBox).
+//! Traits intended for subclassing [`ComboBox`].
 
 use glib::{translate::*, GString};
 
-use crate::{prelude::*, subclass::prelude::*, ComboBox};
+use crate::{ffi, prelude::*, subclass::prelude::*, ComboBox};
 
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait ComboBoxImpl: ComboBoxImplExt + WidgetImpl {
+pub trait ComboBoxImpl: WidgetImpl + ObjectSubclass<Type: IsA<ComboBox>> {
     #[cfg(feature = "v4_6")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_6")))]
     fn activate(&self) {
@@ -23,14 +23,9 @@ pub trait ComboBoxImpl: ComboBoxImplExt + WidgetImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ComboBoxImplExt> Sealed for T {}
-}
-
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait ComboBoxImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ComboBoxImplExt: ComboBoxImpl {
     #[cfg(feature = "v4_6")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_6")))]
     fn parent_activate(&self) {

@@ -1,24 +1,19 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`ScaleButton`](crate::ScaleButton).
+//! Traits intended for subclassing [`ScaleButton`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, ScaleButton};
+use crate::{ffi, prelude::*, subclass::prelude::*, ScaleButton};
 
-pub trait ScaleButtonImpl: ScaleButtonImplExt + WidgetImpl {
+pub trait ScaleButtonImpl: WidgetImpl + ObjectSubclass<Type: IsA<ScaleButton>> {
     fn value_changed(&self, new_value: f64) {
         self.parent_value_changed(new_value)
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ScaleButtonImplExt> Sealed for T {}
-}
-
-pub trait ScaleButtonImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ScaleButtonImplExt: ScaleButtonImpl {
     fn parent_value_changed(&self, new_value: f64) {
         unsafe {
             let data = Self::type_data();

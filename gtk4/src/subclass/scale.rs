@@ -1,25 +1,20 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`Scale`](crate::Scale).
+//! Traits intended for subclassing [`Scale`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Scale};
+use crate::{ffi, prelude::*, subclass::prelude::*, Scale};
 
-pub trait ScaleImpl: ScaleImplExt + RangeImpl {
+pub trait ScaleImpl: RangeImpl + ObjectSubclass<Type: IsA<Scale>> {
     #[doc(alias = "get_layout_offsets")]
     fn layout_offsets(&self) -> (i32, i32) {
         self.parent_layout_offsets()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ScaleImplExt> Sealed for T {}
-}
-
-pub trait ScaleImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ScaleImplExt: ScaleImpl {
     fn parent_layout_offsets(&self) -> (i32, i32) {
         unsafe {
             let data = Self::type_data();

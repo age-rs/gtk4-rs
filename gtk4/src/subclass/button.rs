@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`Button`](crate::Button).
+//! Traits intended for subclassing [`Button`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Button};
+use crate::{ffi, prelude::*, subclass::prelude::*, Button};
 
-pub trait ButtonImpl: ButtonImplExt + WidgetImpl {
+pub trait ButtonImpl: WidgetImpl + ObjectSubclass<Type: IsA<Button>> {
     fn activate(&self) {
         self.parent_activate()
     }
@@ -17,12 +17,7 @@ pub trait ButtonImpl: ButtonImplExt + WidgetImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ButtonImplExt> Sealed for T {}
-}
-
-pub trait ButtonImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ButtonImplExt: ButtonImpl {
     fn parent_activate(&self) {
         unsafe {
             let data = Self::type_data();

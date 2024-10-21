@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{Device, DeviceTool, Display, SeatCapabilities};
+use crate::{ffi, Device, DeviceTool, Display, SeatCapabilities};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +23,7 @@ impl Seat {
     pub const NONE: Option<&'static Seat> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Seat>> Sealed for T {}
-}
-
-pub trait SeatExt: IsA<Seat> + sealed::Sealed + 'static {
+pub trait SeatExt: IsA<Seat> + 'static {
     #[doc(alias = "gdk_seat_get_capabilities")]
     #[doc(alias = "get_capabilities")]
     fn capabilities(&self) -> SeatCapabilities {
@@ -96,7 +91,7 @@ pub trait SeatExt: IsA<Seat> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"device-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     device_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -125,7 +120,7 @@ pub trait SeatExt: IsA<Seat> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"device-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     device_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -154,7 +149,7 @@ pub trait SeatExt: IsA<Seat> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tool-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tool_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -183,7 +178,7 @@ pub trait SeatExt: IsA<Seat> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tool-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tool_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -1,16 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the [`Editable`](crate::Editable)
-//! interface.
+//! Traits intended for implementing the [`Editable`] interface.
 use std::sync::OnceLock;
 
 use glib::{translate::*, GString, Quark};
 use libc::{c_char, c_int};
 
-use crate::{prelude::*, subclass::prelude::*, Editable};
+use crate::{ffi, prelude::*, subclass::prelude::*, Editable};
 
-pub trait EditableImpl: WidgetImpl {
+pub trait EditableImpl: WidgetImpl + ObjectSubclass<Type: IsA<Editable>> {
     fn insert_text(&self, text: &str, length: i32, position: &mut i32) {
         self.parent_insert_text(text, length, position);
     }
@@ -51,12 +50,7 @@ pub trait EditableImpl: WidgetImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::EditableImplExt> Sealed for T {}
-}
-
-pub trait EditableImplExt: sealed::Sealed + ObjectSubclass {
+pub trait EditableImplExt: EditableImpl {
     #[doc(alias = "gtk_editable_delegate_get_property")]
     fn delegate_get_property(
         &self,

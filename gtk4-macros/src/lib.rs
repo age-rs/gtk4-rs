@@ -12,8 +12,8 @@ mod template_callbacks_attribute;
 mod util;
 
 use proc_macro::TokenStream;
-use proc_macro_error::proc_macro_error;
-use syn::{parse_macro_input, DeriveInput};
+use proc_macro2::Span;
+use syn::{parse_macro_input, DeriveInput, Error};
 
 /// That macro includes and compiles blueprint file by path relative to project
 /// rood
@@ -21,16 +21,16 @@ use syn::{parse_macro_input, DeriveInput};
 /// It expected to run inside composite_template_derive, not by users
 #[cfg(feature = "blueprint")]
 #[proc_macro]
-#[proc_macro_error]
 #[doc(hidden)]
 pub fn include_blueprint(input: TokenStream) -> TokenStream {
-    use proc_macro_error::abort_call_site;
     use quote::quote;
 
     let tokens: Vec<_> = input.into_iter().collect();
 
     if tokens.len() != 1 {
-        abort_call_site!("File name not found");
+        return Error::new(Span::call_site(), "File name not found")
+            .into_compile_error()
+            .into();
     }
 
     let root = std::env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| ".".into());
@@ -42,17 +42,24 @@ pub fn include_blueprint(input: TokenStream) -> TokenStream {
     let path = std::path::Path::new(&root).join(file_name);
 
     if !path.exists() {
-        abort_call_site!("{} not found", &path.to_string_lossy());
+        return Error::new(
+            Span::call_site(),
+            format!("{} not found", &path.to_string_lossy()),
+        )
+        .into_compile_error()
+        .into();
     }
 
     let path = path.to_string_lossy().to_string();
 
-    let template = blueprint::compile_blueprint(
-        std::fs::read_to_string(&path)
-            .unwrap_or_else(|err| abort_call_site!("{}", err))
-            .as_bytes(),
-    )
-    .unwrap();
+    let template = match std::fs::read_to_string(&path) {
+        Ok(content) => blueprint::compile_blueprint(content.as_bytes()).unwrap(),
+        Err(err) => {
+            return Error::new(Span::call_site(), err)
+                .into_compile_error()
+                .into()
+        }
+    };
 
     quote!({
         // Compiler reruns macro if file changed
@@ -194,11 +201,11 @@ pub fn include_blueprint(input: TokenStream) -> TokenStream {
 /// }
 /// ```
 #[proc_macro_derive(CompositeTemplate, attributes(template, template_child))]
-#[proc_macro_error]
 pub fn composite_template_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
-    let gen = composite_template_derive::impl_composite_template(&input);
-    gen.into()
+    composite_template_derive::impl_composite_template(&input)
+        .unwrap_or_else(Error::into_compile_error)
+        .into()
 }
 
 /// Attribute macro for creating template callbacks from Rust methods.
@@ -249,12 +256,10 @@ pub fn composite_template_derive(input: TokenStream) -> TokenStream {
 /// exposed to the template scope. It can take the following options:
 /// - `name` renames the callback. Defaults to the function name if not defined.
 /// - `function` ignores the first value when calling the callback and disallows
-///   `self`.  Useful
-/// for callbacks called from `<closure>` tags.
+///   `self`.  Useful for callbacks called from `<closure>` tags.
 /// - `function = false` reverts the effects of `functions` used on the `impl`,
-///   so the callback
-/// gets the first value and can take `self` again. Mainly useful for callbacks
-/// that are invoked with `swapped="true"`.
+///   so the callback gets the first value and can take `self` again. Mainly useful
+///   for callbacks that are invoked with `swapped="true"`.
 ///
 /// The `rest` attribute can be placed on the last argument of a template
 /// callback. This attribute must be used on an argument of type
@@ -386,13 +391,18 @@ pub fn composite_template_derive(input: TokenStream) -> TokenStream {
 /// }
 /// ```
 #[proc_macro_attribute]
-#[proc_macro_error]
 pub fn template_callbacks(attr: TokenStream, item: TokenStream) -> TokenStream {
-    use proc_macro_error::abort_call_site;
     let args = parse_macro_input!(attr as template_callbacks_attribute::Args);
     match syn::parse::<syn::ItemImpl>(item) {
-        Ok(input) => template_callbacks_attribute::impl_template_callbacks(input, args).into(),
-        Err(_) => abort_call_site!(template_callbacks_attribute::WRONG_PLACE_MSG),
+        Ok(input) => template_callbacks_attribute::impl_template_callbacks(input, args)
+            .unwrap_or_else(syn::Error::into_compile_error)
+            .into(),
+        Err(_) => Error::new(
+            Span::call_site(),
+            template_callbacks_attribute::WRONG_PLACE_MSG,
+        )
+        .into_compile_error()
+        .into(),
     }
 }
 
@@ -424,9 +434,7 @@ pub fn template_callbacks(attr: TokenStream, item: TokenStream) -> TokenStream {
 /// }
 /// ```
 #[proc_macro_attribute]
-#[proc_macro_error]
 pub fn test(_attr: TokenStream, item: TokenStream) -> TokenStream {
-    use proc_macro_error::abort_call_site;
     use quote::quote;
 
     match syn::parse::<syn::ItemFn>(item) {
@@ -458,6 +466,11 @@ pub fn test(_attr: TokenStream, item: TokenStream) -> TokenStream {
             };
             test.into()
         }
-        Err(_) => abort_call_site!("This macro should be used on a function definition"),
+        Err(_) => Error::new(
+            Span::call_site(),
+            "This macro should be used on a function definition",
+        )
+        .into_compile_error()
+        .into(),
     }
 }

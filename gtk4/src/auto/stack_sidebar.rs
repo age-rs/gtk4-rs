@@ -3,8 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow, Stack,
-    Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow,
+    Stack, Widget,
 };
 use glib::{
     prelude::*,
@@ -44,6 +44,7 @@ impl StackSidebar {
     }
 
     #[doc(alias = "gtk_stack_sidebar_set_stack")]
+    #[doc(alias = "stack")]
     pub fn set_stack(&self, stack: &Stack) {
         unsafe {
             ffi::gtk_stack_sidebar_set_stack(self.to_glib_none().0, stack.to_glib_none().0);
@@ -65,7 +66,7 @@ impl StackSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stack\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stack_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

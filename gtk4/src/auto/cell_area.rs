@@ -4,7 +4,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Buildable, CellAreaContext, CellEditable, CellLayout, CellRenderer, CellRendererState,
+    ffi, Buildable, CellAreaContext, CellEditable, CellLayout, CellRenderer, CellRendererState,
     DirectionType, Orientation, SizeRequestMode, Snapshot, TreeIter, TreeModel, TreePath, Widget,
 };
 use glib::{
@@ -27,12 +27,7 @@ impl CellArea {
     pub const NONE: Option<&'static CellArea> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::CellArea>> Sealed for T {}
-}
-
-pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
+pub trait CellAreaExt: IsA<CellArea> + 'static {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_area_activate")]
@@ -356,6 +351,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_area_get_edit_widget")]
     #[doc(alias = "get_edit_widget")]
+    #[doc(alias = "edit-widget")]
     fn edit_widget(&self) -> Option<CellEditable> {
         unsafe {
             from_glib_none(ffi::gtk_cell_area_get_edit_widget(
@@ -368,6 +364,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_area_get_edited_cell")]
     #[doc(alias = "get_edited_cell")]
+    #[doc(alias = "edited-cell")]
     fn edited_cell(&self) -> Option<CellRenderer> {
         unsafe {
             from_glib_none(ffi::gtk_cell_area_get_edited_cell(
@@ -380,6 +377,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_area_get_focus_cell")]
     #[doc(alias = "get_focus_cell")]
+    #[doc(alias = "focus-cell")]
     fn focus_cell(&self) -> Option<CellRenderer> {
         unsafe {
             from_glib_none(ffi::gtk_cell_area_get_focus_cell(
@@ -638,6 +636,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_area_set_focus_cell")]
+    #[doc(alias = "focus-cell")]
     fn set_focus_cell(&self, renderer: Option<&impl IsA<CellRenderer>>) {
         unsafe {
             ffi::gtk_cell_area_set_focus_cell(
@@ -698,7 +697,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             renderer: *mut ffi::GtkCellRenderer,
             editable: *mut ffi::GtkCellEditable,
             cell_area: *mut gdk::ffi::GdkRectangle,
-            path: *mut libc::c_char,
+            path: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -716,7 +715,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"add-editable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     add_editable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -754,7 +753,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"apply-attributes\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     apply_attributes_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -773,7 +772,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GtkCellArea,
             renderer: *mut ffi::GtkCellRenderer,
-            path: *mut libc::c_char,
+            path: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -789,7 +788,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     focus_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -823,7 +822,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"remove-editable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     remove_editable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -849,7 +848,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::edit-widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_edit_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -875,7 +874,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::edited-cell\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_edited_cell_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -898,7 +897,7 @@ pub trait CellAreaExt: IsA<CellArea> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-cell\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_focus_cell_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

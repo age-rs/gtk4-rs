@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{RecentData, RecentInfo};
+use crate::{ffi, RecentData, RecentInfo};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -43,12 +43,7 @@ impl Default for RecentManager {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RecentManager>> Sealed for T {}
-}
-
-pub trait RecentManagerExt: IsA<RecentManager> + sealed::Sealed + 'static {
+pub trait RecentManagerExt: IsA<RecentManager> + 'static {
     #[doc(alias = "gtk_recent_manager_add_full")]
     fn add_full(&self, uri: &str, recent_data: &RecentData) -> bool {
         unsafe {
@@ -180,7 +175,7 @@ pub trait RecentManagerExt: IsA<RecentManager> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -203,7 +198,7 @@ pub trait RecentManagerExt: IsA<RecentManager> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::size\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

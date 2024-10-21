@@ -1,28 +1,23 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`StyleContext`](crate::StyleContext).
+//! Traits intended for subclassing [`StyleContext`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, StyleContext};
+use crate::{ffi, prelude::*, subclass::prelude::*, StyleContext};
 
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait StyleContextImpl: StyleContextImplExt + ObjectImpl {
+pub trait StyleContextImpl: ObjectImpl + ObjectSubclass<Type: IsA<StyleContext>> {
     fn changed(&self) {
         self.parent_changed()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::StyleContextImplExt> Sealed for T {}
-}
-
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait StyleContextImplExt: sealed::Sealed + ObjectSubclass {
+pub trait StyleContextImplExt: StyleContextImpl {
     fn parent_changed(&self) {
         unsafe {
             let data = Self::type_data();

@@ -6,7 +6,8 @@
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_4")))]
 use crate::TitlebarGesture;
 use crate::{
-    Device, Event, FullscreenMode, Surface, SurfaceEdge, Texture, ToplevelLayout, ToplevelState,
+    ffi, Device, Event, FullscreenMode, Surface, SurfaceEdge, Texture, ToplevelLayout,
+    ToplevelState,
 };
 use glib::{
     prelude::*,
@@ -28,12 +29,7 @@ impl Toplevel {
     pub const NONE: Option<&'static Toplevel> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Toplevel>> Sealed for T {}
-}
-
-pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
+pub trait ToplevelExt: IsA<Toplevel> + 'static {
     #[doc(alias = "gdk_toplevel_begin_move")]
     fn begin_move(&self, device: &impl IsA<Device>, button: i32, x: f64, y: f64, timestamp: u32) {
         unsafe {
@@ -119,6 +115,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_decorated")]
+    #[doc(alias = "decorated")]
     fn set_decorated(&self, decorated: bool) {
         unsafe {
             ffi::gdk_toplevel_set_decorated(self.as_ref().to_glib_none().0, decorated.into_glib());
@@ -126,6 +123,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_deletable")]
+    #[doc(alias = "deletable")]
     fn set_deletable(&self, deletable: bool) {
         unsafe {
             ffi::gdk_toplevel_set_deletable(self.as_ref().to_glib_none().0, deletable.into_glib());
@@ -133,6 +131,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_icon_list")]
+    #[doc(alias = "icon-list")]
     fn set_icon_list(&self, surfaces: &[Texture]) {
         unsafe {
             ffi::gdk_toplevel_set_icon_list(
@@ -143,6 +142,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_modal")]
+    #[doc(alias = "modal")]
     fn set_modal(&self, modal: bool) {
         unsafe {
             ffi::gdk_toplevel_set_modal(self.as_ref().to_glib_none().0, modal.into_glib());
@@ -150,6 +150,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_startup_id")]
+    #[doc(alias = "startup-id")]
     fn set_startup_id(&self, startup_id: &str) {
         unsafe {
             ffi::gdk_toplevel_set_startup_id(
@@ -160,6 +161,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_title")]
+    #[doc(alias = "title")]
     fn set_title(&self, title: &str) {
         unsafe {
             ffi::gdk_toplevel_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
@@ -167,6 +169,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_toplevel_set_transient_for")]
+    #[doc(alias = "transient-for")]
     fn set_transient_for(&self, parent: &impl IsA<Surface>) {
         unsafe {
             ffi::gdk_toplevel_set_transient_for(
@@ -268,7 +271,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::decorated\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_decorated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -291,7 +294,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::deletable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_deletable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -317,7 +320,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fullscreen-mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_fullscreen_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -340,7 +343,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-list\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_list_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -363,7 +366,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_modal_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -389,7 +392,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shortcuts-inhibited\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_shortcuts_inhibited_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -412,7 +415,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::startup-id\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_startup_id_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -435,7 +438,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_state_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -458,7 +461,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -484,7 +487,7 @@ pub trait ToplevelExt: IsA<Toplevel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transient-for\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transient_for_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

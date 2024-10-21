@@ -4,7 +4,7 @@ use std::{fmt, mem};
 
 use glib::translate::*;
 
-use crate::{prelude::*, Ordering, SortType, TreeIter, TreeModel, TreeSortable};
+use crate::{ffi, prelude::*, Ordering, SortType, TreeIter, TreeModel, TreeSortable};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
@@ -24,7 +24,7 @@ impl IntoGlib for SortColumn {
         match self {
             SortColumn::Default => ffi::GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
             SortColumn::Index(x) => {
-                assert!(x <= i32::max_value() as u32, "column index is too big");
+                assert!(x <= i32::MAX as u32, "column index is too big");
                 x as i32
             }
         }
@@ -59,17 +59,12 @@ impl fmt::Display for SortColumn {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TreeSortable>> Sealed for T {}
-}
-
 // rustdoc-stripper-ignore-next
 /// Trait containing manually implemented methods of
 /// [`TreeSortable`](crate::TreeSortable).
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait TreeSortableExtManual: sealed::Sealed + IsA<TreeSortable> + 'static {
+pub trait TreeSortableExtManual: IsA<TreeSortable> + 'static {
     #[doc(alias = "gtk_tree_sortable_set_default_sort_func")]
     fn set_default_sort_func<F>(&self, sort_func: F)
     where

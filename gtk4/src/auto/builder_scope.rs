@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::prelude::*;
 
 glib::wrapper! {
@@ -17,11 +18,6 @@ impl BuilderScope {
     pub const NONE: Option<&'static BuilderScope> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BuilderScope>> Sealed for T {}
-}
-
-pub trait BuilderScopeExt: IsA<BuilderScope> + sealed::Sealed + 'static {}
+pub trait BuilderScopeExt: IsA<BuilderScope> + 'static {}
 
 impl<O: IsA<BuilderScope>> BuilderScopeExt for O {}

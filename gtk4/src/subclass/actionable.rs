@@ -1,14 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the [`Actionable`](crate::Actionable)
-//! interface.
+//! Traits intended for implementing the [`Actionable`] interface.
 
 use glib::{translate::*, GString, Variant};
 
-use crate::{prelude::*, subclass::prelude::*, Actionable};
+use crate::{ffi, prelude::*, subclass::prelude::*, Actionable};
 
-pub trait ActionableImpl: WidgetImpl {
+pub trait ActionableImpl: WidgetImpl + ObjectSubclass<Type: IsA<Actionable>> {
     #[doc(alias = "get_action_name")]
     fn action_name(&self) -> Option<GString>;
     #[doc(alias = "get_action_target_value")]
@@ -17,12 +16,7 @@ pub trait ActionableImpl: WidgetImpl {
     fn set_action_target_value(&self, value: Option<&Variant>);
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ActionableImplExt> Sealed for T {}
-}
-
-pub trait ActionableImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ActionableImplExt: ActionableImpl {
     fn parent_action_name(&self) -> Option<GString> {
         unsafe {
             let type_data = Self::type_data();

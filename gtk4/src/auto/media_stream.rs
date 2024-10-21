@@ -3,6 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +24,7 @@ impl MediaStream {
     pub const NONE: Option<&'static MediaStream> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::MediaStream>> Sealed for T {}
-}
-
-pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
+pub trait MediaStreamExt: IsA<MediaStream> + 'static {
     #[cfg_attr(feature = "v4_4", deprecated = "Since 4.4")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_media_stream_ended")]
@@ -46,6 +42,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_media_stream_get_ended")]
     #[doc(alias = "get_ended")]
+    #[doc(alias = "ended")]
     fn is_ended(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_get_ended(
@@ -66,6 +63,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_media_stream_get_loop")]
     #[doc(alias = "get_loop")]
+    #[doc(alias = "loop")]
     fn is_loop(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_get_loop(
@@ -76,6 +74,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_media_stream_get_muted")]
     #[doc(alias = "get_muted")]
+    #[doc(alias = "muted")]
     fn is_muted(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_get_muted(
@@ -86,6 +85,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_media_stream_get_playing")]
     #[doc(alias = "get_playing")]
+    #[doc(alias = "playing")]
     fn is_playing(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_get_playing(
@@ -107,6 +107,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_has_audio")]
+    #[doc(alias = "has-audio")]
     fn has_audio(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_has_audio(
@@ -116,6 +117,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_has_video")]
+    #[doc(alias = "has-video")]
     fn has_video(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_has_video(
@@ -125,6 +127,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_is_prepared")]
+    #[doc(alias = "prepared")]
     fn is_prepared(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_is_prepared(
@@ -134,6 +137,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_is_seekable")]
+    #[doc(alias = "seekable")]
     fn is_seekable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_is_seekable(
@@ -143,6 +147,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_is_seeking")]
+    #[doc(alias = "seeking")]
     fn is_seeking(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_media_stream_is_seeking(
@@ -212,6 +217,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_set_loop")]
+    #[doc(alias = "loop")]
     fn set_loop(&self, loop_: bool) {
         unsafe {
             ffi::gtk_media_stream_set_loop(self.as_ref().to_glib_none().0, loop_.into_glib());
@@ -219,6 +225,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_set_muted")]
+    #[doc(alias = "muted")]
     fn set_muted(&self, muted: bool) {
         unsafe {
             ffi::gtk_media_stream_set_muted(self.as_ref().to_glib_none().0, muted.into_glib());
@@ -226,6 +233,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_set_playing")]
+    #[doc(alias = "playing")]
     fn set_playing(&self, playing: bool) {
         unsafe {
             ffi::gtk_media_stream_set_playing(self.as_ref().to_glib_none().0, playing.into_glib());
@@ -233,6 +241,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_media_stream_set_volume")]
+    #[doc(alias = "volume")]
     fn set_volume(&self, volume: f64) {
         unsafe {
             ffi::gtk_media_stream_set_volume(self.as_ref().to_glib_none().0, volume);
@@ -320,7 +329,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -343,7 +352,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ended\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ended_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -366,7 +375,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::error\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_error_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -392,7 +401,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-audio\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_audio_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -418,7 +427,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-video\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_video_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -441,7 +450,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::loop\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_loop_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -464,7 +473,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::muted\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_muted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -487,7 +496,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::playing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_playing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -513,7 +522,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::prepared\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_prepared_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -539,7 +548,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::seekable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_seekable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -562,7 +571,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::seeking\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_seeking_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -588,7 +597,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timestamp\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timestamp_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -611,7 +620,7 @@ pub trait MediaStreamExt: IsA<MediaStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::volume\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_volume_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

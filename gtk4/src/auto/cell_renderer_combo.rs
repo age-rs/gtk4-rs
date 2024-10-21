@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{CellRenderer, CellRendererMode, CellRendererText, TreeIter, TreeModel, TreePath};
+use crate::{ffi, CellRenderer, CellRendererMode, CellRendererText, TreeIter, TreeModel, TreePath};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -74,7 +74,7 @@ impl CellRendererCombo {
             F: Fn(&CellRendererCombo, TreePath, &TreeIter) + 'static,
         >(
             this: *mut ffi::GtkCellRendererCombo,
-            path_string: *mut libc::c_char,
+            path_string: *mut std::ffi::c_char,
             new_iter: *mut ffi::GtkTreeIter,
             f: glib::ffi::gpointer,
         ) {
@@ -87,7 +87,7 @@ impl CellRendererCombo {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -110,7 +110,7 @@ impl CellRendererCombo {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-entry\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_entry_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -133,7 +133,7 @@ impl CellRendererCombo {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_model_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -156,7 +156,7 @@ impl CellRendererCombo {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_column_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

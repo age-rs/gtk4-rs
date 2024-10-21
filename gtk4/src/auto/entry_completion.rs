@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{Buildable, CellArea, CellLayout, TreeIter, TreeModel};
+use crate::{ffi, Buildable, CellArea, CellLayout, TreeIter, TreeModel};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -87,6 +87,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_inline_completion")]
     #[doc(alias = "get_inline_completion")]
+    #[doc(alias = "inline-completion")]
     pub fn is_inline_completion(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_entry_completion_get_inline_completion(
@@ -99,6 +100,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_inline_selection")]
     #[doc(alias = "get_inline_selection")]
+    #[doc(alias = "inline-selection")]
     pub fn is_inline_selection(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_entry_completion_get_inline_selection(
@@ -111,6 +113,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_minimum_key_length")]
     #[doc(alias = "get_minimum_key_length")]
+    #[doc(alias = "minimum-key-length")]
     pub fn minimum_key_length(&self) -> i32 {
         unsafe { ffi::gtk_entry_completion_get_minimum_key_length(self.to_glib_none().0) }
     }
@@ -127,6 +130,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_popup_completion")]
     #[doc(alias = "get_popup_completion")]
+    #[doc(alias = "popup-completion")]
     pub fn is_popup_completion(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_entry_completion_get_popup_completion(
@@ -139,6 +143,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_popup_set_width")]
     #[doc(alias = "get_popup_set_width")]
+    #[doc(alias = "popup-set-width")]
     pub fn is_popup_set_width(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_entry_completion_get_popup_set_width(
@@ -151,6 +156,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_popup_single_match")]
     #[doc(alias = "get_popup_single_match")]
+    #[doc(alias = "popup-single-match")]
     pub fn is_popup_single_match(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_entry_completion_get_popup_single_match(
@@ -163,6 +169,7 @@ impl EntryCompletion {
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_get_text_column")]
     #[doc(alias = "get_text_column")]
+    #[doc(alias = "text-column")]
     pub fn text_column(&self) -> i32 {
         unsafe { ffi::gtk_entry_completion_get_text_column(self.to_glib_none().0) }
     }
@@ -179,6 +186,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_inline_completion")]
+    #[doc(alias = "inline-completion")]
     pub fn set_inline_completion(&self, inline_completion: bool) {
         unsafe {
             ffi::gtk_entry_completion_set_inline_completion(
@@ -191,6 +199,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_inline_selection")]
+    #[doc(alias = "inline-selection")]
     pub fn set_inline_selection(&self, inline_selection: bool) {
         unsafe {
             ffi::gtk_entry_completion_set_inline_selection(
@@ -212,7 +221,7 @@ impl EntryCompletion {
             P: Fn(&EntryCompletion, &str, &TreeIter) -> bool + 'static,
         >(
             completion: *mut ffi::GtkEntryCompletion,
-            key: *const libc::c_char,
+            key: *const std::ffi::c_char,
             iter: *mut ffi::GtkTreeIter,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
@@ -245,6 +254,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_minimum_key_length")]
+    #[doc(alias = "minimum-key-length")]
     pub fn set_minimum_key_length(&self, length: i32) {
         unsafe {
             ffi::gtk_entry_completion_set_minimum_key_length(self.to_glib_none().0, length);
@@ -254,6 +264,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_model")]
+    #[doc(alias = "model")]
     pub fn set_model(&self, model: Option<&impl IsA<TreeModel>>) {
         unsafe {
             ffi::gtk_entry_completion_set_model(
@@ -266,6 +277,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_popup_completion")]
+    #[doc(alias = "popup-completion")]
     pub fn set_popup_completion(&self, popup_completion: bool) {
         unsafe {
             ffi::gtk_entry_completion_set_popup_completion(
@@ -278,6 +290,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_popup_set_width")]
+    #[doc(alias = "popup-set-width")]
     pub fn set_popup_set_width(&self, popup_set_width: bool) {
         unsafe {
             ffi::gtk_entry_completion_set_popup_set_width(
@@ -290,6 +303,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_popup_single_match")]
+    #[doc(alias = "popup-single-match")]
     pub fn set_popup_single_match(&self, popup_single_match: bool) {
         unsafe {
             ffi::gtk_entry_completion_set_popup_single_match(
@@ -302,6 +316,7 @@ impl EntryCompletion {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_entry_completion_set_text_column")]
+    #[doc(alias = "text-column")]
     pub fn set_text_column(&self, column: i32) {
         unsafe {
             ffi::gtk_entry_completion_set_text_column(self.to_glib_none().0, column);
@@ -341,7 +356,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cursor-on-match\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     cursor_on_match_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -358,7 +373,7 @@ impl EntryCompletion {
             F: Fn(&EntryCompletion, &str) -> glib::Propagation + 'static,
         >(
             this: *mut ffi::GtkEntryCompletion,
-            prefix: *mut libc::c_char,
+            prefix: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
@@ -373,7 +388,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-prefix\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     insert_prefix_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -409,7 +424,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"match-selected\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     match_selected_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -431,7 +446,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"no-matches\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     no_matches_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -459,7 +474,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inline-completion\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_inline_completion_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -484,7 +499,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inline-selection\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_inline_selection_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -512,7 +527,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-key-length\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_minimum_key_length_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -535,7 +550,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_model_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -560,7 +575,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-completion\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_popup_completion_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -585,7 +600,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-set-width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_popup_set_width_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -613,7 +628,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-single-match\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_popup_single_match_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -636,7 +651,7 @@ impl EntryCompletion {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_column_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

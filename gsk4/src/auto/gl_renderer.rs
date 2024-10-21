@@ -2,9 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::Renderer;
-#[cfg(feature = "v4_2")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v4_2")))]
+use crate::{ffi, Renderer};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -17,8 +15,6 @@ glib::wrapper! {
 }
 
 impl GLRenderer {
-    #[cfg(feature = "v4_2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v4_2")))]
     #[doc(alias = "gsk_gl_renderer_new")]
     pub fn new() -> GLRenderer {
         assert_initialized_main_thread!();

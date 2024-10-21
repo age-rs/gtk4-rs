@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`MediaStream`](crate::MediaStream).
+//! Traits intended for subclassing [`MediaStream`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, MediaStream};
+use crate::{ffi, prelude::*, subclass::prelude::*, MediaStream};
 
-pub trait MediaStreamImpl: MediaStreamImplExt + ObjectImpl {
+pub trait MediaStreamImpl: ObjectImpl + ObjectSubclass<Type: IsA<MediaStream>> {
     fn pause(&self) {
         self.parent_pause()
     }
@@ -33,12 +33,7 @@ pub trait MediaStreamImpl: MediaStreamImplExt + ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::MediaStreamImplExt> Sealed for T {}
-}
-
-pub trait MediaStreamImplExt: sealed::Sealed + ObjectSubclass {
+pub trait MediaStreamImplExt: MediaStreamImpl {
     fn parent_pause(&self) {
         unsafe {
             let data = Self::type_data();

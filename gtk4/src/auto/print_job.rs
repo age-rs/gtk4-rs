@@ -3,7 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    NumberUpLayout, PageRange, PageSet, PageSetup, PrintPages, PrintSettings, PrintStatus, Printer,
+    ffi, NumberUpLayout, PageRange, PageSet, PageSetup, PrintPages, PrintSettings, PrintStatus,
+    Printer,
 };
 use glib::{
     prelude::*,
@@ -147,6 +148,7 @@ impl PrintJob {
 
     #[doc(alias = "gtk_print_job_get_track_print_status")]
     #[doc(alias = "get_track_print_status")]
+    #[doc(alias = "track-print-status")]
     pub fn tracks_print_status(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_print_job_get_track_print_status(
@@ -266,6 +268,7 @@ impl PrintJob {
     }
 
     #[doc(alias = "gtk_print_job_set_track_print_status")]
+    #[doc(alias = "track-print-status")]
     pub fn set_track_print_status(&self, track_status: bool) {
         unsafe {
             ffi::gtk_print_job_set_track_print_status(
@@ -294,7 +297,7 @@ impl PrintJob {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"status-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     status_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -320,7 +323,7 @@ impl PrintJob {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-print-status\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_track_print_status_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

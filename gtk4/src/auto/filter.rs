@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{FilterChange, FilterMatch};
+use crate::{ffi, FilterChange, FilterMatch};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +23,7 @@ impl Filter {
     pub const NONE: Option<&'static Filter> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Filter>> Sealed for T {}
-}
-
-pub trait FilterExt: IsA<Filter> + sealed::Sealed + 'static {
+pub trait FilterExt: IsA<Filter> + 'static {
     #[doc(alias = "gtk_filter_changed")]
     fn changed(&self, change: FilterChange) {
         unsafe {
@@ -78,7 +73,7 @@ pub trait FilterExt: IsA<Filter> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

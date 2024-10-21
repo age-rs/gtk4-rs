@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{Adjustment, Border, ScrollablePolicy};
+use crate::{ffi, Adjustment, Border, ScrollablePolicy};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +23,7 @@ impl Scrollable {
     pub const NONE: Option<&'static Scrollable> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Scrollable>> Sealed for T {}
-}
-
-pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
+pub trait ScrollableExt: IsA<Scrollable> + 'static {
     #[doc(alias = "gtk_scrollable_get_border")]
     #[doc(alias = "get_border")]
     fn border(&self) -> Option<Border> {
@@ -58,6 +53,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_scrollable_get_hscroll_policy")]
     #[doc(alias = "get_hscroll_policy")]
+    #[doc(alias = "hscroll-policy")]
     fn hscroll_policy(&self) -> ScrollablePolicy {
         unsafe {
             from_glib(ffi::gtk_scrollable_get_hscroll_policy(
@@ -78,6 +74,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_scrollable_get_vscroll_policy")]
     #[doc(alias = "get_vscroll_policy")]
+    #[doc(alias = "vscroll-policy")]
     fn vscroll_policy(&self) -> ScrollablePolicy {
         unsafe {
             from_glib(ffi::gtk_scrollable_get_vscroll_policy(
@@ -87,6 +84,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_scrollable_set_hadjustment")]
+    #[doc(alias = "hadjustment")]
     fn set_hadjustment(&self, hadjustment: Option<&impl IsA<Adjustment>>) {
         unsafe {
             ffi::gtk_scrollable_set_hadjustment(
@@ -97,6 +95,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_scrollable_set_hscroll_policy")]
+    #[doc(alias = "hscroll-policy")]
     fn set_hscroll_policy(&self, policy: ScrollablePolicy) {
         unsafe {
             ffi::gtk_scrollable_set_hscroll_policy(
@@ -107,6 +106,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_scrollable_set_vadjustment")]
+    #[doc(alias = "vadjustment")]
     fn set_vadjustment(&self, vadjustment: Option<&impl IsA<Adjustment>>) {
         unsafe {
             ffi::gtk_scrollable_set_vadjustment(
@@ -117,6 +117,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_scrollable_set_vscroll_policy")]
+    #[doc(alias = "vscroll-policy")]
     fn set_vscroll_policy(&self, policy: ScrollablePolicy) {
         unsafe {
             ffi::gtk_scrollable_set_vscroll_policy(
@@ -144,7 +145,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hadjustment\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hadjustment_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -170,7 +171,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hscroll-policy\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hscroll_policy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -196,7 +197,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vadjustment\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_vadjustment_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -222,7 +223,7 @@ pub trait ScrollableExt: IsA<Scrollable> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vscroll-policy\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_vscroll_policy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

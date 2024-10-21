@@ -6,13 +6,13 @@
 
 // Re-export gtk dependencies
 pub use cairo;
-pub use ffi;
 pub use gdk;
 pub use gdk_pixbuf;
 pub use gio;
 pub use glib;
 pub use graphene;
 pub use gsk;
+pub use gtk4_sys as ffi;
 pub use pango;
 
 #[macro_use]
@@ -102,6 +102,9 @@ pub use auto::*;
 pub use rt::*;
 
 pub mod accessible;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+mod accessible_text_range;
 mod actionable;
 mod application;
 mod assistant;
@@ -111,6 +114,7 @@ mod border;
 mod builder;
 mod builder_cscope;
 mod builder_rust_scope;
+mod calendar;
 mod callback_action;
 mod cell_area;
 mod cell_layout;

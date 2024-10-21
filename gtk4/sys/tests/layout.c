@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 int main() {
+    printf("%s;%zu;%zu\n", "GtkAccessibleAnnouncementPriority", sizeof(GtkAccessibleAnnouncementPriority), alignof(GtkAccessibleAnnouncementPriority));
     printf("%s;%zu;%zu\n", "GtkAccessibleAutocomplete", sizeof(GtkAccessibleAutocomplete), alignof(GtkAccessibleAutocomplete));
     printf("%s;%zu;%zu\n", "GtkAccessibleInterface", sizeof(GtkAccessibleInterface), alignof(GtkAccessibleInterface));
     printf("%s;%zu;%zu\n", "GtkAccessibleInvalidState", sizeof(GtkAccessibleInvalidState), alignof(GtkAccessibleInvalidState));
@@ -17,6 +18,10 @@ int main() {
     printf("%s;%zu;%zu\n", "GtkAccessibleRole", sizeof(GtkAccessibleRole), alignof(GtkAccessibleRole));
     printf("%s;%zu;%zu\n", "GtkAccessibleSort", sizeof(GtkAccessibleSort), alignof(GtkAccessibleSort));
     printf("%s;%zu;%zu\n", "GtkAccessibleState", sizeof(GtkAccessibleState), alignof(GtkAccessibleState));
+    printf("%s;%zu;%zu\n", "GtkAccessibleTextContentChange", sizeof(GtkAccessibleTextContentChange), alignof(GtkAccessibleTextContentChange));
+    printf("%s;%zu;%zu\n", "GtkAccessibleTextGranularity", sizeof(GtkAccessibleTextGranularity), alignof(GtkAccessibleTextGranularity));
+    printf("%s;%zu;%zu\n", "GtkAccessibleTextInterface", sizeof(GtkAccessibleTextInterface), alignof(GtkAccessibleTextInterface));
+    printf("%s;%zu;%zu\n", "GtkAccessibleTextRange", sizeof(GtkAccessibleTextRange), alignof(GtkAccessibleTextRange));
     printf("%s;%zu;%zu\n", "GtkAccessibleTristate", sizeof(GtkAccessibleTristate), alignof(GtkAccessibleTristate));
     printf("%s;%zu;%zu\n", "GtkActionableInterface", sizeof(GtkActionableInterface), alignof(GtkActionableInterface));
     printf("%s;%zu;%zu\n", "GtkAdjustment", sizeof(GtkAdjustment), alignof(GtkAdjustment));
@@ -135,6 +140,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GtkFontDialogButtonClass", sizeof(GtkFontDialogButtonClass), alignof(GtkFontDialogButtonClass));
     printf("%s;%zu;%zu\n", "GtkFontDialogClass", sizeof(GtkFontDialogClass), alignof(GtkFontDialogClass));
     printf("%s;%zu;%zu\n", "GtkFontLevel", sizeof(GtkFontLevel), alignof(GtkFontLevel));
+    printf("%s;%zu;%zu\n", "GtkFontRendering", sizeof(GtkFontRendering), alignof(GtkFontRendering));
     printf("%s;%zu;%zu\n", "GtkFrame", sizeof(GtkFrame), alignof(GtkFrame));
     printf("%s;%zu;%zu\n", "GtkFrameClass", sizeof(GtkFrameClass), alignof(GtkFrameClass));
     printf("%s;%zu;%zu\n", "GtkGLArea", sizeof(GtkGLArea), alignof(GtkGLArea));
@@ -286,6 +292,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GtkText", sizeof(GtkText), alignof(GtkText));
     printf("%s;%zu;%zu\n", "GtkTextBuffer", sizeof(GtkTextBuffer), alignof(GtkTextBuffer));
     printf("%s;%zu;%zu\n", "GtkTextBufferClass", sizeof(GtkTextBufferClass), alignof(GtkTextBufferClass));
+    printf("%s;%zu;%zu\n", "GtkTextBufferNotifyFlags", sizeof(GtkTextBufferNotifyFlags), alignof(GtkTextBufferNotifyFlags));
     printf("%s;%zu;%zu\n", "GtkTextChildAnchor", sizeof(GtkTextChildAnchor), alignof(GtkTextChildAnchor));
     printf("%s;%zu;%zu\n", "GtkTextChildAnchorClass", sizeof(GtkTextChildAnchorClass), alignof(GtkTextChildAnchorClass));
     printf("%s;%zu;%zu\n", "GtkTextDirection", sizeof(GtkTextDirection), alignof(GtkTextDirection));

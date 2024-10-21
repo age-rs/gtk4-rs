@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{PageSetup, PrintContext};
+use crate::{ffi, PageSetup, PrintContext};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +23,7 @@ impl PrintOperationPreview {
     pub const NONE: Option<&'static PrintOperationPreview> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::PrintOperationPreview>> Sealed for T {}
-}
-
-pub trait PrintOperationPreviewExt: IsA<PrintOperationPreview> + sealed::Sealed + 'static {
+pub trait PrintOperationPreviewExt: IsA<PrintOperationPreview> + 'static {
     #[doc(alias = "gtk_print_operation_preview_end_preview")]
     fn end_preview(&self) {
         unsafe {
@@ -79,7 +74,7 @@ pub trait PrintOperationPreviewExt: IsA<PrintOperationPreview> + sealed::Sealed 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"got-page-size\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     got_page_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -108,7 +103,7 @@ pub trait PrintOperationPreviewExt: IsA<PrintOperationPreview> + sealed::Sealed 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"ready\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     ready_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::Widget;
+use crate::{ffi, Widget};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,16 +23,12 @@ impl ListItem {
     pub const NONE: Option<&'static ListItem> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ListItem>> Sealed for T {}
-}
-
-pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
+pub trait ListItemExt: IsA<ListItem> + 'static {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_list_item_get_accessible_description")]
     #[doc(alias = "get_accessible_description")]
+    #[doc(alias = "accessible-description")]
     fn accessible_description(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gtk_list_item_get_accessible_description(
@@ -45,6 +41,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_list_item_get_accessible_label")]
     #[doc(alias = "get_accessible_label")]
+    #[doc(alias = "accessible-label")]
     fn accessible_label(&self) -> glib::GString {
         unsafe {
             from_glib_none(ffi::gtk_list_item_get_accessible_label(
@@ -55,6 +52,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_list_item_get_activatable")]
     #[doc(alias = "get_activatable")]
+    #[doc(alias = "activatable")]
     fn is_activatable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_list_item_get_activatable(
@@ -73,6 +71,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_list_item_get_focusable")]
     #[doc(alias = "get_focusable")]
+    #[doc(alias = "focusable")]
     fn is_focusable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_list_item_get_focusable(
@@ -95,6 +94,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_list_item_get_selectable")]
     #[doc(alias = "get_selectable")]
+    #[doc(alias = "selectable")]
     fn is_selectable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_list_item_get_selectable(
@@ -105,6 +105,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_list_item_get_selected")]
     #[doc(alias = "get_selected")]
+    #[doc(alias = "selected")]
     fn is_selected(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_list_item_get_selected(
@@ -116,6 +117,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_list_item_set_accessible_description")]
+    #[doc(alias = "accessible-description")]
     fn set_accessible_description(&self, description: &str) {
         unsafe {
             ffi::gtk_list_item_set_accessible_description(
@@ -128,6 +130,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_list_item_set_accessible_label")]
+    #[doc(alias = "accessible-label")]
     fn set_accessible_label(&self, label: &str) {
         unsafe {
             ffi::gtk_list_item_set_accessible_label(
@@ -138,6 +141,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_list_item_set_activatable")]
+    #[doc(alias = "activatable")]
     fn set_activatable(&self, activatable: bool) {
         unsafe {
             ffi::gtk_list_item_set_activatable(
@@ -148,6 +152,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_list_item_set_child")]
+    #[doc(alias = "child")]
     fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_list_item_set_child(
@@ -160,6 +165,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_list_item_set_focusable")]
+    #[doc(alias = "focusable")]
     fn set_focusable(&self, focusable: bool) {
         unsafe {
             ffi::gtk_list_item_set_focusable(self.as_ref().to_glib_none().0, focusable.into_glib());
@@ -167,6 +173,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_list_item_set_selectable")]
+    #[doc(alias = "selectable")]
     fn set_selectable(&self, selectable: bool) {
         unsafe {
             ffi::gtk_list_item_set_selectable(
@@ -199,7 +206,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accessible-description\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_accessible_description_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -227,7 +234,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accessible-label\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_accessible_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -253,7 +260,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activatable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_activatable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -276,7 +283,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -301,7 +308,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focusable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_focusable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -324,7 +331,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_item_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -347,7 +354,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -370,7 +377,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selectable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selectable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -393,7 +400,7 @@ pub trait ListItemExt: IsA<ListItem> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selected\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selected_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

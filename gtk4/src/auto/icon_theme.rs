@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{IconLookupFlags, IconPaintable, TextDirection};
+use crate::{ffi, IconLookupFlags, IconPaintable, TextDirection};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -59,6 +59,7 @@ impl IconTheme {
 
     #[doc(alias = "gtk_icon_theme_get_icon_names")]
     #[doc(alias = "get_icon_names")]
+    #[doc(alias = "icon-names")]
     pub fn icon_names(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_icon_theme_get_icon_names(
@@ -69,6 +70,7 @@ impl IconTheme {
 
     #[doc(alias = "gtk_icon_theme_get_resource_path")]
     #[doc(alias = "get_resource_path")]
+    #[doc(alias = "resource-path")]
     pub fn resource_path(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_icon_theme_get_resource_path(
@@ -79,6 +81,7 @@ impl IconTheme {
 
     #[doc(alias = "gtk_icon_theme_get_search_path")]
     #[doc(alias = "get_search_path")]
+    #[doc(alias = "search-path")]
     pub fn search_path(&self) -> Vec<std::path::PathBuf> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_icon_theme_get_search_path(
@@ -89,6 +92,7 @@ impl IconTheme {
 
     #[doc(alias = "gtk_icon_theme_get_theme_name")]
     #[doc(alias = "get_theme_name")]
+    #[doc(alias = "theme-name")]
     pub fn theme_name(&self) -> glib::GString {
         unsafe { from_glib_full(ffi::gtk_icon_theme_get_theme_name(self.to_glib_none().0)) }
     }
@@ -160,6 +164,7 @@ impl IconTheme {
     }
 
     #[doc(alias = "gtk_icon_theme_set_resource_path")]
+    #[doc(alias = "resource-path")]
     pub fn set_resource_path(&self, path: &[&str]) {
         unsafe {
             ffi::gtk_icon_theme_set_resource_path(self.to_glib_none().0, path.to_glib_none().0);
@@ -167,6 +172,7 @@ impl IconTheme {
     }
 
     #[doc(alias = "gtk_icon_theme_set_search_path")]
+    #[doc(alias = "search-path")]
     pub fn set_search_path(&self, path: &[&std::path::Path]) {
         unsafe {
             ffi::gtk_icon_theme_set_search_path(self.to_glib_none().0, path.to_glib_none().0);
@@ -174,6 +180,7 @@ impl IconTheme {
     }
 
     #[doc(alias = "gtk_icon_theme_set_theme_name")]
+    #[doc(alias = "theme-name")]
     pub fn set_theme_name(&self, theme_name: Option<&str>) {
         unsafe {
             ffi::gtk_icon_theme_set_theme_name(self.to_glib_none().0, theme_name.to_glib_none().0);
@@ -209,7 +216,7 @@ impl IconTheme {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -232,7 +239,7 @@ impl IconTheme {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::display\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_display_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -255,7 +262,7 @@ impl IconTheme {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-names\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_names_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -278,7 +285,7 @@ impl IconTheme {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resource-path\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_resource_path_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -301,7 +308,7 @@ impl IconTheme {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-path\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_search_path_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -324,7 +331,7 @@ impl IconTheme {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::theme-name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_theme_name_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

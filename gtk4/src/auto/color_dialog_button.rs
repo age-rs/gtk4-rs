@@ -3,8 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ColorDialog, ConstraintTarget, LayoutManager,
-    Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ColorDialog, ConstraintTarget,
+    LayoutManager, Overflow, Widget,
 };
 use glib::{
     prelude::*,
@@ -57,6 +57,7 @@ impl ColorDialogButton {
     }
 
     #[doc(alias = "gtk_color_dialog_button_set_dialog")]
+    #[doc(alias = "dialog")]
     pub fn set_dialog(&self, dialog: &ColorDialog) {
         unsafe {
             ffi::gtk_color_dialog_button_set_dialog(self.to_glib_none().0, dialog.to_glib_none().0);
@@ -64,6 +65,7 @@ impl ColorDialogButton {
     }
 
     #[doc(alias = "gtk_color_dialog_button_set_rgba")]
+    #[doc(alias = "rgba")]
     pub fn set_rgba(&self, color: &gdk::RGBA) {
         unsafe {
             ffi::gtk_color_dialog_button_set_rgba(self.to_glib_none().0, color.to_glib_none().0);
@@ -86,7 +88,7 @@ impl ColorDialogButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -117,7 +119,7 @@ impl ColorDialogButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::dialog\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dialog_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -142,7 +144,7 @@ impl ColorDialogButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rgba\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_rgba_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

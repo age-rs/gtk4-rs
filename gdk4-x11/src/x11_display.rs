@@ -7,7 +7,7 @@ use std::{boxed::Box as Box_, mem::transmute};
 #[cfg(feature = "xlib")]
 #[cfg_attr(docsrs, doc(cfg(feature = "xlib")))]
 use glib::signal::{connect_raw, SignalHandlerId};
-use glib::{translate::*, IntoGStr};
+use glib::translate::*;
 #[cfg(all(feature = "v4_4", feature = "egl"))]
 #[cfg_attr(docsrs, doc(cfg(all(feature = "v4_4", feature = "egl"))))]
 use khronos_egl as egl;
@@ -18,7 +18,7 @@ use x11::xlib;
 #[cfg_attr(docsrs, doc(cfg(feature = "xlib")))]
 use x11::xlib::{Cursor as XCursor, Window as XWindow};
 
-use crate::{prelude::*, X11Display};
+use crate::{ffi, prelude::*, X11Display};
 #[cfg(not(feature = "xlib"))]
 use crate::{XCursor, XWindow};
 
@@ -90,7 +90,7 @@ impl X11Display {
         connect_raw(
             self.as_ptr() as *mut _,
             b"xevent\0".as_ptr() as *const _,
-            Some(transmute::<_, unsafe extern "C" fn()>(
+            Some(transmute::<*const (), unsafe extern "C" fn()>(
                 xevent_trampoline::<F> as *const (),
             )),
             Box_::into_raw(f),

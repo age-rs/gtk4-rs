@@ -1,14 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`Widget`](crate::Widget).
+//! Traits intended for subclassing [`Widget`].
 
 use std::{boxed::Box as Box_, collections::HashMap, fmt, future::Future};
 
-use glib::{subclass::SignalId, translate::*, GString, Variant};
+use glib::{clone::Downgrade, subclass::SignalId, translate::*, GString, Variant};
 
 use crate::{
-    prelude::*, subclass::prelude::*, AccessibleRole, BuilderRustScope, BuilderScope,
+    ffi, prelude::*, subclass::prelude::*, AccessibleRole, BuilderRustScope, BuilderScope,
     DirectionType, LayoutManager, Orientation, Shortcut, SizeRequestMode, Snapshot, StateFlags,
     SystemSetting, TextDirection, Tooltip, Widget,
 };
@@ -104,7 +104,7 @@ impl Iterator for WidgetActionIter {
 
 impl std::iter::FusedIterator for WidgetActionIter {}
 
-pub trait WidgetImpl: WidgetImplExt + ObjectImpl {
+pub trait WidgetImpl: ObjectImpl + ObjectSubclass<Type: IsA<Widget>> {
     fn compute_expand(&self, hexpand: &mut bool, vexpand: &mut bool) {
         self.parent_compute_expand(hexpand, vexpand)
     }
@@ -207,12 +207,7 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::WidgetImplExt> Sealed for T {}
-}
-
-pub trait WidgetImplExt: sealed::Sealed + ObjectSubclass {
+pub trait WidgetImplExt: WidgetImpl {
     fn parent_compute_expand(&self, hexpand: &mut bool, vexpand: &mut bool) {
         unsafe {
             let data = Self::type_data();
@@ -913,9 +908,19 @@ pub unsafe trait WidgetClassExt: ClassStruct {
                 let ctx = glib::MainContext::default();
                 let action_name = action_name.to_owned();
                 let parameter_type = parameter_type.map(ToOwned::to_owned);
-                ctx.spawn_local(glib::clone!(@strong this, @strong action_name, @strong parameter_type, @strong activate => async move {
-                    activate(this, action_name, parameter_type).await;
-                }));
+                ctx.spawn_local(glib::clone!(
+                    #[strong]
+                    this,
+                    #[strong]
+                    action_name,
+                    #[strong]
+                    parameter_type,
+                    #[strong]
+                    activate,
+                    async move {
+                        activate(this, action_name, parameter_type).await;
+                    }
+                ));
             },
         );
     }
@@ -1258,6 +1263,17 @@ where
     }
 }
 
+impl<T> Downgrade for TemplateChild<T>
+where
+    T: ObjectType + FromGlibPtrNone<*mut <T as ObjectType>::GlibType> + Downgrade,
+{
+    type Weak = T::Weak;
+
+    fn downgrade(&self) -> Self::Weak {
+        T::downgrade(&self.get())
+    }
+}
+
 impl<T> TemplateChild<T>
 where
     T: ObjectType + FromGlibPtrNone<*mut <T as ObjectType>::GlibType>,
@@ -1407,17 +1423,15 @@ pub trait CompositeTemplateInitializingExt {
     fn init_template(&self);
 }
 
-impl<T> CompositeTemplateInitializingExt for glib::subclass::InitializingObject<T>
-where
-    T: WidgetImpl + CompositeTemplate,
-    <T as ObjectSubclass>::Type: IsA<Widget>,
+impl<T: WidgetImpl + CompositeTemplate> CompositeTemplateInitializingExt
+    for glib::subclass::InitializingObject<T>
 {
     fn init_template(&self) {
         unsafe {
             let widget = self
                 .as_ref()
                 .unsafe_cast_ref::<<T as ObjectSubclass>::Type>();
-            ffi::gtk_widget_init_template(widget.as_ref().to_glib_none().0);
+            ffi::gtk_widget_init_template(AsRef::<Widget>::as_ref(widget).to_glib_none().0);
 
             <T as CompositeTemplate>::check_template_children(widget);
         }
@@ -1430,11 +1444,7 @@ pub trait CompositeTemplateDisposeExt {
     fn dispose_template(&self);
 }
 
-impl<T> CompositeTemplateDisposeExt for T
-where
-    T: WidgetImpl + CompositeTemplate,
-    <T as ObjectSubclass>::Type: IsA<Widget>,
-{
+impl<T: WidgetImpl + CompositeTemplate> CompositeTemplateDisposeExt for T {
     #[cfg(feature = "v4_8")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_8")))]
     fn dispose_template(&self) {

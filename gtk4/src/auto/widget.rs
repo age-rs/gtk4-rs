@@ -4,9 +4,9 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, Align, Allocation, Buildable, ConstraintTarget, DirectionType, EventController,
-    LayoutManager, Native, Orientation, Overflow, PickFlags, Requisition, Root, Settings,
-    SizeRequestMode, Snapshot, StateFlags, StyleContext, TextDirection, Tooltip,
+    ffi, Accessible, Align, Allocation, Buildable, ConstraintTarget, DirectionType,
+    EventController, LayoutManager, Native, Orientation, Overflow, PickFlags, Requisition, Root,
+    Settings, SizeRequestMode, Snapshot, StateFlags, StyleContext, TextDirection, Tooltip,
 };
 use glib::{
     prelude::*,
@@ -50,12 +50,7 @@ impl std::fmt::Display for Widget {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Widget>> Sealed for T {}
-}
-
-pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
+pub trait WidgetExt: IsA<Widget> + 'static {
     #[doc(alias = "gtk_widget_action_set_enabled")]
     fn action_set_enabled(&self, action_name: &str, enabled: bool) {
         unsafe {
@@ -334,6 +329,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_can_focus")]
     #[doc(alias = "get_can_focus")]
+    #[doc(alias = "can-focus")]
     fn can_focus(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_can_focus(
@@ -344,6 +340,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_can_target")]
     #[doc(alias = "get_can_target")]
+    #[doc(alias = "can-target")]
     fn can_target(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_can_target(
@@ -386,6 +383,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_css_classes")]
     #[doc(alias = "get_css_classes")]
+    #[doc(alias = "css-classes")]
     fn css_classes(&self) -> Vec<glib::GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_widget_get_css_classes(
@@ -396,6 +394,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_css_name")]
     #[doc(alias = "get_css_name")]
+    #[doc(alias = "css-name")]
     fn css_name(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gtk_widget_get_css_name(self.as_ref().to_glib_none().0)) }
     }
@@ -446,6 +445,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_focus_on_click")]
     #[doc(alias = "get_focus_on_click")]
+    #[doc(alias = "focus-on-click")]
     fn gets_focus_on_click(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_focus_on_click(
@@ -456,6 +456,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_focusable")]
     #[doc(alias = "get_focusable")]
+    #[doc(alias = "focusable")]
     fn is_focusable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_focusable(
@@ -470,6 +471,8 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
         unsafe { from_glib_none(ffi::gtk_widget_get_font_map(self.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg_attr(feature = "v4_16", deprecated = "Since 4.16")]
+    #[allow(deprecated)]
     #[doc(alias = "gtk_widget_get_font_options")]
     #[doc(alias = "get_font_options")]
     fn font_options(&self) -> Option<cairo::FontOptions> {
@@ -498,6 +501,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_has_tooltip")]
     #[doc(alias = "get_has_tooltip")]
+    #[doc(alias = "has-tooltip")]
     fn has_tooltip(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_has_tooltip(
@@ -514,12 +518,14 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_hexpand")]
     #[doc(alias = "get_hexpand")]
+    #[doc(alias = "hexpand")]
     fn hexpands(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_get_hexpand(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_widget_get_hexpand_set")]
     #[doc(alias = "get_hexpand_set")]
+    #[doc(alias = "hexpand-set")]
     fn is_hexpand_set(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_hexpand_set(
@@ -541,6 +547,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_layout_manager")]
     #[doc(alias = "get_layout_manager")]
+    #[doc(alias = "layout-manager")]
     fn layout_manager(&self) -> Option<LayoutManager> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_layout_manager(
@@ -557,30 +564,35 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_margin_bottom")]
     #[doc(alias = "get_margin_bottom")]
+    #[doc(alias = "margin-bottom")]
     fn margin_bottom(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_bottom(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_widget_get_margin_end")]
     #[doc(alias = "get_margin_end")]
+    #[doc(alias = "margin-end")]
     fn margin_end(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_end(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_widget_get_margin_start")]
     #[doc(alias = "get_margin_start")]
+    #[doc(alias = "margin-start")]
     fn margin_start(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_start(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_widget_get_margin_top")]
     #[doc(alias = "get_margin_top")]
+    #[doc(alias = "margin-top")]
     fn margin_top(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_top(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_widget_get_name")]
     #[doc(alias = "get_name")]
+    #[doc(alias = "name")]
     fn widget_name(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gtk_widget_get_name(self.as_ref().to_glib_none().0)) }
     }
@@ -675,6 +687,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_receives_default")]
     #[doc(alias = "get_receives_default")]
+    #[doc(alias = "receives-default")]
     fn receives_default(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_receives_default(
@@ -701,11 +714,13 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_scale_factor")]
     #[doc(alias = "get_scale_factor")]
+    #[doc(alias = "scale-factor")]
     fn scale_factor(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_scale_factor(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_widget_get_sensitive")]
+    #[doc(alias = "sensitive")]
     fn get_sensitive(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_sensitive(
@@ -765,6 +780,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_tooltip_markup")]
     #[doc(alias = "get_tooltip_markup")]
+    #[doc(alias = "tooltip-markup")]
     fn tooltip_markup(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_tooltip_markup(
@@ -775,6 +791,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_tooltip_text")]
     #[doc(alias = "get_tooltip_text")]
+    #[doc(alias = "tooltip-text")]
     fn tooltip_text(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_tooltip_text(
@@ -791,12 +808,14 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_get_vexpand")]
     #[doc(alias = "get_vexpand")]
+    #[doc(alias = "vexpand")]
     fn vexpands(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_get_vexpand(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_widget_get_vexpand_set")]
     #[doc(alias = "get_vexpand_set")]
+    #[doc(alias = "vexpand-set")]
     fn is_vexpand_set(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_vexpand_set(
@@ -806,6 +825,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_get_visible")]
+    #[doc(alias = "visible")]
     fn get_visible(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_get_visible(self.as_ref().to_glib_none().0)) }
     }
@@ -832,11 +852,13 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_has_default")]
+    #[doc(alias = "has-default")]
     fn has_default(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_has_default(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_widget_has_focus")]
+    #[doc(alias = "has-focus")]
     fn has_focus(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_has_focus(self.as_ref().to_glib_none().0)) }
     }
@@ -922,11 +944,13 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_is_sensitive")]
+    #[doc(alias = "sensitive")]
     fn is_sensitive(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_is_sensitive(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_widget_is_visible")]
+    #[doc(alias = "visible")]
     fn is_visible(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_is_visible(self.as_ref().to_glib_none().0)) }
     }
@@ -1082,6 +1106,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_can_focus")]
+    #[doc(alias = "can-focus")]
     fn set_can_focus(&self, can_focus: bool) {
         unsafe {
             ffi::gtk_widget_set_can_focus(self.as_ref().to_glib_none().0, can_focus.into_glib());
@@ -1089,6 +1114,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_can_target")]
+    #[doc(alias = "can-target")]
     fn set_can_target(&self, can_target: bool) {
         unsafe {
             ffi::gtk_widget_set_can_target(self.as_ref().to_glib_none().0, can_target.into_glib());
@@ -1106,6 +1132,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_css_classes")]
+    #[doc(alias = "css-classes")]
     fn set_css_classes(&self, classes: &[&str]) {
         unsafe {
             ffi::gtk_widget_set_css_classes(
@@ -1116,6 +1143,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_cursor")]
+    #[doc(alias = "cursor")]
     fn set_cursor(&self, cursor: Option<&gdk::Cursor>) {
         unsafe {
             ffi::gtk_widget_set_cursor(self.as_ref().to_glib_none().0, cursor.to_glib_none().0);
@@ -1150,6 +1178,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_focus_on_click")]
+    #[doc(alias = "focus-on-click")]
     fn set_focus_on_click(&self, focus_on_click: bool) {
         unsafe {
             ffi::gtk_widget_set_focus_on_click(
@@ -1160,6 +1189,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_focusable")]
+    #[doc(alias = "focusable")]
     fn set_focusable(&self, focusable: bool) {
         unsafe {
             ffi::gtk_widget_set_focusable(self.as_ref().to_glib_none().0, focusable.into_glib());
@@ -1176,6 +1206,8 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v4_16", deprecated = "Since 4.16")]
+    #[allow(deprecated)]
     #[doc(alias = "gtk_widget_set_font_options")]
     fn set_font_options(&self, options: Option<&cairo::FontOptions>) {
         unsafe {
@@ -1187,6 +1219,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_halign")]
+    #[doc(alias = "halign")]
     fn set_halign(&self, align: Align) {
         unsafe {
             ffi::gtk_widget_set_halign(self.as_ref().to_glib_none().0, align.into_glib());
@@ -1194,6 +1227,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_has_tooltip")]
+    #[doc(alias = "has-tooltip")]
     fn set_has_tooltip(&self, has_tooltip: bool) {
         unsafe {
             ffi::gtk_widget_set_has_tooltip(
@@ -1204,6 +1238,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_hexpand")]
+    #[doc(alias = "hexpand")]
     fn set_hexpand(&self, expand: bool) {
         unsafe {
             ffi::gtk_widget_set_hexpand(self.as_ref().to_glib_none().0, expand.into_glib());
@@ -1211,6 +1246,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_hexpand_set")]
+    #[doc(alias = "hexpand-set")]
     fn set_hexpand_set(&self, set: bool) {
         unsafe {
             ffi::gtk_widget_set_hexpand_set(self.as_ref().to_glib_none().0, set.into_glib());
@@ -1218,6 +1254,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_layout_manager")]
+    #[doc(alias = "layout-manager")]
     fn set_layout_manager(&self, layout_manager: Option<impl IsA<LayoutManager>>) {
         unsafe {
             ffi::gtk_widget_set_layout_manager(
@@ -1228,6 +1265,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_margin_bottom")]
+    #[doc(alias = "margin-bottom")]
     fn set_margin_bottom(&self, margin: i32) {
         unsafe {
             ffi::gtk_widget_set_margin_bottom(self.as_ref().to_glib_none().0, margin);
@@ -1235,6 +1273,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_margin_end")]
+    #[doc(alias = "margin-end")]
     fn set_margin_end(&self, margin: i32) {
         unsafe {
             ffi::gtk_widget_set_margin_end(self.as_ref().to_glib_none().0, margin);
@@ -1242,6 +1281,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_margin_start")]
+    #[doc(alias = "margin-start")]
     fn set_margin_start(&self, margin: i32) {
         unsafe {
             ffi::gtk_widget_set_margin_start(self.as_ref().to_glib_none().0, margin);
@@ -1249,6 +1289,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_margin_top")]
+    #[doc(alias = "margin-top")]
     fn set_margin_top(&self, margin: i32) {
         unsafe {
             ffi::gtk_widget_set_margin_top(self.as_ref().to_glib_none().0, margin);
@@ -1257,6 +1298,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_widget_set_name")]
     #[doc(alias = "set_name")]
+    #[doc(alias = "name")]
     fn set_widget_name(&self, name: &str) {
         unsafe {
             ffi::gtk_widget_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
@@ -1264,6 +1306,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_opacity")]
+    #[doc(alias = "opacity")]
     fn set_opacity(&self, opacity: f64) {
         unsafe {
             ffi::gtk_widget_set_opacity(self.as_ref().to_glib_none().0, opacity);
@@ -1271,6 +1314,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_overflow")]
+    #[doc(alias = "overflow")]
     fn set_overflow(&self, overflow: Overflow) {
         unsafe {
             ffi::gtk_widget_set_overflow(self.as_ref().to_glib_none().0, overflow.into_glib());
@@ -1288,6 +1332,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_receives_default")]
+    #[doc(alias = "receives-default")]
     fn set_receives_default(&self, receives_default: bool) {
         unsafe {
             ffi::gtk_widget_set_receives_default(
@@ -1298,6 +1343,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_sensitive")]
+    #[doc(alias = "sensitive")]
     fn set_sensitive(&self, sensitive: bool) {
         unsafe {
             ffi::gtk_widget_set_sensitive(self.as_ref().to_glib_none().0, sensitive.into_glib());
@@ -1323,6 +1369,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_tooltip_markup")]
+    #[doc(alias = "tooltip-markup")]
     fn set_tooltip_markup(&self, markup: Option<&str>) {
         unsafe {
             ffi::gtk_widget_set_tooltip_markup(
@@ -1333,6 +1380,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_tooltip_text")]
+    #[doc(alias = "tooltip-text")]
     fn set_tooltip_text(&self, text: Option<&str>) {
         unsafe {
             ffi::gtk_widget_set_tooltip_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
@@ -1340,6 +1388,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_valign")]
+    #[doc(alias = "valign")]
     fn set_valign(&self, align: Align) {
         unsafe {
             ffi::gtk_widget_set_valign(self.as_ref().to_glib_none().0, align.into_glib());
@@ -1347,6 +1396,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_vexpand")]
+    #[doc(alias = "vexpand")]
     fn set_vexpand(&self, expand: bool) {
         unsafe {
             ffi::gtk_widget_set_vexpand(self.as_ref().to_glib_none().0, expand.into_glib());
@@ -1354,6 +1404,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_vexpand_set")]
+    #[doc(alias = "vexpand-set")]
     fn set_vexpand_set(&self, set: bool) {
         unsafe {
             ffi::gtk_widget_set_vexpand_set(self.as_ref().to_glib_none().0, set.into_glib());
@@ -1361,6 +1412,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_widget_set_visible")]
+    #[doc(alias = "visible")]
     fn set_visible(&self, visible: bool) {
         unsafe {
             ffi::gtk_widget_set_visible(self.as_ref().to_glib_none().0, visible.into_glib());
@@ -1504,7 +1556,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"destroy\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     destroy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1536,7 +1588,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"direction-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     direction_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1558,7 +1610,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"hide\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     hide_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1591,7 +1643,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"keynav-failed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     keynav_failed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1613,7 +1665,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"map\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     map_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1646,7 +1698,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mnemonic-activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     mnemonic_activate_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1675,7 +1727,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-focus\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     move_focus_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1697,8 +1749,8 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             F: Fn(&P, i32, i32, bool, &Tooltip) -> bool + 'static,
         >(
             this: *mut ffi::GtkWidget,
-            x: libc::c_int,
-            y: libc::c_int,
+            x: std::ffi::c_int,
+            y: std::ffi::c_int,
             keyboard_mode: glib::ffi::gboolean,
             tooltip: *mut ffi::GtkTooltip,
             f: glib::ffi::gpointer,
@@ -1718,7 +1770,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"query-tooltip\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     query_tooltip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1740,7 +1792,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"realize\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     realize_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1762,7 +1814,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     show_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1794,7 +1846,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"state-flags-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     state_flags_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1816,7 +1868,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unmap\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     unmap_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1838,7 +1890,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unrealize\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     unrealize_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1861,7 +1913,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-focus\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_focus_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1884,7 +1936,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-target\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_target_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1907,7 +1959,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::css-classes\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_css_classes_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1930,7 +1982,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_cursor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1956,7 +2008,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-on-click\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_focus_on_click_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1979,7 +2031,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focusable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_focusable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2002,7 +2054,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::halign\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_halign_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2025,7 +2077,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-default\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_default_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2048,7 +2100,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-focus\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_focus_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2071,7 +2123,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-tooltip\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_tooltip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2097,7 +2149,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::height-request\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_height_request_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2120,7 +2172,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hexpand\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hexpand_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2143,7 +2195,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hexpand-set\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hexpand_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2169,7 +2221,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::layout-manager\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_layout_manager_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2195,7 +2247,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-bottom\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_margin_bottom_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2218,7 +2270,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-end\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_margin_end_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2241,7 +2293,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-start\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_margin_start_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2264,7 +2316,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-top\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_margin_top_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2287,7 +2339,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2310,7 +2362,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::opacity\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_opacity_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2333,7 +2385,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::overflow\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_overflow_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2356,7 +2408,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_parent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2382,7 +2434,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::receives-default\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_receives_default_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2405,7 +2457,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::root\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_root_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2428,7 +2480,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scale-factor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scale_factor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2451,7 +2503,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sensitive\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sensitive_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2477,7 +2529,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-markup\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_markup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2500,7 +2552,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-text\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2523,7 +2575,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::valign\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_valign_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2546,7 +2598,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vexpand\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_vexpand_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2569,7 +2621,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vexpand-set\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_vexpand_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2592,7 +2644,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2618,7 +2670,7 @@ pub trait WidgetExt: IsA<Widget> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width-request\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_width_request_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{CellArea, CellRenderer, TreeIter, TreeModel};
+use crate::{ffi, CellArea, CellRenderer, TreeIter, TreeModel};
 use glib::{prelude::*, translate::*};
 use std::boxed::Box as Box_;
 
@@ -20,12 +20,7 @@ impl CellLayout {
     pub const NONE: Option<&'static CellLayout> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::CellLayout>> Sealed for T {}
-}
-
-pub trait CellLayoutExt: IsA<CellLayout> + sealed::Sealed + 'static {
+pub trait CellLayoutExt: IsA<CellLayout> + 'static {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_cell_layout_add_attribute")]

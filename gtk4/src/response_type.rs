@@ -2,12 +2,8 @@
 
 use std::fmt;
 
-use crate::prelude::*;
-use glib::{
-    translate::*,
-    value::{FromValue, ValueType},
-    Type, Value,
-};
+use crate::{ffi, prelude::*};
+use glib::{translate::*, value::FromValue, Type, Value};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[doc(alias = "GtkResponseType")]
@@ -80,7 +76,7 @@ impl FromGlib<ffi::GtkResponseType> for ResponseType {
             ffi::GTK_RESPONSE_NO => Self::No,
             ffi::GTK_RESPONSE_APPLY => Self::Apply,
             ffi::GTK_RESPONSE_HELP => Self::Help,
-            value if value >= 0 && value <= ::std::u16::MAX as i32 => Self::Other(value as u16),
+            value if value >= 0 && value <= u16::MAX as i32 => Self::Other(value as u16),
             value => Self::__Unknown(value),
         }
     }

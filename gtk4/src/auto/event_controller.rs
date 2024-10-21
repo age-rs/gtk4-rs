@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{PropagationLimit, PropagationPhase, Widget};
+use crate::{ffi, PropagationLimit, PropagationPhase, Widget};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +23,7 @@ impl EventController {
     pub const NONE: Option<&'static EventController> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::EventController>> Sealed for T {}
-}
-
-pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
+pub trait EventControllerExt: IsA<EventController> + 'static {
     #[doc(alias = "gtk_event_controller_get_current_event")]
     #[doc(alias = "get_current_event")]
     fn current_event(&self) -> Option<gdk::Event> {
@@ -77,6 +72,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_event_controller_get_propagation_limit")]
     #[doc(alias = "get_propagation_limit")]
+    #[doc(alias = "propagation-limit")]
     fn propagation_limit(&self) -> PropagationLimit {
         unsafe {
             from_glib(ffi::gtk_event_controller_get_propagation_limit(
@@ -87,6 +83,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_event_controller_get_propagation_phase")]
     #[doc(alias = "get_propagation_phase")]
+    #[doc(alias = "propagation-phase")]
     fn propagation_phase(&self) -> PropagationPhase {
         unsafe {
             from_glib(ffi::gtk_event_controller_get_propagation_phase(
@@ -97,7 +94,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_event_controller_get_widget")]
     #[doc(alias = "get_widget")]
-    fn widget(&self) -> Widget {
+    fn widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_event_controller_get_widget(
                 self.as_ref().to_glib_none().0,
@@ -113,6 +110,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_event_controller_set_name")]
+    #[doc(alias = "name")]
     fn set_name(&self, name: Option<&str>) {
         unsafe {
             ffi::gtk_event_controller_set_name(
@@ -123,6 +121,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_event_controller_set_propagation_limit")]
+    #[doc(alias = "propagation-limit")]
     fn set_propagation_limit(&self, limit: PropagationLimit) {
         unsafe {
             ffi::gtk_event_controller_set_propagation_limit(
@@ -133,6 +132,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_event_controller_set_propagation_phase")]
+    #[doc(alias = "propagation-phase")]
     fn set_propagation_phase(&self, phase: PropagationPhase) {
         unsafe {
             ffi::gtk_event_controller_set_propagation_phase(
@@ -172,7 +172,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -198,7 +198,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::propagation-limit\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_propagation_limit_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -224,7 +224,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::propagation-phase\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_propagation_phase_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -250,7 +250,7 @@ pub trait EventControllerExt: IsA<EventController> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

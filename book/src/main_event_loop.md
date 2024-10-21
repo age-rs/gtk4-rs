@@ -245,7 +245,7 @@ The web client [`reqwest`](https://docs.rs/reqwest/latest/reqwest/) belongs to t
 Let's add it by executing the following command
 
 ```
-cargo add reqwest@0.11 --features rustls-tls --no-default-features
+cargo add reqwest@0.12 --features rustls-tls --no-default-features
 ```
 
 As soon as the button is pressed, we want to send a `GET` request to [www.gtk-rs.org](https://www.gtk-rs.org).
@@ -320,7 +320,7 @@ static RUNTIME: Runtime =
 #    let (sender, receiver) = async_channel::bounded(1);
 #    // Connect to "clicked" signal of `button`
 #    button.connect_clicked(move |_| {
-#        RUNTIME.spawn(clone!(@strong sender => async move {
+#        RUNTIME.spawn(clone!(#[strong] sender, async move {
 #            let response = reqwest::get("https://www.gtk-rs.org").await;
 #            sender.send(response).await.expect("The channel needs to be open.");
 #        }));
@@ -369,7 +369,7 @@ Filename: <a class=file-link href="https://github.com/gtk-rs/gtk4-rs/blob/master
 {{#rustdoc_include ../listings/main_event_loop/9/main.rs:tokio_runtime}}
 ```
 
-In the button callback we can now spawn the `requwest` `async` block with `tokio` rather than with `glib`.
+In the button callback we can now spawn the `reqwest` `async` block with `tokio` rather than with `glib`.
 
 Filename: <a class=file-link href="https://github.com/gtk-rs/gtk4-rs/blob/master/book/listings/main_event_loop/9/main.rs">listings/main_event_loop/9/main.rs</a>
 

@@ -8,9 +8,9 @@ use std::{
     rc::Rc,
 };
 
-use glib::{translate::*, IntoOptionalGStr};
+use glib::translate::*;
 
-use crate::{prelude::*, Dialog, DialogFlags, ResponseType, Widget, Window};
+use crate::{ffi, prelude::*, Dialog, DialogFlags, ResponseType, Widget, Window};
 
 impl Dialog {
     #[doc(alias = "gtk_dialog_new_with_buttons")]
@@ -41,16 +41,11 @@ impl Dialog {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Dialog>> Sealed for T {}
-}
-
 // rustdoc-stripper-ignore-next
 /// Trait containing manually implemented methods of [`Dialog`](crate::Dialog).
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait DialogExtManual: sealed::Sealed + IsA<Dialog> + 'static {
+pub trait DialogExtManual: IsA<Dialog> + 'static {
     #[doc(alias = "gtk_dialog_add_buttons")]
     fn add_buttons(&self, buttons: &[(&str, ResponseType)]) {
         for &(text, id) in buttons {
@@ -153,9 +148,13 @@ mod tests {
     #[test]
     async fn dialog_future() {
         let dialog = Dialog::new();
-        glib::idle_add_local_once(glib::clone!(@strong dialog => move || {
-            dialog.response(ResponseType::Ok);
-        }));
+        glib::idle_add_local_once(glib::clone!(
+            #[strong]
+            dialog,
+            move || {
+                dialog.response(ResponseType::Ok);
+            }
+        ));
         let response = dialog.run_future().await;
         assert_eq!(response, ResponseType::Ok);
     }

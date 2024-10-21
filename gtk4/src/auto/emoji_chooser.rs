@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Native,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Native,
     Overflow, Popover, PositionType, ShortcutManager, Widget,
 };
 use glib::{
@@ -41,7 +41,7 @@ impl EmojiChooser {
     pub fn connect_emoji_picked<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn emoji_picked_trampoline<F: Fn(&EmojiChooser, &str) + 'static>(
             this: *mut ffi::GtkEmojiChooser,
-            text: *mut libc::c_char,
+            text: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -55,7 +55,7 @@ impl EmojiChooser {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"emoji-picked\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     emoji_picked_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

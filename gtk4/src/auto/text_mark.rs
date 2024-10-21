@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::TextBuffer;
+use crate::{ffi, TextBuffer};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -79,12 +79,7 @@ impl TextMarkBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TextMark>> Sealed for T {}
-}
-
-pub trait TextMarkExt: IsA<TextMark> + sealed::Sealed + 'static {
+pub trait TextMarkExt: IsA<TextMark> + 'static {
     #[doc(alias = "gtk_text_mark_get_buffer")]
     #[doc(alias = "get_buffer")]
     fn buffer(&self) -> Option<TextBuffer> {
@@ -107,6 +102,7 @@ pub trait TextMarkExt: IsA<TextMark> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_mark_get_left_gravity")]
     #[doc(alias = "get_left_gravity")]
+    #[doc(alias = "left-gravity")]
     fn is_left_gravity(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_mark_get_left_gravity(

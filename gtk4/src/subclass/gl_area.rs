@@ -1,15 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`GLArea`](crate::GLArea).
+//! Traits intended for subclassing [`GLArea`].
 
 use gdk::GLContext;
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, GLArea};
+use crate::{ffi, prelude::*, subclass::prelude::*, GLArea};
 
 #[allow(clippy::upper_case_acronyms)]
-pub trait GLAreaImpl: GLAreaImplExt + WidgetImpl {
+pub trait GLAreaImpl: WidgetImpl + ObjectSubclass<Type: IsA<GLArea>> {
     fn create_context(&self) -> Option<GLContext> {
         self.parent_create_context()
     }
@@ -23,13 +23,8 @@ pub trait GLAreaImpl: GLAreaImplExt + WidgetImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::GLAreaImplExt> Sealed for T {}
-}
-
 #[allow(clippy::upper_case_acronyms)]
-pub trait GLAreaImplExt: sealed::Sealed + ObjectSubclass {
+pub trait GLAreaImplExt: GLAreaImpl {
     fn parent_create_context(&self) -> Option<GLContext> {
         unsafe {
             let data = Self::type_data();

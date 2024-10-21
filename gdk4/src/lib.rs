@@ -1,10 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
+#![allow(deprecated)]
 #![doc = include_str!("../README.md")]
 
 pub use cairo;
-pub use ffi;
+pub use gdk4_sys as ffi;
 pub use gdk_pixbuf;
 pub use gio;
 #[cfg(feature = "gl")]
@@ -70,8 +71,14 @@ mod content_formats_builder;
 mod content_provider;
 mod content_serializer;
 mod crossing_event;
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+mod cursor;
 mod delete_event;
 mod display;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+mod dmabuf_texture_builder;
 mod dnd_event;
 #[cfg(feature = "v4_12")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]

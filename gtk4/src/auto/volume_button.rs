@@ -7,7 +7,7 @@
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
 use crate::AccessibleRange;
 use crate::{
-    Accessible, AccessibleRole, Adjustment, Align, Buildable, ConstraintTarget, LayoutManager,
+    ffi, Accessible, AccessibleRole, Adjustment, Align, Buildable, ConstraintTarget, LayoutManager,
     Orientable, Orientation, Overflow, ScaleButton, Widget,
 };
 use glib::{
@@ -83,7 +83,7 @@ impl VolumeButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-symbolic\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_use_symbolic_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -126,6 +126,14 @@ impl VolumeButtonBuilder {
             builder: self
                 .builder
                 .property("adjustment", adjustment.clone().upcast()),
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    pub fn has_frame(self, has_frame: bool) -> Self {
+        Self {
+            builder: self.builder.property("has-frame", has_frame),
         }
     }
 

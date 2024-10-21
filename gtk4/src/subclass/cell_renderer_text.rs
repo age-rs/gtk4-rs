@@ -1,29 +1,25 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing
-//! [`CellRendererText`](crate::CellRendererText).
+//! Traits intended for subclassing [`CellRendererText`].
 
 use glib::{translate::*, GString};
 
-use crate::{prelude::*, subclass::prelude::*, CellRendererText};
+use crate::{ffi, prelude::*, subclass::prelude::*, CellRendererText};
 
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait CellRendererTextImpl: CellRendererTextImplExt + CellRendererImpl {
+pub trait CellRendererTextImpl:
+    CellRendererImpl + ObjectSubclass<Type: IsA<CellRendererText>>
+{
     fn edited(&self, path: &str, new_text: &str) {
         self.parent_edited(path, new_text);
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::CellRendererTextImplExt> Sealed for T {}
-}
-
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait CellRendererTextImplExt: sealed::Sealed + ObjectSubclass {
+pub trait CellRendererTextImplExt: CellRendererTextImpl {
     fn parent_edited(&self, path: &str, new_text: &str) {
         unsafe {
             let data = Self::type_data();

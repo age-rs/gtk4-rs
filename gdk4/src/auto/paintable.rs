@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{PaintableFlags, Snapshot};
+use crate::{ffi, PaintableFlags, Snapshot};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -34,12 +34,7 @@ impl Paintable {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Paintable>> Sealed for T {}
-}
-
-pub trait PaintableExt: IsA<Paintable> + sealed::Sealed + 'static {
+pub trait PaintableExt: IsA<Paintable> + 'static {
     #[doc(alias = "gdk_paintable_compute_concrete_size")]
     fn compute_concrete_size(
         &self,
@@ -142,7 +137,7 @@ pub trait PaintableExt: IsA<Paintable> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"invalidate-contents\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     invalidate_contents_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -164,7 +159,7 @@ pub trait PaintableExt: IsA<Paintable> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"invalidate-size\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     invalidate_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

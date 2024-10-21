@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Actionable, Align, Buildable, Button, ConstraintTarget,
+    ffi, Accessible, AccessibleRole, Actionable, Align, Buildable, Button, ConstraintTarget,
     LayoutManager, Overflow, Widget,
 };
 use glib::{
@@ -60,11 +60,13 @@ impl LinkButton {
 
     #[doc(alias = "gtk_link_button_get_visited")]
     #[doc(alias = "get_visited")]
+    #[doc(alias = "visited")]
     pub fn is_visited(&self) -> bool {
         unsafe { from_glib(ffi::gtk_link_button_get_visited(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_link_button_set_uri")]
+    #[doc(alias = "uri")]
     pub fn set_uri(&self, uri: &str) {
         unsafe {
             ffi::gtk_link_button_set_uri(self.to_glib_none().0, uri.to_glib_none().0);
@@ -72,6 +74,7 @@ impl LinkButton {
     }
 
     #[doc(alias = "gtk_link_button_set_visited")]
+    #[doc(alias = "visited")]
     pub fn set_visited(&self, visited: bool) {
         unsafe {
             ffi::gtk_link_button_set_visited(self.to_glib_none().0, visited.into_glib());
@@ -97,7 +100,7 @@ impl LinkButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-link\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_link_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -120,7 +123,7 @@ impl LinkButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_uri_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -143,7 +146,7 @@ impl LinkButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visited\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visited_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

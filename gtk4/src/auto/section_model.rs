@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -22,12 +23,7 @@ impl SectionModel {
     pub const NONE: Option<&'static SectionModel> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SectionModel>> Sealed for T {}
-}
-
-pub trait SectionModelExt: IsA<SectionModel> + sealed::Sealed + 'static {
+pub trait SectionModelExt: IsA<SectionModel> + 'static {
     #[doc(alias = "gtk_section_model_get_section")]
     #[doc(alias = "get_section")]
     fn section(&self, position: u32) -> (u32, u32) {
@@ -64,8 +60,8 @@ pub trait SectionModelExt: IsA<SectionModel> + sealed::Sealed + 'static {
             F: Fn(&P, u32, u32) + 'static,
         >(
             this: *mut ffi::GtkSectionModel,
-            position: libc::c_uint,
-            n_items: libc::c_uint,
+            position: std::ffi::c_uint,
+            n_items: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -80,7 +76,7 @@ pub trait SectionModelExt: IsA<SectionModel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"sections-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     sections_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

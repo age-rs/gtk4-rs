@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::Display;
+use crate::{ffi, Display};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -22,6 +22,7 @@ glib::wrapper! {
 impl DisplayManager {
     #[doc(alias = "gdk_display_manager_get_default_display")]
     #[doc(alias = "get_default_display")]
+    #[doc(alias = "default-display")]
     pub fn default_display(&self) -> Option<Display> {
         unsafe {
             from_glib_none(ffi::gdk_display_manager_get_default_display(
@@ -50,6 +51,7 @@ impl DisplayManager {
     }
 
     #[doc(alias = "gdk_display_manager_set_default_display")]
+    #[doc(alias = "default-display")]
     pub fn set_default_display(&self, display: &impl IsA<Display>) {
         unsafe {
             ffi::gdk_display_manager_set_default_display(
@@ -85,7 +87,7 @@ impl DisplayManager {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"display-opened\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     display_opened_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -108,7 +110,7 @@ impl DisplayManager {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-display\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_display_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

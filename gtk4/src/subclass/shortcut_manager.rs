@@ -1,14 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the
-//! [`ShortcutManager`](crate::ShortcutManager) interface.
+//! Traits intended for implementing the [`ShortcutManager`] interface.
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, ShortcutController, ShortcutManager};
+use crate::{ffi, prelude::*, subclass::prelude::*, ShortcutController, ShortcutManager};
 
-pub trait ShortcutManagerImpl: ObjectImpl {
+pub trait ShortcutManagerImpl: ObjectImpl + ObjectSubclass<Type: IsA<ShortcutManager>> {
     fn add_controller(&self, controller: &ShortcutController) {
         self.parent_add_controller(controller);
     }
@@ -18,12 +17,7 @@ pub trait ShortcutManagerImpl: ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ShortcutManagerImplExt> Sealed for T {}
-}
-
-pub trait ShortcutManagerImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ShortcutManagerImplExt: ShortcutManagerImpl {
     fn parent_add_controller(&self, controller: &ShortcutController) {
         unsafe {
             let type_data = Self::type_data();

@@ -3,7 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow,
+    Widget,
 };
 use glib::{
     prelude::*,
@@ -38,11 +39,13 @@ impl Spinner {
 
     #[doc(alias = "gtk_spinner_get_spinning")]
     #[doc(alias = "get_spinning")]
+    #[doc(alias = "spinning")]
     pub fn is_spinning(&self) -> bool {
         unsafe { from_glib(ffi::gtk_spinner_get_spinning(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_spinner_set_spinning")]
+    #[doc(alias = "spinning")]
     pub fn set_spinning(&self, spinning: bool) {
         unsafe {
             ffi::gtk_spinner_set_spinning(self.to_glib_none().0, spinning.into_glib());
@@ -78,7 +81,7 @@ impl Spinner {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spinning\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spinning_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, ArrowType, Buildable, ConstraintTarget, LayoutManager,
+    ffi, Accessible, AccessibleRole, Align, ArrowType, Buildable, ConstraintTarget, LayoutManager,
     Overflow, Popover, Widget,
 };
 use glib::{
@@ -41,6 +41,7 @@ impl MenuButton {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
     #[doc(alias = "gtk_menu_button_get_active")]
     #[doc(alias = "get_active")]
+    #[doc(alias = "active")]
     pub fn is_active(&self) -> bool {
         unsafe { from_glib(ffi::gtk_menu_button_get_active(self.to_glib_none().0)) }
     }
@@ -49,6 +50,7 @@ impl MenuButton {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_4")))]
     #[doc(alias = "gtk_menu_button_get_always_show_arrow")]
     #[doc(alias = "get_always_show_arrow")]
+    #[doc(alias = "always-show-arrow")]
     pub fn must_always_show_arrow(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_menu_button_get_always_show_arrow(
@@ -61,6 +63,7 @@ impl MenuButton {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_menu_button_get_can_shrink")]
     #[doc(alias = "get_can_shrink")]
+    #[doc(alias = "can-shrink")]
     pub fn can_shrink(&self) -> bool {
         unsafe { from_glib(ffi::gtk_menu_button_get_can_shrink(self.to_glib_none().0)) }
     }
@@ -81,12 +84,14 @@ impl MenuButton {
 
     #[doc(alias = "gtk_menu_button_get_has_frame")]
     #[doc(alias = "get_has_frame")]
+    #[doc(alias = "has-frame")]
     pub fn has_frame(&self) -> bool {
         unsafe { from_glib(ffi::gtk_menu_button_get_has_frame(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_menu_button_get_icon_name")]
     #[doc(alias = "get_icon_name")]
+    #[doc(alias = "icon-name")]
     pub fn icon_name(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gtk_menu_button_get_icon_name(self.to_glib_none().0)) }
     }
@@ -99,6 +104,7 @@ impl MenuButton {
 
     #[doc(alias = "gtk_menu_button_get_menu_model")]
     #[doc(alias = "get_menu_model")]
+    #[doc(alias = "menu-model")]
     pub fn menu_model(&self) -> Option<gio::MenuModel> {
         unsafe { from_glib_none(ffi::gtk_menu_button_get_menu_model(self.to_glib_none().0)) }
     }
@@ -113,12 +119,14 @@ impl MenuButton {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_4")))]
     #[doc(alias = "gtk_menu_button_get_primary")]
     #[doc(alias = "get_primary")]
+    #[doc(alias = "primary")]
     pub fn is_primary(&self) -> bool {
         unsafe { from_glib(ffi::gtk_menu_button_get_primary(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_menu_button_get_use_underline")]
     #[doc(alias = "get_use_underline")]
+    #[doc(alias = "use-underline")]
     pub fn uses_underline(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_menu_button_get_use_underline(
@@ -144,6 +152,7 @@ impl MenuButton {
     #[cfg(feature = "v4_10")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
     #[doc(alias = "gtk_menu_button_set_active")]
+    #[doc(alias = "active")]
     pub fn set_active(&self, active: bool) {
         unsafe {
             ffi::gtk_menu_button_set_active(self.to_glib_none().0, active.into_glib());
@@ -153,6 +162,7 @@ impl MenuButton {
     #[cfg(feature = "v4_4")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_4")))]
     #[doc(alias = "gtk_menu_button_set_always_show_arrow")]
+    #[doc(alias = "always-show-arrow")]
     pub fn set_always_show_arrow(&self, always_show_arrow: bool) {
         unsafe {
             ffi::gtk_menu_button_set_always_show_arrow(
@@ -165,6 +175,7 @@ impl MenuButton {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_menu_button_set_can_shrink")]
+    #[doc(alias = "can-shrink")]
     pub fn set_can_shrink(&self, can_shrink: bool) {
         unsafe {
             ffi::gtk_menu_button_set_can_shrink(self.to_glib_none().0, can_shrink.into_glib());
@@ -174,6 +185,7 @@ impl MenuButton {
     #[cfg(feature = "v4_6")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_6")))]
     #[doc(alias = "gtk_menu_button_set_child")]
+    #[doc(alias = "child")]
     pub fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_menu_button_set_child(
@@ -213,6 +225,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_direction")]
+    #[doc(alias = "direction")]
     pub fn set_direction(&self, direction: ArrowType) {
         unsafe {
             ffi::gtk_menu_button_set_direction(self.to_glib_none().0, direction.into_glib());
@@ -220,6 +233,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_has_frame")]
+    #[doc(alias = "has-frame")]
     pub fn set_has_frame(&self, has_frame: bool) {
         unsafe {
             ffi::gtk_menu_button_set_has_frame(self.to_glib_none().0, has_frame.into_glib());
@@ -227,6 +241,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_icon_name")]
+    #[doc(alias = "icon-name")]
     pub fn set_icon_name(&self, icon_name: &str) {
         unsafe {
             ffi::gtk_menu_button_set_icon_name(self.to_glib_none().0, icon_name.to_glib_none().0);
@@ -234,6 +249,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_label")]
+    #[doc(alias = "label")]
     pub fn set_label(&self, label: &str) {
         unsafe {
             ffi::gtk_menu_button_set_label(self.to_glib_none().0, label.to_glib_none().0);
@@ -241,6 +257,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_menu_model")]
+    #[doc(alias = "menu-model")]
     pub fn set_menu_model(&self, menu_model: Option<&impl IsA<gio::MenuModel>>) {
         unsafe {
             ffi::gtk_menu_button_set_menu_model(
@@ -251,6 +268,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_popover")]
+    #[doc(alias = "popover")]
     pub fn set_popover(&self, popover: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_menu_button_set_popover(
@@ -263,6 +281,7 @@ impl MenuButton {
     #[cfg(feature = "v4_4")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_4")))]
     #[doc(alias = "gtk_menu_button_set_primary")]
+    #[doc(alias = "primary")]
     pub fn set_primary(&self, primary: bool) {
         unsafe {
             ffi::gtk_menu_button_set_primary(self.to_glib_none().0, primary.into_glib());
@@ -270,6 +289,7 @@ impl MenuButton {
     }
 
     #[doc(alias = "gtk_menu_button_set_use_underline")]
+    #[doc(alias = "use-underline")]
     pub fn set_use_underline(&self, use_underline: bool) {
         unsafe {
             ffi::gtk_menu_button_set_use_underline(
@@ -295,7 +315,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -326,7 +346,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_active_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -354,7 +374,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::always-show-arrow\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_always_show_arrow_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -379,7 +399,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-shrink\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_shrink_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -404,7 +424,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -427,7 +447,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_direction_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -450,7 +470,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-frame\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_frame_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -473,7 +493,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_name_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -496,7 +516,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -519,7 +539,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-model\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_menu_model_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -542,7 +562,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popover\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_popover_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -567,7 +587,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_primary_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -590,7 +610,7 @@ impl MenuButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_use_underline_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

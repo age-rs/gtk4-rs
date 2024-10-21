@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`Adjustment`](crate::Adjustment).
+//! Traits intended for subclassing [`Adjustment`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Adjustment};
+use crate::{ffi, prelude::*, subclass::prelude::*, Adjustment};
 
-pub trait AdjustmentImpl: AdjustmentImplExt + ObjectImpl {
+pub trait AdjustmentImpl: ObjectImpl + ObjectSubclass<Type: IsA<Adjustment>> {
     fn changed(&self) {
         self.parent_changed()
     }
@@ -17,12 +17,7 @@ pub trait AdjustmentImpl: AdjustmentImplExt + ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AdjustmentImplExt> Sealed for T {}
-}
-
-pub trait AdjustmentImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AdjustmentImplExt: AdjustmentImpl {
     fn parent_changed(&self) {
         unsafe {
             let data = Self::type_data();

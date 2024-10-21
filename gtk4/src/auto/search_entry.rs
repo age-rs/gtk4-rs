@@ -3,9 +3,12 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, Editable, LayoutManager,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, Editable, LayoutManager,
     Overflow, Widget,
 };
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+use crate::{InputHints, InputPurpose};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -37,6 +40,28 @@ impl SearchEntry {
         SearchEntryBuilder::new()
     }
 
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_search_entry_get_input_hints")]
+    #[doc(alias = "get_input_hints")]
+    #[doc(alias = "input-hints")]
+    pub fn input_hints(&self) -> InputHints {
+        unsafe { from_glib(ffi::gtk_search_entry_get_input_hints(self.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_search_entry_get_input_purpose")]
+    #[doc(alias = "get_input_purpose")]
+    #[doc(alias = "input-purpose")]
+    pub fn input_purpose(&self) -> InputPurpose {
+        unsafe {
+            from_glib(ffi::gtk_search_entry_get_input_purpose(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gtk_search_entry_get_key_capture_widget")]
     #[doc(alias = "get_key_capture_widget")]
     pub fn key_capture_widget(&self) -> Option<Widget> {
@@ -51,8 +76,29 @@ impl SearchEntry {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_8")))]
     #[doc(alias = "gtk_search_entry_get_search_delay")]
     #[doc(alias = "get_search_delay")]
+    #[doc(alias = "search-delay")]
     pub fn search_delay(&self) -> u32 {
         unsafe { ffi::gtk_search_entry_get_search_delay(self.to_glib_none().0) }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_search_entry_set_input_hints")]
+    #[doc(alias = "input-hints")]
+    pub fn set_input_hints(&self, hints: InputHints) {
+        unsafe {
+            ffi::gtk_search_entry_set_input_hints(self.to_glib_none().0, hints.into_glib());
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_search_entry_set_input_purpose")]
+    #[doc(alias = "input-purpose")]
+    pub fn set_input_purpose(&self, purpose: InputPurpose) {
+        unsafe {
+            ffi::gtk_search_entry_set_input_purpose(self.to_glib_none().0, purpose.into_glib());
+        }
     }
 
     #[doc(alias = "gtk_search_entry_set_key_capture_widget")]
@@ -68,6 +114,7 @@ impl SearchEntry {
     #[cfg(feature = "v4_8")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_8")))]
     #[doc(alias = "gtk_search_entry_set_search_delay")]
+    #[doc(alias = "search-delay")]
     pub fn set_search_delay(&self, delay: u32) {
         unsafe {
             ffi::gtk_search_entry_set_search_delay(self.to_glib_none().0, delay);
@@ -108,7 +155,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -134,7 +181,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-match\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     next_match_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -160,7 +207,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"previous-match\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     previous_match_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -186,7 +233,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     search_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -208,7 +255,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-started\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     search_started_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -230,7 +277,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stop-search\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     stop_search_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -260,8 +307,58 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activates-default\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_activates_default_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "input-hints")]
+    pub fn connect_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_hints_trampoline<F: Fn(&SearchEntry) + 'static>(
+            this: *mut ffi::GtkSearchEntry,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::input-hints\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_input_hints_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "input-purpose")]
+    pub fn connect_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_purpose_trampoline<F: Fn(&SearchEntry) + 'static>(
+            this: *mut ffi::GtkSearchEntry,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::input-purpose\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_input_purpose_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -283,7 +380,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::placeholder-text\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_placeholder_text_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -308,7 +405,7 @@ impl SearchEntry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-delay\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_search_delay_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -344,6 +441,22 @@ impl SearchEntryBuilder {
             builder: self
                 .builder
                 .property("activates-default", activates_default),
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    pub fn input_hints(self, input_hints: InputHints) -> Self {
+        Self {
+            builder: self.builder.property("input-hints", input_hints),
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    pub fn input_purpose(self, input_purpose: InputPurpose) -> Self {
+        Self {
+            builder: self.builder.property("input-purpose", input_purpose),
         }
     }
 

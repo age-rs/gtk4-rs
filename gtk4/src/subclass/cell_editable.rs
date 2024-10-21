@@ -1,16 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the [`CellEditable`](crate::CellEditable)
-//! interface.
+//! Traits intended for implementing the [`CellEditable`] interface.
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, CellEditable};
+use crate::{ffi, prelude::*, subclass::prelude::*, CellEditable};
 
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait CellEditableImpl: ObjectImpl {
+pub trait CellEditableImpl: ObjectImpl + ObjectSubclass<Type: IsA<CellEditable>> {
     fn editing_done(&self) {
         self.parent_editing_done()
     }
@@ -24,14 +23,9 @@ pub trait CellEditableImpl: ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::CellEditableImplExt> Sealed for T {}
-}
-
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait CellEditableImplExt: sealed::Sealed + ObjectSubclass {
+pub trait CellEditableImplExt: CellEditableImpl {
     fn parent_editing_done(&self) {
         unsafe {
             let type_data = Self::type_data();

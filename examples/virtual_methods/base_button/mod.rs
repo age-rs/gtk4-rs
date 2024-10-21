@@ -36,6 +36,7 @@ pub trait BaseButtonExt: IsA<BaseButton> {
     ///
     /// This retrieves this instance's class and calls the function pointer in
     /// it.
+    #[allow(dead_code)]
     fn sync_method(&self, extra_text: Option<&str>) {
         let obj = self.upcast_ref::<BaseButton>();
         (obj.class().as_ref().sync_method)(obj, extra_text);
@@ -59,7 +60,7 @@ impl<O: IsA<BaseButton>> BaseButtonExt for O {}
 /// implement.
 ///
 /// See `derived_button/imp.rs` for how to override virtual methods.
-pub trait BaseButtonImpl: ButtonImpl {
+pub trait BaseButtonImpl: ButtonImpl + ObjectSubclass<Type: IsA<BaseButton>> {
     /// Default implementation of a virtual method.
     ///
     /// This always calls into the implementation of the parent class so that if

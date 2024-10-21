@@ -2,16 +2,11 @@
 
 use glib::{translate::*, ControlFlow, WeakRef};
 
-use crate::{prelude::*, Widget};
-
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Widget>> Sealed for T {}
-}
+use crate::{ffi, prelude::*, Widget};
 
 // rustdoc-stripper-ignore-next
 /// Trait containing manually implemented methods of [`Widget`](crate::Widget).
-pub trait WidgetExtManual: sealed::Sealed + IsA<Widget> + 'static {
+pub trait WidgetExtManual: IsA<Widget> + 'static {
     #[doc(alias = "gtk_widget_add_tick_callback")]
     fn add_tick_callback<P: Fn(&Self, &gdk::FrameClock) -> ControlFlow + 'static>(
         &self,

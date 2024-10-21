@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    EventController, Gesture, GestureDrag, GestureSingle, Orientation, PanDirection,
+    ffi, EventController, Gesture, GestureDrag, GestureSingle, Orientation, PanDirection,
     PropagationLimit, PropagationPhase,
 };
 use glib::{
@@ -46,6 +46,7 @@ impl GesturePan {
     }
 
     #[doc(alias = "gtk_gesture_pan_set_orientation")]
+    #[doc(alias = "orientation")]
     pub fn set_orientation(&self, orientation: Orientation) {
         unsafe {
             ffi::gtk_gesture_pan_set_orientation(self.to_glib_none().0, orientation.into_glib());
@@ -57,7 +58,7 @@ impl GesturePan {
         unsafe extern "C" fn pan_trampoline<F: Fn(&GesturePan, PanDirection, f64) + 'static>(
             this: *mut ffi::GtkGesturePan,
             direction: ffi::GtkPanDirection,
-            offset: libc::c_double,
+            offset: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -68,7 +69,7 @@ impl GesturePan {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pan\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     pan_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -91,7 +92,7 @@ impl GesturePan {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::orientation\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_orientation_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

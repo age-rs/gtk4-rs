@@ -3,7 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow,
+    Widget,
 };
 use glib::{
     prelude::*,
@@ -49,6 +50,14 @@ impl Calendar {
         unsafe { from_glib_full(ffi::gtk_calendar_get_date(self.to_glib_none().0)) }
     }
 
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_calendar_get_day")]
+    #[doc(alias = "get_day")]
+    pub fn day(&self) -> i32 {
+        unsafe { ffi::gtk_calendar_get_day(self.to_glib_none().0) }
+    }
+
     #[doc(alias = "gtk_calendar_get_day_is_marked")]
     #[doc(alias = "get_day_is_marked")]
     pub fn day_is_marked(&self, day: u32) -> bool {
@@ -60,26 +69,45 @@ impl Calendar {
         }
     }
 
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_calendar_get_month")]
+    #[doc(alias = "get_month")]
+    pub fn month(&self) -> i32 {
+        unsafe { ffi::gtk_calendar_get_month(self.to_glib_none().0) }
+    }
+
     #[doc(alias = "gtk_calendar_get_show_day_names")]
     #[doc(alias = "get_show_day_names")]
+    #[doc(alias = "show-day-names")]
     pub fn shows_day_names(&self) -> bool {
         unsafe { from_glib(ffi::gtk_calendar_get_show_day_names(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_calendar_get_show_heading")]
     #[doc(alias = "get_show_heading")]
+    #[doc(alias = "show-heading")]
     pub fn shows_heading(&self) -> bool {
         unsafe { from_glib(ffi::gtk_calendar_get_show_heading(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_calendar_get_show_week_numbers")]
     #[doc(alias = "get_show_week_numbers")]
+    #[doc(alias = "show-week-numbers")]
     pub fn shows_week_numbers(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_calendar_get_show_week_numbers(
                 self.to_glib_none().0,
             ))
         }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_calendar_get_year")]
+    #[doc(alias = "get_year")]
+    pub fn year(&self) -> i32 {
+        unsafe { ffi::gtk_calendar_get_year(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_calendar_mark_day")]
@@ -96,7 +124,28 @@ impl Calendar {
         }
     }
 
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_calendar_set_day")]
+    #[doc(alias = "day")]
+    pub fn set_day(&self, day: i32) {
+        unsafe {
+            ffi::gtk_calendar_set_day(self.to_glib_none().0, day);
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_calendar_set_month")]
+    #[doc(alias = "month")]
+    pub fn set_month(&self, month: i32) {
+        unsafe {
+            ffi::gtk_calendar_set_month(self.to_glib_none().0, month);
+        }
+    }
+
     #[doc(alias = "gtk_calendar_set_show_day_names")]
+    #[doc(alias = "show-day-names")]
     pub fn set_show_day_names(&self, value: bool) {
         unsafe {
             ffi::gtk_calendar_set_show_day_names(self.to_glib_none().0, value.into_glib());
@@ -104,6 +153,7 @@ impl Calendar {
     }
 
     #[doc(alias = "gtk_calendar_set_show_heading")]
+    #[doc(alias = "show-heading")]
     pub fn set_show_heading(&self, value: bool) {
         unsafe {
             ffi::gtk_calendar_set_show_heading(self.to_glib_none().0, value.into_glib());
@@ -111,9 +161,20 @@ impl Calendar {
     }
 
     #[doc(alias = "gtk_calendar_set_show_week_numbers")]
+    #[doc(alias = "show-week-numbers")]
     pub fn set_show_week_numbers(&self, value: bool) {
         unsafe {
             ffi::gtk_calendar_set_show_week_numbers(self.to_glib_none().0, value.into_glib());
+        }
+    }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    #[doc(alias = "gtk_calendar_set_year")]
+    #[doc(alias = "year")]
+    pub fn set_year(&self, year: i32) {
+        unsafe {
+            ffi::gtk_calendar_set_year(self.to_glib_none().0, year);
         }
     }
 
@@ -122,30 +183,6 @@ impl Calendar {
         unsafe {
             ffi::gtk_calendar_unmark_day(self.to_glib_none().0, day);
         }
-    }
-
-    pub fn day(&self) -> i32 {
-        ObjectExt::property(self, "day")
-    }
-
-    pub fn set_day(&self, day: i32) {
-        ObjectExt::set_property(self, "day", day)
-    }
-
-    pub fn month(&self) -> i32 {
-        ObjectExt::property(self, "month")
-    }
-
-    pub fn set_month(&self, month: i32) {
-        ObjectExt::set_property(self, "month", month)
-    }
-
-    pub fn year(&self) -> i32 {
-        ObjectExt::property(self, "year")
-    }
-
-    pub fn set_year(&self, year: i32) {
-        ObjectExt::set_property(self, "year", year)
     }
 
     #[doc(alias = "day-selected")]
@@ -162,7 +199,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"day-selected\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     day_selected_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -184,7 +221,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-month\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     next_month_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -206,7 +243,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-year\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     next_year_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -228,7 +265,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"prev-month\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     prev_month_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -250,7 +287,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"prev-year\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     prev_year_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -273,7 +310,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::day\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_day_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -296,7 +333,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::month\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_month_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -319,7 +356,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-day-names\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_day_names_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -342,7 +379,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-heading\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_heading_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -368,7 +405,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-week-numbers\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_week_numbers_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -391,7 +428,7 @@ impl Calendar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::year\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_year_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

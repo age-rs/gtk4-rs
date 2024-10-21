@@ -1,15 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the [`FontChooser`](crate::FontChooser)
-//! interface.
+//! Traits intended for implementing the [`FontChooser`] interface.
 use std::sync::OnceLock;
 
 use glib::{translate::*, GString, Quark};
 use pango::{FontFace, FontFamily, FontMap};
 
 use super::PtrHolder;
-use crate::{prelude::*, subclass::prelude::*, FontChooser};
+use crate::{ffi, prelude::*, subclass::prelude::*, FontChooser};
 
 #[derive(Debug)]
 pub struct FilterCallback {
@@ -49,7 +48,7 @@ impl Drop for FilterCallback {
 
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait FontChooserImpl: ObjectImpl {
+pub trait FontChooserImpl: ObjectImpl + ObjectSubclass<Type: IsA<FontChooser>> {
     fn font_family(&self) -> Option<FontFamily> {
         self.parent_font_family()
     }
@@ -79,14 +78,9 @@ pub trait FontChooserImpl: ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::FontChooserImplExt> Sealed for T {}
-}
-
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait FontChooserImplExt: sealed::Sealed + ObjectSubclass {
+pub trait FontChooserImplExt: FontChooserImpl {
     fn parent_font_family(&self) -> Option<FontFamily> {
         unsafe {
             let type_data = Self::type_data();

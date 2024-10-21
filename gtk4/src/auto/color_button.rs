@@ -4,8 +4,8 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ColorChooser, ConstraintTarget, LayoutManager,
-    Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ColorChooser, ConstraintTarget,
+    LayoutManager, Overflow, Widget,
 };
 use glib::{
     prelude::*,
@@ -54,6 +54,7 @@ impl ColorButton {
     #[allow(deprecated)]
     #[doc(alias = "gtk_color_button_get_modal")]
     #[doc(alias = "get_modal")]
+    #[doc(alias = "modal")]
     pub fn is_modal(&self) -> bool {
         unsafe { from_glib(ffi::gtk_color_button_get_modal(self.to_glib_none().0)) }
     }
@@ -69,6 +70,7 @@ impl ColorButton {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_color_button_set_modal")]
+    #[doc(alias = "modal")]
     pub fn set_modal(&self, modal: bool) {
         unsafe {
             ffi::gtk_color_button_set_modal(self.to_glib_none().0, modal.into_glib());
@@ -78,6 +80,7 @@ impl ColorButton {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_color_button_set_title")]
+    #[doc(alias = "title")]
     pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_color_button_set_title(self.to_glib_none().0, title.to_glib_none().0);
@@ -110,7 +113,7 @@ impl ColorButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -138,7 +141,7 @@ impl ColorButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"color-set\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     color_set_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -161,7 +164,7 @@ impl ColorButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_modal_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -184,7 +187,7 @@ impl ColorButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-editor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_editor_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -207,7 +210,7 @@ impl ColorButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

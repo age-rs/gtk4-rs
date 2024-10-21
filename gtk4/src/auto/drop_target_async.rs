@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{EventController, PropagationLimit, PropagationPhase};
+use crate::{ffi, EventController, PropagationLimit, PropagationPhase};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -67,6 +67,7 @@ impl DropTargetAsync {
     }
 
     #[doc(alias = "gtk_drop_target_async_set_actions")]
+    #[doc(alias = "actions")]
     pub fn set_actions(&self, actions: gdk::DragAction) {
         unsafe {
             ffi::gtk_drop_target_async_set_actions(self.to_glib_none().0, actions.into_glib());
@@ -74,6 +75,7 @@ impl DropTargetAsync {
     }
 
     #[doc(alias = "gtk_drop_target_async_set_formats")]
+    #[doc(alias = "formats")]
     pub fn set_formats(&self, formats: Option<&gdk::ContentFormats>) {
         unsafe {
             ffi::gtk_drop_target_async_set_formats(self.to_glib_none().0, formats.to_glib_none().0);
@@ -100,7 +102,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accept\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     accept_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -118,8 +120,8 @@ impl DropTargetAsync {
         >(
             this: *mut ffi::GtkDropTargetAsync,
             drop: *mut gdk::ffi::GdkDrop,
-            x: libc::c_double,
-            y: libc::c_double,
+            x: std::ffi::c_double,
+            y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) -> gdk::ffi::GdkDragAction {
             let f: &F = &*(f as *const F);
@@ -130,7 +132,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-enter\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     drag_enter_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -155,7 +157,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-leave\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     drag_leave_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -173,8 +175,8 @@ impl DropTargetAsync {
         >(
             this: *mut ffi::GtkDropTargetAsync,
             drop: *mut gdk::ffi::GdkDrop,
-            x: libc::c_double,
-            y: libc::c_double,
+            x: std::ffi::c_double,
+            y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) -> gdk::ffi::GdkDragAction {
             let f: &F = &*(f as *const F);
@@ -185,7 +187,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-motion\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     drag_motion_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -203,8 +205,8 @@ impl DropTargetAsync {
         >(
             this: *mut ffi::GtkDropTargetAsync,
             drop: *mut gdk::ffi::GdkDrop,
-            x: libc::c_double,
-            y: libc::c_double,
+            x: std::ffi::c_double,
+            y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);
@@ -215,7 +217,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drop\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     drop_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -238,7 +240,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::actions\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_actions_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -261,7 +263,7 @@ impl DropTargetAsync {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::formats\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_formats_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

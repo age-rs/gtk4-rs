@@ -1,15 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`IMContext`](crate::IMContext).
+//! Traits intended for subclassing [`IMContext`].
 
 use glib::{translate::*, GString};
 use pango::AttrList;
 
-use crate::{prelude::*, subclass::prelude::*, IMContext, Widget};
+use crate::{ffi, prelude::*, subclass::prelude::*, IMContext, Widget};
 
 #[allow(clippy::upper_case_acronyms)]
-pub trait IMContextImpl: IMContextImplExt + ObjectImpl {
+pub trait IMContextImpl: ObjectImpl + ObjectSubclass<Type: IsA<IMContext>> {
     fn commit(&self, string: &str) {
         self.parent_commit(string)
     }
@@ -67,15 +67,15 @@ pub trait IMContextImpl: IMContextImplExt + ObjectImpl {
     fn activate_osk(&self) {
         self.parent_activate_osk()
     }
-}
-
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IMContextImplExt> Sealed for T {}
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    fn activate_osk_with_event(&self, event: Option<&gdk::Event>) -> bool {
+        self.parent_activate_osk_with_event(event)
+    }
 }
 
 #[allow(clippy::upper_case_acronyms)]
-pub trait IMContextImplExt: sealed::Sealed + ObjectSubclass {
+pub trait IMContextImplExt: IMContextImpl {
     fn parent_commit(&self, string: &str) {
         unsafe {
             let data = Self::type_data();
@@ -310,6 +310,23 @@ pub trait IMContextImplExt: sealed::Sealed + ObjectSubclass {
             }
         }
     }
+
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    fn parent_activate_osk_with_event(&self, event: Option<&gdk::Event>) -> bool {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GtkIMContextClass;
+            if let Some(f) = (*parent_class).activate_osk_with_event {
+                from_glib(f(
+                    self.obj().unsafe_cast_ref::<IMContext>().to_glib_none().0,
+                    event.to_glib_none().0,
+                ))
+            } else {
+                false
+            }
+        }
+    }
 }
 
 impl<T: IMContextImpl> IMContextImplExt for T {}
@@ -341,6 +358,11 @@ unsafe impl<T: IMContextImpl> IsSubclassable<T> for IMContext {
         #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
         {
             klass.activate_osk = Some(im_context_activate_osk::<T>);
+        };
+        #[cfg(feature = "v4_14")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+        {
+            klass.activate_osk_with_event = Some(im_context_activate_osk_with_event::<T>);
         };
     }
 }
@@ -522,4 +544,19 @@ unsafe extern "C" fn im_context_activate_osk<T: IMContextImpl>(ptr: *mut ffi::Gt
     let imp = instance.imp();
 
     imp.activate_osk()
+}
+
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+unsafe extern "C" fn im_context_activate_osk_with_event<T: IMContextImpl>(
+    ptr: *mut ffi::GtkIMContext,
+    eventptr: *mut gdk::ffi::GdkEvent,
+) -> glib::ffi::gboolean {
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.imp();
+
+    let event: Borrowed<Option<gdk::Event>> = from_glib_borrow(eventptr);
+
+    imp.activate_osk_with_event(event.as_ref().as_ref())
+        .into_glib()
 }

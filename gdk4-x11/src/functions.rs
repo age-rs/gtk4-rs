@@ -1,14 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::{translate::*, IntoGStr};
+use glib::translate::*;
 #[cfg(feature = "xlib")]
 #[cfg_attr(docsrs, doc(cfg(feature = "xlib")))]
 use x11::xlib::Atom as XAtom;
 
 pub use crate::auto::functions::*;
-use crate::X11Display;
 #[cfg(not(feature = "xlib"))]
 use crate::XAtom;
+use crate::{ffi, X11Display};
 
 #[doc(alias = "gdk_x11_get_xatom_by_name_for_display")]
 pub fn x11_get_xatom_by_name_for_display(display: &X11Display, atom_name: impl IntoGStr) -> XAtom {

@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::prelude::*;
 
 glib::wrapper! {
@@ -17,11 +18,6 @@ impl ConstraintTarget {
     pub const NONE: Option<&'static ConstraintTarget> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ConstraintTarget>> Sealed for T {}
-}
-
-pub trait ConstraintTargetExt: IsA<ConstraintTarget> + sealed::Sealed + 'static {}
+pub trait ConstraintTargetExt: IsA<ConstraintTarget> + 'static {}
 
 impl<O: IsA<ConstraintTarget>> ConstraintTargetExt for O {}

@@ -3,7 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow,
+    Widget,
 };
 use glib::{
     prelude::*,
@@ -56,6 +57,7 @@ impl Expander {
 
     #[doc(alias = "gtk_expander_get_expanded")]
     #[doc(alias = "get_expanded")]
+    #[doc(alias = "expanded")]
     pub fn is_expanded(&self) -> bool {
         unsafe { from_glib(ffi::gtk_expander_get_expanded(self.to_glib_none().0)) }
     }
@@ -68,29 +70,34 @@ impl Expander {
 
     #[doc(alias = "gtk_expander_get_label_widget")]
     #[doc(alias = "get_label_widget")]
+    #[doc(alias = "label-widget")]
     pub fn label_widget(&self) -> Option<Widget> {
         unsafe { from_glib_none(ffi::gtk_expander_get_label_widget(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_expander_get_resize_toplevel")]
     #[doc(alias = "get_resize_toplevel")]
+    #[doc(alias = "resize-toplevel")]
     pub fn resizes_toplevel(&self) -> bool {
         unsafe { from_glib(ffi::gtk_expander_get_resize_toplevel(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_expander_get_use_markup")]
     #[doc(alias = "get_use_markup")]
+    #[doc(alias = "use-markup")]
     pub fn uses_markup(&self) -> bool {
         unsafe { from_glib(ffi::gtk_expander_get_use_markup(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_expander_get_use_underline")]
     #[doc(alias = "get_use_underline")]
+    #[doc(alias = "use-underline")]
     pub fn uses_underline(&self) -> bool {
         unsafe { from_glib(ffi::gtk_expander_get_use_underline(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_expander_set_child")]
+    #[doc(alias = "child")]
     pub fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_expander_set_child(
@@ -101,6 +108,7 @@ impl Expander {
     }
 
     #[doc(alias = "gtk_expander_set_expanded")]
+    #[doc(alias = "expanded")]
     pub fn set_expanded(&self, expanded: bool) {
         unsafe {
             ffi::gtk_expander_set_expanded(self.to_glib_none().0, expanded.into_glib());
@@ -108,6 +116,7 @@ impl Expander {
     }
 
     #[doc(alias = "gtk_expander_set_label")]
+    #[doc(alias = "label")]
     pub fn set_label(&self, label: Option<&str>) {
         unsafe {
             ffi::gtk_expander_set_label(self.to_glib_none().0, label.to_glib_none().0);
@@ -115,6 +124,7 @@ impl Expander {
     }
 
     #[doc(alias = "gtk_expander_set_label_widget")]
+    #[doc(alias = "label-widget")]
     pub fn set_label_widget(&self, label_widget: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_expander_set_label_widget(
@@ -125,6 +135,7 @@ impl Expander {
     }
 
     #[doc(alias = "gtk_expander_set_resize_toplevel")]
+    #[doc(alias = "resize-toplevel")]
     pub fn set_resize_toplevel(&self, resize_toplevel: bool) {
         unsafe {
             ffi::gtk_expander_set_resize_toplevel(
@@ -135,6 +146,7 @@ impl Expander {
     }
 
     #[doc(alias = "gtk_expander_set_use_markup")]
+    #[doc(alias = "use-markup")]
     pub fn set_use_markup(&self, use_markup: bool) {
         unsafe {
             ffi::gtk_expander_set_use_markup(self.to_glib_none().0, use_markup.into_glib());
@@ -142,6 +154,7 @@ impl Expander {
     }
 
     #[doc(alias = "gtk_expander_set_use_underline")]
+    #[doc(alias = "use-underline")]
     pub fn set_use_underline(&self, use_underline: bool) {
         unsafe {
             ffi::gtk_expander_set_use_underline(self.to_glib_none().0, use_underline.into_glib());
@@ -162,7 +175,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -189,7 +202,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -212,7 +225,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expanded\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_expanded_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -235,7 +248,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -258,7 +271,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_widget_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -281,7 +294,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resize-toplevel\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_resize_toplevel_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -304,7 +317,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_use_markup_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -327,7 +340,7 @@ impl Expander {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_use_underline_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

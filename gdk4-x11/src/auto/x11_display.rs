@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::X11Screen;
+use crate::{ffi, X11Screen};
 use glib::translate::*;
 
 glib::wrapper! {
@@ -131,6 +131,8 @@ impl X11Display {
         }
     }
 
+    #[cfg_attr(feature = "v4_16", deprecated = "Since 4.16")]
+    #[allow(deprecated)]
     #[doc(alias = "gdk_x11_display_set_cursor_theme")]
     pub fn set_cursor_theme(&self, theme: Option<&str>, size: i32) {
         unsafe {

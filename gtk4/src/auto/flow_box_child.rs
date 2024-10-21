@@ -3,7 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow,
+    Widget,
 };
 use glib::{
     prelude::*,
@@ -259,12 +260,7 @@ impl FlowBoxChildBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FlowBoxChild>> Sealed for T {}
-}
-
-pub trait FlowBoxChildExt: IsA<FlowBoxChild> + sealed::Sealed + 'static {
+pub trait FlowBoxChildExt: IsA<FlowBoxChild> + 'static {
     #[doc(alias = "gtk_flow_box_child_changed")]
     fn changed(&self) {
         unsafe {
@@ -298,6 +294,7 @@ pub trait FlowBoxChildExt: IsA<FlowBoxChild> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_flow_box_child_set_child")]
+    #[doc(alias = "child")]
     fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_flow_box_child_set_child(
@@ -321,7 +318,7 @@ pub trait FlowBoxChildExt: IsA<FlowBoxChild> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -348,7 +345,7 @@ pub trait FlowBoxChildExt: IsA<FlowBoxChild> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

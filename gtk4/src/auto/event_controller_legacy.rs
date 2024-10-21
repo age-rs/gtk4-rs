@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{EventController, PropagationLimit, PropagationPhase};
+use crate::{ffi, EventController, PropagationLimit, PropagationPhase};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -56,7 +56,7 @@ impl EventControllerLegacy {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"event\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     event_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -18,6 +18,13 @@ mod accessible_range;
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
 pub use self::accessible_range::AccessibleRange;
 
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+mod accessible_text;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::accessible_text::AccessibleText;
+
 mod action_bar;
 pub use self::action_bar::ActionBar;
 
@@ -1114,6 +1121,9 @@ mod tree_row_reference;
 pub use self::tree_row_reference::TreeRowReference;
 
 mod enums;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::enums::AccessibleAnnouncementPriority;
 pub use self::enums::AccessibleAutocomplete;
 pub use self::enums::AccessibleInvalidState;
 #[cfg(feature = "v4_10")]
@@ -1124,6 +1134,12 @@ pub use self::enums::AccessibleRelation;
 pub use self::enums::AccessibleRole;
 pub use self::enums::AccessibleSort;
 pub use self::enums::AccessibleState;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::enums::AccessibleTextContentChange;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::enums::AccessibleTextGranularity;
 pub use self::enums::AccessibleTristate;
 pub use self::enums::ArrowType;
 pub use self::enums::AssistantPageType;
@@ -1161,6 +1177,9 @@ pub use self::enums::FilterMatch;
 #[cfg(feature = "v4_10")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
 pub use self::enums::FontLevel;
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+pub use self::enums::FontRendering;
 #[cfg(feature = "v4_14")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
 pub use self::enums::GraphicsOffloadEnabled;
@@ -1250,8 +1269,6 @@ pub use self::flags::InputHints;
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
 pub use self::flags::ListScrollFlags;
 pub use self::flags::PickFlags;
-#[cfg(feature = "v4_14")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
 pub use self::flags::PopoverMenuFlags;
 #[cfg(target_os = "linux")]
 #[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
@@ -1259,6 +1276,9 @@ pub use self::flags::PrintCapabilities;
 pub use self::flags::ShortcutActionFlags;
 pub use self::flags::StateFlags;
 pub use self::flags::StyleContextPrintFlags;
+#[cfg(feature = "v4_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_16")))]
+pub use self::flags::TextBufferNotifyFlags;
 pub use self::flags::TextSearchFlags;
 #[allow(deprecated)]
 pub use self::flags::TreeModelFlags;
@@ -1269,6 +1289,111 @@ pub use self::alias::Allocation;
 pub(crate) mod functions;
 
 mod constants;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_BACKGROUND;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_FAMILY;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_FOREGROUND;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_OVERLINE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_OVERLINE_NONE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_OVERLINE_SINGLE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_SIZE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_CONDENSED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_EXPANDED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_EXTRA_CONDENSED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_EXTRA_EXPANDED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_NORMAL;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_SEMI_CONDENSED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_SEMI_EXPANDED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_ULTRA_CONDENSED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRETCH_ULTRA_EXPANDED;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STRIKETHROUGH;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STYLE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STYLE_ITALIC;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STYLE_NORMAL;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_STYLE_OBLIQUE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_UNDERLINE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_UNDERLINE_DOUBLE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_UNDERLINE_ERROR;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_UNDERLINE_NONE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_UNDERLINE_SINGLE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT_ALL_PETITE_CAPS;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT_ALL_SMALL_CAPS;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT_PETITE_CAPS;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT_SMALL_CAPS;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT_TITLE_CAPS;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_VARIANT_UNICASE;
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+pub use self::constants::ACCESSIBLE_ATTRIBUTE_WEIGHT;
 pub use self::constants::IM_MODULE_EXTENSION_POINT_NAME;
 pub use self::constants::LEVEL_BAR_OFFSET_FULL;
 pub use self::constants::LEVEL_BAR_OFFSET_HIGH;
@@ -1319,6 +1444,9 @@ pub(crate) mod traits {
     #[cfg(feature = "v4_10")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
     pub use super::accessible_range::AccessibleRangeExt;
+    #[cfg(feature = "v4_14")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+    pub use super::accessible_text::AccessibleTextExt;
     pub use super::actionable::ActionableExt;
     pub use super::adjustment::AdjustmentExt;
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]

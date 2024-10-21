@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{TreeIter, TreeModelFlags, TreePath};
+use crate::{ffi, TreeIter, TreeModelFlags, TreePath};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -24,12 +24,7 @@ impl TreeModel {
     pub const NONE: Option<&'static TreeModel> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TreeModel>> Sealed for T {}
-}
-
-pub trait TreeModelExt: IsA<TreeModel> + sealed::Sealed + 'static {
+pub trait TreeModelExt: IsA<TreeModel> + 'static {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_model_foreach")]
@@ -359,7 +354,7 @@ pub trait TreeModelExt: IsA<TreeModel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     row_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -388,7 +383,7 @@ pub trait TreeModelExt: IsA<TreeModel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-deleted\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     row_deleted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -422,7 +417,7 @@ pub trait TreeModelExt: IsA<TreeModel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-has-child-toggled\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     row_has_child_toggled_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -456,7 +451,7 @@ pub trait TreeModelExt: IsA<TreeModel> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-inserted\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     row_inserted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

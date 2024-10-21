@@ -1,16 +1,16 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`TextView`](crate::TextView).
+//! Traits intended for subclassing [`TextView`].
 
 use glib::translate::*;
 
 use crate::{
-    prelude::*, subclass::prelude::*, DeleteType, MovementStep, Snapshot, TextExtendSelection,
+    ffi, prelude::*, subclass::prelude::*, DeleteType, MovementStep, Snapshot, TextExtendSelection,
     TextIter, TextView, TextViewLayer,
 };
 
-pub trait TextViewImpl: TextViewImplExt + WidgetImpl {
+pub trait TextViewImpl: WidgetImpl + ObjectSubclass<Type: IsA<TextView>> {
     fn backspace(&self) {
         self.parent_backspace()
     }
@@ -66,12 +66,7 @@ pub trait TextViewImpl: TextViewImplExt + WidgetImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::TextViewImplExt> Sealed for T {}
-}
-
-pub trait TextViewImplExt: sealed::Sealed + ObjectSubclass {
+pub trait TextViewImplExt: TextViewImpl {
     fn parent_backspace(&self) {
         unsafe {
             let data = Self::type_data();

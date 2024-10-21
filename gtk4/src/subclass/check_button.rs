@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`CheckButton`](crate::CheckButton).
+//! Traits intended for subclassing [`CheckButton`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, CheckButton};
+use crate::{ffi, prelude::*, subclass::prelude::*, CheckButton};
 
-pub trait CheckButtonImpl: CheckButtonImplExt + WidgetImpl {
+pub trait CheckButtonImpl: WidgetImpl + ObjectSubclass<Type: IsA<CheckButton>> {
     fn toggled(&self) {
         self.parent_toggled()
     }
@@ -19,12 +19,7 @@ pub trait CheckButtonImpl: CheckButtonImplExt + WidgetImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::CheckButtonImplExt> Sealed for T {}
-}
-
-pub trait CheckButtonImplExt: sealed::Sealed + ObjectSubclass {
+pub trait CheckButtonImplExt: CheckButtonImpl {
     fn parent_toggled(&self) {
         unsafe {
             let data = Self::type_data();

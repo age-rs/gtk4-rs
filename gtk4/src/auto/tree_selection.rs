@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{SelectionMode, TreeIter, TreeModel, TreePath, TreeView};
+use crate::{ffi, SelectionMode, TreeIter, TreeModel, TreePath, TreeView};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -180,6 +180,7 @@ impl TreeSelection {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_selection_set_mode")]
+    #[doc(alias = "mode")]
     pub fn set_mode(&self, type_: SelectionMode) {
         unsafe {
             ffi::gtk_tree_selection_set_mode(self.to_glib_none().0, type_.into_glib());
@@ -292,7 +293,7 @@ impl TreeSelection {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -315,7 +316,7 @@ impl TreeSelection {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mode_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

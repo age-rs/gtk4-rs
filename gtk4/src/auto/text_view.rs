@@ -2,8 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+use crate::AccessibleText;
 use crate::{
-    Accessible, AccessibleRole, Adjustment, Align, Buildable, ConstraintTarget, DeleteType,
+    ffi, Accessible, AccessibleRole, Adjustment, Align, Buildable, ConstraintTarget, DeleteType,
     InputHints, InputPurpose, Justification, LayoutManager, MovementStep, Overflow, ScrollStep,
     Scrollable, ScrollablePolicy, TextBuffer, TextChildAnchor, TextExtendSelection, TextIter,
     TextMark, TextWindowType, Widget, WrapMode,
@@ -15,6 +18,18 @@ use glib::{
 };
 use std::boxed::Box as Box_;
 
+#[cfg(feature = "v4_14")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v4_14")))]
+glib::wrapper! {
+    #[doc(alias = "GtkTextView")]
+    pub struct TextView(Object<ffi::GtkTextView, ffi::GtkTextViewClass>) @extends Widget, @implements Accessible, Buildable, ConstraintTarget, AccessibleText, Scrollable;
+
+    match fn {
+        type_ => || ffi::gtk_text_view_get_type(),
+    }
+}
+
+#[cfg(not(any(feature = "v4_14")))]
 glib::wrapper! {
     #[doc(alias = "GtkTextView")]
     pub struct TextView(Object<ffi::GtkTextView, ffi::GtkTextViewClass>) @extends Widget, @implements Accessible, Buildable, ConstraintTarget, Scrollable;
@@ -430,12 +445,7 @@ impl TextViewBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TextView>> Sealed for T {}
-}
-
-pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
+pub trait TextViewExt: IsA<TextView> + 'static {
     #[doc(alias = "gtk_text_view_add_child_at_anchor")]
     fn add_child_at_anchor(&self, child: &impl IsA<Widget>, anchor: &impl IsA<TextChildAnchor>) {
         unsafe {
@@ -523,6 +533,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_accepts_tab")]
     #[doc(alias = "get_accepts_tab")]
+    #[doc(alias = "accepts-tab")]
     fn accepts_tab(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_view_get_accepts_tab(
@@ -533,6 +544,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_bottom_margin")]
     #[doc(alias = "get_bottom_margin")]
+    #[doc(alias = "bottom-margin")]
     fn bottom_margin(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_bottom_margin(self.as_ref().to_glib_none().0) }
     }
@@ -565,6 +577,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_cursor_visible")]
     #[doc(alias = "get_cursor_visible")]
+    #[doc(alias = "cursor-visible")]
     fn is_cursor_visible(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_view_get_cursor_visible(
@@ -575,6 +588,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_editable")]
     #[doc(alias = "get_editable")]
+    #[doc(alias = "editable")]
     fn is_editable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_view_get_editable(
@@ -585,6 +599,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_extra_menu")]
     #[doc(alias = "get_extra_menu")]
+    #[doc(alias = "extra-menu")]
     fn extra_menu(&self) -> gio::MenuModel {
         unsafe {
             from_glib_none(ffi::gtk_text_view_get_extra_menu(
@@ -612,6 +627,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_input_hints")]
     #[doc(alias = "get_input_hints")]
+    #[doc(alias = "input-hints")]
     fn input_hints(&self) -> InputHints {
         unsafe {
             from_glib(ffi::gtk_text_view_get_input_hints(
@@ -622,6 +638,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_input_purpose")]
     #[doc(alias = "get_input_purpose")]
+    #[doc(alias = "input-purpose")]
     fn input_purpose(&self) -> InputPurpose {
         unsafe {
             from_glib(ffi::gtk_text_view_get_input_purpose(
@@ -696,6 +713,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_left_margin")]
     #[doc(alias = "get_left_margin")]
+    #[doc(alias = "left-margin")]
     fn left_margin(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_left_margin(self.as_ref().to_glib_none().0) }
     }
@@ -746,6 +764,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_monospace")]
     #[doc(alias = "get_monospace")]
+    #[doc(alias = "monospace")]
     fn is_monospace(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_view_get_monospace(
@@ -756,6 +775,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_overwrite")]
     #[doc(alias = "get_overwrite")]
+    #[doc(alias = "overwrite")]
     fn overwrites(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_view_get_overwrite(
@@ -766,24 +786,28 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_pixels_above_lines")]
     #[doc(alias = "get_pixels_above_lines")]
+    #[doc(alias = "pixels-above-lines")]
     fn pixels_above_lines(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_pixels_above_lines(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_text_view_get_pixels_below_lines")]
     #[doc(alias = "get_pixels_below_lines")]
+    #[doc(alias = "pixels-below-lines")]
     fn pixels_below_lines(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_pixels_below_lines(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_text_view_get_pixels_inside_wrap")]
     #[doc(alias = "get_pixels_inside_wrap")]
+    #[doc(alias = "pixels-inside-wrap")]
     fn pixels_inside_wrap(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_pixels_inside_wrap(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_text_view_get_right_margin")]
     #[doc(alias = "get_right_margin")]
+    #[doc(alias = "right-margin")]
     fn right_margin(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_right_margin(self.as_ref().to_glib_none().0) }
     }
@@ -808,6 +832,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_top_margin")]
     #[doc(alias = "get_top_margin")]
+    #[doc(alias = "top-margin")]
     fn top_margin(&self) -> i32 {
         unsafe { ffi::gtk_text_view_get_top_margin(self.as_ref().to_glib_none().0) }
     }
@@ -827,6 +852,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_text_view_get_wrap_mode")]
     #[doc(alias = "get_wrap_mode")]
+    #[doc(alias = "wrap-mode")]
     fn wrap_mode(&self) -> WrapMode {
         unsafe {
             from_glib(ffi::gtk_text_view_get_wrap_mode(
@@ -964,6 +990,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_accepts_tab")]
+    #[doc(alias = "accepts-tab")]
     fn set_accepts_tab(&self, accepts_tab: bool) {
         unsafe {
             ffi::gtk_text_view_set_accepts_tab(
@@ -974,6 +1001,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_bottom_margin")]
+    #[doc(alias = "bottom-margin")]
     fn set_bottom_margin(&self, bottom_margin: i32) {
         unsafe {
             ffi::gtk_text_view_set_bottom_margin(self.as_ref().to_glib_none().0, bottom_margin);
@@ -981,6 +1009,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_buffer")]
+    #[doc(alias = "buffer")]
     fn set_buffer(&self, buffer: Option<&impl IsA<TextBuffer>>) {
         unsafe {
             ffi::gtk_text_view_set_buffer(
@@ -991,6 +1020,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_cursor_visible")]
+    #[doc(alias = "cursor-visible")]
     fn set_cursor_visible(&self, setting: bool) {
         unsafe {
             ffi::gtk_text_view_set_cursor_visible(
@@ -1001,6 +1031,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_editable")]
+    #[doc(alias = "editable")]
     fn set_editable(&self, setting: bool) {
         unsafe {
             ffi::gtk_text_view_set_editable(self.as_ref().to_glib_none().0, setting.into_glib());
@@ -1008,6 +1039,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_extra_menu")]
+    #[doc(alias = "extra-menu")]
     fn set_extra_menu(&self, model: Option<&impl IsA<gio::MenuModel>>) {
         unsafe {
             ffi::gtk_text_view_set_extra_menu(
@@ -1029,6 +1061,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_indent")]
+    #[doc(alias = "indent")]
     fn set_indent(&self, indent: i32) {
         unsafe {
             ffi::gtk_text_view_set_indent(self.as_ref().to_glib_none().0, indent);
@@ -1036,6 +1069,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_input_hints")]
+    #[doc(alias = "input-hints")]
     fn set_input_hints(&self, hints: InputHints) {
         unsafe {
             ffi::gtk_text_view_set_input_hints(self.as_ref().to_glib_none().0, hints.into_glib());
@@ -1043,6 +1077,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_input_purpose")]
+    #[doc(alias = "input-purpose")]
     fn set_input_purpose(&self, purpose: InputPurpose) {
         unsafe {
             ffi::gtk_text_view_set_input_purpose(
@@ -1053,6 +1088,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_justification")]
+    #[doc(alias = "justification")]
     fn set_justification(&self, justification: Justification) {
         unsafe {
             ffi::gtk_text_view_set_justification(
@@ -1063,6 +1099,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_left_margin")]
+    #[doc(alias = "left-margin")]
     fn set_left_margin(&self, left_margin: i32) {
         unsafe {
             ffi::gtk_text_view_set_left_margin(self.as_ref().to_glib_none().0, left_margin);
@@ -1070,6 +1107,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_monospace")]
+    #[doc(alias = "monospace")]
     fn set_monospace(&self, monospace: bool) {
         unsafe {
             ffi::gtk_text_view_set_monospace(self.as_ref().to_glib_none().0, monospace.into_glib());
@@ -1077,6 +1115,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_overwrite")]
+    #[doc(alias = "overwrite")]
     fn set_overwrite(&self, overwrite: bool) {
         unsafe {
             ffi::gtk_text_view_set_overwrite(self.as_ref().to_glib_none().0, overwrite.into_glib());
@@ -1084,6 +1123,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_pixels_above_lines")]
+    #[doc(alias = "pixels-above-lines")]
     fn set_pixels_above_lines(&self, pixels_above_lines: i32) {
         unsafe {
             ffi::gtk_text_view_set_pixels_above_lines(
@@ -1094,6 +1134,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_pixels_below_lines")]
+    #[doc(alias = "pixels-below-lines")]
     fn set_pixels_below_lines(&self, pixels_below_lines: i32) {
         unsafe {
             ffi::gtk_text_view_set_pixels_below_lines(
@@ -1104,6 +1145,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_pixels_inside_wrap")]
+    #[doc(alias = "pixels-inside-wrap")]
     fn set_pixels_inside_wrap(&self, pixels_inside_wrap: i32) {
         unsafe {
             ffi::gtk_text_view_set_pixels_inside_wrap(
@@ -1114,6 +1156,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_right_margin")]
+    #[doc(alias = "right-margin")]
     fn set_right_margin(&self, right_margin: i32) {
         unsafe {
             ffi::gtk_text_view_set_right_margin(self.as_ref().to_glib_none().0, right_margin);
@@ -1121,6 +1164,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_tabs")]
+    #[doc(alias = "tabs")]
     fn set_tabs(&self, tabs: &pango::TabArray) {
         unsafe {
             ffi::gtk_text_view_set_tabs(
@@ -1131,6 +1175,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_top_margin")]
+    #[doc(alias = "top-margin")]
     fn set_top_margin(&self, top_margin: i32) {
         unsafe {
             ffi::gtk_text_view_set_top_margin(self.as_ref().to_glib_none().0, top_margin);
@@ -1138,6 +1183,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_text_view_set_wrap_mode")]
+    #[doc(alias = "wrap-mode")]
     fn set_wrap_mode(&self, wrap_mode: WrapMode) {
         unsafe {
             ffi::gtk_text_view_set_wrap_mode(self.as_ref().to_glib_none().0, wrap_mode.into_glib());
@@ -1200,7 +1246,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"backspace\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     backspace_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1226,7 +1272,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"copy-clipboard\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     copy_clipboard_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1252,7 +1298,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cut-clipboard\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     cut_clipboard_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1275,7 +1321,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GtkTextView,
             type_: ffi::GtkDeleteType,
-            count: libc::c_int,
+            count: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -1290,7 +1336,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-from-cursor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     delete_from_cursor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1337,7 +1383,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"extend-selection\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     extend_selection_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1352,7 +1398,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             F: Fn(&P, &str) + 'static,
         >(
             this: *mut ffi::GtkTextView,
-            string: *mut libc::c_char,
+            string: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -1366,7 +1412,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-at-cursor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     insert_at_cursor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1392,7 +1438,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-emoji\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     insert_emoji_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1415,7 +1461,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GtkTextView,
             step: ffi::GtkMovementStep,
-            count: libc::c_int,
+            count: std::ffi::c_int,
             extend_selection: glib::ffi::gboolean,
             f: glib::ffi::gpointer,
         ) {
@@ -1432,7 +1478,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     move_cursor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1455,7 +1501,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GtkTextView,
             step: ffi::GtkScrollStep,
-            count: libc::c_int,
+            count: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -1470,7 +1516,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-viewport\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     move_viewport_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1496,7 +1542,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paste-clipboard\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     paste_clipboard_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1515,7 +1561,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             F: Fn(&P, &str) + 'static,
         >(
             this: *mut ffi::GtkTextView,
-            preedit: *mut libc::c_char,
+            preedit: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -1529,7 +1575,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     preedit_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1559,7 +1605,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     select_all_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1585,7 +1631,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-anchor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     set_anchor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1614,7 +1660,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     toggle_cursor_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1640,7 +1686,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-overwrite\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     toggle_overwrite_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1670,7 +1716,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accepts-tab\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_accepts_tab_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1696,7 +1742,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bottom-margin\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bottom_margin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1719,7 +1765,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1745,7 +1791,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_cursor_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1768,7 +1814,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::editable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_editable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1791,7 +1837,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::extra-menu\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_extra_menu_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1814,7 +1860,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::im-module\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_im_module_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1837,7 +1883,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::indent\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_indent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1863,7 +1909,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-hints\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_input_hints_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1889,7 +1935,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-purpose\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_input_purpose_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1915,7 +1961,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::justification\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_justification_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1941,7 +1987,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::left-margin\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_left_margin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1964,7 +2010,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::monospace\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_monospace_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1987,7 +2033,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::overwrite\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_overwrite_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2013,7 +2059,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-above-lines\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pixels_above_lines_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2039,7 +2085,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-below-lines\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pixels_below_lines_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2065,7 +2111,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-inside-wrap\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pixels_inside_wrap_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2091,7 +2137,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::right-margin\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_right_margin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2114,7 +2160,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tabs\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tabs_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2137,7 +2183,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::top-margin\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_top_margin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -2160,7 +2206,7 @@ pub trait TextViewExt: IsA<TextView> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_wrap_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

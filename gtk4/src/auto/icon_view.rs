@@ -4,9 +4,10 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, AccessibleRole, Adjustment, Align, Buildable, CellArea, CellLayout, CellRenderer,
-    ConstraintTarget, IconViewDropPosition, LayoutManager, MovementStep, Orientation, Overflow,
-    Scrollable, ScrollablePolicy, SelectionMode, Tooltip, TreeIter, TreeModel, TreePath, Widget,
+    ffi, Accessible, AccessibleRole, Adjustment, Align, Buildable, CellArea, CellLayout,
+    CellRenderer, ConstraintTarget, IconViewDropPosition, LayoutManager, MovementStep, Orientation,
+    Overflow, Scrollable, ScrollablePolicy, SelectionMode, Tooltip, TreeIter, TreeModel, TreePath,
+    Widget,
 };
 use glib::{
     prelude::*,
@@ -117,6 +118,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_activate_on_single_click")]
     #[doc(alias = "get_activate_on_single_click")]
+    #[doc(alias = "activate-on-single-click")]
     pub fn activates_on_single_click(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_icon_view_get_activate_on_single_click(
@@ -154,6 +156,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_column_spacing")]
     #[doc(alias = "get_column_spacing")]
+    #[doc(alias = "column-spacing")]
     pub fn column_spacing(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_column_spacing(self.to_glib_none().0) }
     }
@@ -271,6 +274,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_item_orientation")]
     #[doc(alias = "get_item_orientation")]
+    #[doc(alias = "item-orientation")]
     pub fn item_orientation(&self) -> Orientation {
         unsafe {
             from_glib(ffi::gtk_icon_view_get_item_orientation(
@@ -283,6 +287,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_item_padding")]
     #[doc(alias = "get_item_padding")]
+    #[doc(alias = "item-padding")]
     pub fn item_padding(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_item_padding(self.to_glib_none().0) }
     }
@@ -304,6 +309,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_item_width")]
     #[doc(alias = "get_item_width")]
+    #[doc(alias = "item-width")]
     pub fn item_width(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_item_width(self.to_glib_none().0) }
     }
@@ -320,6 +326,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_markup_column")]
     #[doc(alias = "get_markup_column")]
+    #[doc(alias = "markup-column")]
     pub fn markup_column(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_markup_column(self.to_glib_none().0) }
     }
@@ -350,6 +357,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_pixbuf_column")]
     #[doc(alias = "get_pixbuf_column")]
+    #[doc(alias = "pixbuf-column")]
     pub fn pixbuf_column(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_pixbuf_column(self.to_glib_none().0) }
     }
@@ -358,6 +366,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_reorderable")]
     #[doc(alias = "get_reorderable")]
+    #[doc(alias = "reorderable")]
     pub fn is_reorderable(&self) -> bool {
         unsafe { from_glib(ffi::gtk_icon_view_get_reorderable(self.to_glib_none().0)) }
     }
@@ -366,6 +375,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_row_spacing")]
     #[doc(alias = "get_row_spacing")]
+    #[doc(alias = "row-spacing")]
     pub fn row_spacing(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_row_spacing(self.to_glib_none().0) }
     }
@@ -386,6 +396,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_selection_mode")]
     #[doc(alias = "get_selection_mode")]
+    #[doc(alias = "selection-mode")]
     pub fn selection_mode(&self) -> SelectionMode {
         unsafe { from_glib(ffi::gtk_icon_view_get_selection_mode(self.to_glib_none().0)) }
     }
@@ -402,6 +413,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_text_column")]
     #[doc(alias = "get_text_column")]
+    #[doc(alias = "text-column")]
     pub fn text_column(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_text_column(self.to_glib_none().0) }
     }
@@ -410,6 +422,7 @@ impl IconView {
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_get_tooltip_column")]
     #[doc(alias = "get_tooltip_column")]
+    #[doc(alias = "tooltip-column")]
     pub fn tooltip_column(&self) -> i32 {
         unsafe { ffi::gtk_icon_view_get_tooltip_column(self.to_glib_none().0) }
     }
@@ -555,6 +568,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_activate_on_single_click")]
+    #[doc(alias = "activate-on-single-click")]
     pub fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_icon_view_set_activate_on_single_click(
@@ -567,6 +581,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_column_spacing")]
+    #[doc(alias = "column-spacing")]
     pub fn set_column_spacing(&self, column_spacing: i32) {
         unsafe {
             ffi::gtk_icon_view_set_column_spacing(self.to_glib_none().0, column_spacing);
@@ -576,6 +591,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_columns")]
+    #[doc(alias = "columns")]
     pub fn set_columns(&self, columns: i32) {
         unsafe {
             ffi::gtk_icon_view_set_columns(self.to_glib_none().0, columns);
@@ -617,6 +633,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_item_orientation")]
+    #[doc(alias = "item-orientation")]
     pub fn set_item_orientation(&self, orientation: Orientation) {
         unsafe {
             ffi::gtk_icon_view_set_item_orientation(self.to_glib_none().0, orientation.into_glib());
@@ -626,6 +643,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_item_padding")]
+    #[doc(alias = "item-padding")]
     pub fn set_item_padding(&self, item_padding: i32) {
         unsafe {
             ffi::gtk_icon_view_set_item_padding(self.to_glib_none().0, item_padding);
@@ -635,6 +653,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_item_width")]
+    #[doc(alias = "item-width")]
     pub fn set_item_width(&self, item_width: i32) {
         unsafe {
             ffi::gtk_icon_view_set_item_width(self.to_glib_none().0, item_width);
@@ -644,6 +663,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_margin")]
+    #[doc(alias = "margin")]
     pub fn set_margin(&self, margin: i32) {
         unsafe {
             ffi::gtk_icon_view_set_margin(self.to_glib_none().0, margin);
@@ -653,6 +673,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_markup_column")]
+    #[doc(alias = "markup-column")]
     pub fn set_markup_column(&self, column: i32) {
         unsafe {
             ffi::gtk_icon_view_set_markup_column(self.to_glib_none().0, column);
@@ -662,6 +683,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_model")]
+    #[doc(alias = "model")]
     pub fn set_model(&self, model: Option<&impl IsA<TreeModel>>) {
         unsafe {
             ffi::gtk_icon_view_set_model(
@@ -674,6 +696,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_pixbuf_column")]
+    #[doc(alias = "pixbuf-column")]
     pub fn set_pixbuf_column(&self, column: i32) {
         unsafe {
             ffi::gtk_icon_view_set_pixbuf_column(self.to_glib_none().0, column);
@@ -683,6 +706,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_reorderable")]
+    #[doc(alias = "reorderable")]
     pub fn set_reorderable(&self, reorderable: bool) {
         unsafe {
             ffi::gtk_icon_view_set_reorderable(self.to_glib_none().0, reorderable.into_glib());
@@ -692,6 +716,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_row_spacing")]
+    #[doc(alias = "row-spacing")]
     pub fn set_row_spacing(&self, row_spacing: i32) {
         unsafe {
             ffi::gtk_icon_view_set_row_spacing(self.to_glib_none().0, row_spacing);
@@ -701,6 +726,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_selection_mode")]
+    #[doc(alias = "selection-mode")]
     pub fn set_selection_mode(&self, mode: SelectionMode) {
         unsafe {
             ffi::gtk_icon_view_set_selection_mode(self.to_glib_none().0, mode.into_glib());
@@ -710,6 +736,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_spacing")]
+    #[doc(alias = "spacing")]
     pub fn set_spacing(&self, spacing: i32) {
         unsafe {
             ffi::gtk_icon_view_set_spacing(self.to_glib_none().0, spacing);
@@ -719,6 +746,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_text_column")]
+    #[doc(alias = "text-column")]
     pub fn set_text_column(&self, column: i32) {
         unsafe {
             ffi::gtk_icon_view_set_text_column(self.to_glib_none().0, column);
@@ -747,6 +775,7 @@ impl IconView {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_icon_view_set_tooltip_column")]
+    #[doc(alias = "tooltip-column")]
     pub fn set_tooltip_column(&self, column: i32) {
         unsafe {
             ffi::gtk_icon_view_set_tooltip_column(self.to_glib_none().0, column);
@@ -827,7 +856,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-cursor-item\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_cursor_item_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -857,7 +886,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"item-activated\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     item_activated_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -875,7 +904,7 @@ impl IconView {
         >(
             this: *mut ffi::GtkIconView,
             step: ffi::GtkMovementStep,
-            count: libc::c_int,
+            count: std::ffi::c_int,
             extend: glib::ffi::gboolean,
             modify: glib::ffi::gboolean,
             f: glib::ffi::gpointer,
@@ -895,7 +924,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     move_cursor_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -927,7 +956,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     select_all_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -953,7 +982,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-cursor-item\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     select_cursor_item_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -979,7 +1008,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     selection_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1001,7 +1030,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-item\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     toggle_cursor_item_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1027,7 +1056,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     unselect_all_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1059,7 +1088,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_activate_on_single_click_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1082,7 +1111,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-spacing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_column_spacing_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1105,7 +1134,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::columns\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_columns_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1128,7 +1157,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item-orientation\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_item_orientation_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1151,7 +1180,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item-padding\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_item_padding_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1174,7 +1203,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item-width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_item_width_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1197,7 +1226,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_margin_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1220,7 +1249,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::markup-column\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_markup_column_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1243,7 +1272,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_model_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1266,7 +1295,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf-column\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pixbuf_column_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1289,7 +1318,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reorderable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_reorderable_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1312,7 +1341,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-spacing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_row_spacing_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1335,7 +1364,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selection_mode_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1358,7 +1387,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spacing_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1381,7 +1410,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_column_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1404,7 +1433,7 @@ impl IconView {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-column\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_column_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -3,7 +3,7 @@
 use std::{cell::RefCell, rc::Rc};
 
 use gio::ApplicationFlags;
-use glib::{signal::SignalHandlerId, translate::*, IntoOptionalGStr};
+use glib::{signal::SignalHandlerId, translate::*};
 
 use crate::{prelude::*, rt, Application};
 
@@ -13,7 +13,7 @@ impl Application {
         skip_assert_initialized!();
         let app: Application = unsafe {
             application_id.run_with_gstr(|application_id| {
-                from_glib_full(ffi::gtk_application_new(
+                from_glib_full(crate::ffi::gtk_application_new(
                     application_id.to_glib_none().0,
                     flags.into_glib(),
                 ))

@@ -2,10 +2,10 @@
 
 use std::ptr;
 
-use glib::{translate::*, IntoOptionalGStr};
+use glib::translate::*;
 use libc::c_char;
 
-use crate::{prelude::*, FileChooserAction, FileChooserDialog, ResponseType, Widget, Window};
+use crate::{ffi, prelude::*, FileChooserAction, FileChooserDialog, ResponseType, Widget, Window};
 
 impl FileChooserDialog {
     #[doc(alias = "gtk_file_chooser_dialog_new")]

@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Actionable, Align, Buildable, ConstraintTarget, LayoutManager,
+    ffi, Accessible, AccessibleRole, Actionable, Align, Buildable, ConstraintTarget, LayoutManager,
     Overflow, Widget,
 };
 use glib::{
@@ -286,12 +286,7 @@ impl ListBoxRowBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ListBoxRow>> Sealed for T {}
-}
-
-pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
+pub trait ListBoxRowExt: IsA<ListBoxRow> + 'static {
     #[doc(alias = "gtk_list_box_row_changed")]
     fn changed(&self) {
         unsafe {
@@ -301,6 +296,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_list_box_row_get_activatable")]
     #[doc(alias = "get_activatable")]
+    #[doc(alias = "activatable")]
     fn is_activatable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_list_box_row_get_activatable(
@@ -337,6 +333,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_list_box_row_get_selectable")]
     #[doc(alias = "get_selectable")]
+    #[doc(alias = "selectable")]
     fn is_selectable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_list_box_row_get_selectable(
@@ -355,6 +352,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_list_box_row_set_activatable")]
+    #[doc(alias = "activatable")]
     fn set_activatable(&self, activatable: bool) {
         unsafe {
             ffi::gtk_list_box_row_set_activatable(
@@ -365,6 +363,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_list_box_row_set_child")]
+    #[doc(alias = "child")]
     fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_list_box_row_set_child(
@@ -385,6 +384,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_list_box_row_set_selectable")]
+    #[doc(alias = "selectable")]
     fn set_selectable(&self, selectable: bool) {
         unsafe {
             ffi::gtk_list_box_row_set_selectable(
@@ -408,7 +408,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -438,7 +438,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activatable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_activatable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -461,7 +461,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -487,7 +487,7 @@ pub trait ListBoxRowExt: IsA<ListBoxRow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selectable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selectable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`CellRenderer`](crate::CellRenderer).
+//! Traits intended for subclassing [`CellRenderer`].
 
 use std::mem;
 
@@ -9,13 +9,13 @@ use glib::{translate::*, GString};
 use libc::{c_char, c_int};
 
 use crate::{
-    prelude::*, subclass::prelude::*, CellEditable, CellRenderer, CellRendererState,
+    ffi, prelude::*, subclass::prelude::*, CellEditable, CellRenderer, CellRendererState,
     SizeRequestMode, Snapshot, Widget,
 };
 
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait CellRendererImpl: CellRendererImplExt + ObjectImpl {
+pub trait CellRendererImpl: ObjectImpl + ObjectSubclass<Type: IsA<CellRenderer>> {
     fn activate<P: IsA<Widget>>(
         &self,
         event: Option<&gdk::Event>,
@@ -95,14 +95,9 @@ pub trait CellRendererImpl: CellRendererImplExt + ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::CellRendererImplExt> Sealed for T {}
-}
-
 #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
 #[allow(deprecated)]
-pub trait CellRendererImplExt: sealed::Sealed + ObjectSubclass {
+pub trait CellRendererImplExt: CellRendererImpl {
     fn parent_request_mode(&self) -> SizeRequestMode {
         unsafe {
             let data = Self::type_data();

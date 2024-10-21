@@ -18,13 +18,13 @@ jobs:
           override: true
 
       - name: Setup mdBook
-        uses: peaceiris/actions-mdbook@v1
+        uses: peaceiris/actions-mdbook@v2
 
       - run: mdbook build -d public
         working-directory: book
 
       - name: Link Checker
-        uses: lycheeverse/lychee-action@v1.9.3
+        uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: book/public
           fail: true

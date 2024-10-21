@@ -44,16 +44,22 @@ version = "4.4"
 version = "4.6"
 
 [package.metadata.system-deps.gtk4.v4_8]
-version = "4.7"
+version = "4.8"
 
 [package.metadata.system-deps.gtk4.v4_10]
 version = "4.10"
 
 [package.metadata.system-deps.gtk4.v4_12]
-version = "4.11"
+version = "4.12"
 
 [package.metadata.system-deps.gtk4.v4_14]
-version = "4.13"
+version = "4.14"
+
+[package.metadata.system-deps.gtk4.v4_16]
+version = "4.16"
+
+[package.metadata.system-deps.gtk4.v4_18]
+version = "4.17"
 
 [package.metadata.docs.rs]
 rustc-args = ["--cfg", "docsrs"]
@@ -71,6 +77,8 @@ v4_8 = ["v4_6"]
 v4_10 = ["v4_8"]
 v4_12 = ["v4_10"]
 v4_14 = ["v4_12"]
+v4_16 = ["v4_14"]
+v4_18 = ["v4_16"]
 
 [dependencies]
 libc = "0.2"
@@ -103,7 +111,7 @@ workspace = true
 workspace = true
 
 [build-dependencies]
-system-deps = "6"
+system-deps = "7"
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{TreeDragSource, TreeIter, TreeModel, TreePath};
+use crate::{ffi, TreeDragSource, TreeIter, TreeModel, TreePath};
 use glib::{prelude::*, translate::*};
 use std::boxed::Box as Box_;
 
@@ -20,12 +20,7 @@ impl TreeModelFilter {
     pub const NONE: Option<&'static TreeModelFilter> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TreeModelFilter>> Sealed for T {}
-}
-
-pub trait TreeModelFilterExt: IsA<TreeModelFilter> + sealed::Sealed + 'static {
+pub trait TreeModelFilterExt: IsA<TreeModelFilter> + 'static {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_model_filter_clear_cache")]

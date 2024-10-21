@@ -1,24 +1,19 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`Entry`](crate::Entry).
+//! Traits intended for subclassing [`Entry`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Entry};
+use crate::{ffi, prelude::*, subclass::prelude::*, Entry};
 
-pub trait EntryImpl: EntryImplExt + WidgetImpl {
+pub trait EntryImpl: WidgetImpl + ObjectSubclass<Type: IsA<Entry>> {
     fn activate(&self) {
         self.parent_activate()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::EntryImplExt> Sealed for T {}
-}
-
-pub trait EntryImplExt: sealed::Sealed + ObjectSubclass {
+pub trait EntryImplExt: EntryImpl {
     fn parent_activate(&self) {
         unsafe {
             let data = Self::type_data();

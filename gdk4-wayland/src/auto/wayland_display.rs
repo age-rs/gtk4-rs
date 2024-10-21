@@ -3,6 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+use crate::ffi;
 use glib::translate::*;
 
 glib::wrapper! {
@@ -37,6 +38,8 @@ impl WaylandDisplay {
         }
     }
 
+    #[cfg_attr(feature = "v4_16", deprecated = "Since 4.16")]
+    #[allow(deprecated)]
     #[doc(alias = "gdk_wayland_display_set_cursor_theme")]
     pub fn set_cursor_theme(&self, name: &str, size: i32) {
         unsafe {

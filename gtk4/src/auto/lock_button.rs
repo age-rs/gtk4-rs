@@ -4,7 +4,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, AccessibleRole, Actionable, Align, Buildable, Button, ConstraintTarget,
+    ffi, Accessible, AccessibleRole, Actionable, Align, Buildable, Button, ConstraintTarget,
     LayoutManager, Overflow, Widget,
 };
 use glib::{
@@ -56,6 +56,7 @@ impl LockButton {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_lock_button_set_permission")]
+    #[doc(alias = "permission")]
     pub fn set_permission(&self, permission: Option<&impl IsA<gio::Permission>>) {
         unsafe {
             ffi::gtk_lock_button_set_permission(
@@ -141,7 +142,7 @@ impl LockButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::permission\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_permission_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -165,7 +166,7 @@ impl LockButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-lock\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_lock_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -189,7 +190,7 @@ impl LockButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-unlock\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_unlock_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -213,7 +214,7 @@ impl LockButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-lock\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_lock_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -242,7 +243,7 @@ impl LockButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-not-authorized\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_not_authorized_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -266,7 +267,7 @@ impl LockButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-unlock\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tooltip_unlock_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

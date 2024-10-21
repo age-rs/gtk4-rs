@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::{translate::*, IntoGStr};
+use glib::translate::*;
 
-use crate::{ContentFormats, ContentFormatsBuilder};
+use crate::{ffi, ContentFormats, ContentFormatsBuilder};
 
 impl ContentFormatsBuilder {
     #[doc(alias = "gdk_content_formats_builder_add_formats")]

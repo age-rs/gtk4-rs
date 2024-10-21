@@ -6,8 +6,8 @@
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_10")))]
 use crate::AccessibleRange;
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, LevelBarMode,
-    Orientable, Orientation, Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager,
+    LevelBarMode, Orientable, Orientation, Overflow, Widget,
 };
 use glib::{
     prelude::*,
@@ -75,18 +75,21 @@ impl LevelBar {
 
     #[doc(alias = "gtk_level_bar_get_inverted")]
     #[doc(alias = "get_inverted")]
+    #[doc(alias = "inverted")]
     pub fn is_inverted(&self) -> bool {
         unsafe { from_glib(ffi::gtk_level_bar_get_inverted(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_level_bar_get_max_value")]
     #[doc(alias = "get_max_value")]
+    #[doc(alias = "max-value")]
     pub fn max_value(&self) -> f64 {
         unsafe { ffi::gtk_level_bar_get_max_value(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_level_bar_get_min_value")]
     #[doc(alias = "get_min_value")]
+    #[doc(alias = "min-value")]
     pub fn min_value(&self) -> f64 {
         unsafe { ffi::gtk_level_bar_get_min_value(self.to_glib_none().0) }
     }
@@ -129,6 +132,7 @@ impl LevelBar {
     }
 
     #[doc(alias = "gtk_level_bar_set_inverted")]
+    #[doc(alias = "inverted")]
     pub fn set_inverted(&self, inverted: bool) {
         unsafe {
             ffi::gtk_level_bar_set_inverted(self.to_glib_none().0, inverted.into_glib());
@@ -136,6 +140,7 @@ impl LevelBar {
     }
 
     #[doc(alias = "gtk_level_bar_set_max_value")]
+    #[doc(alias = "max-value")]
     pub fn set_max_value(&self, value: f64) {
         unsafe {
             ffi::gtk_level_bar_set_max_value(self.to_glib_none().0, value);
@@ -143,6 +148,7 @@ impl LevelBar {
     }
 
     #[doc(alias = "gtk_level_bar_set_min_value")]
+    #[doc(alias = "min-value")]
     pub fn set_min_value(&self, value: f64) {
         unsafe {
             ffi::gtk_level_bar_set_min_value(self.to_glib_none().0, value);
@@ -150,6 +156,7 @@ impl LevelBar {
     }
 
     #[doc(alias = "gtk_level_bar_set_mode")]
+    #[doc(alias = "mode")]
     pub fn set_mode(&self, mode: LevelBarMode) {
         unsafe {
             ffi::gtk_level_bar_set_mode(self.to_glib_none().0, mode.into_glib());
@@ -157,6 +164,7 @@ impl LevelBar {
     }
 
     #[doc(alias = "gtk_level_bar_set_value")]
+    #[doc(alias = "value")]
     pub fn set_value(&self, value: f64) {
         unsafe {
             ffi::gtk_level_bar_set_value(self.to_glib_none().0, value);
@@ -171,7 +179,7 @@ impl LevelBar {
     ) -> SignalHandlerId {
         unsafe extern "C" fn offset_changed_trampoline<F: Fn(&LevelBar, &str) + 'static>(
             this: *mut ffi::GtkLevelBar,
-            name: *mut libc::c_char,
+            name: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -189,7 +197,7 @@ impl LevelBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     offset_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -212,7 +220,7 @@ impl LevelBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_inverted_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -235,7 +243,7 @@ impl LevelBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-value\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_value_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -258,7 +266,7 @@ impl LevelBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-value\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_value_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -281,7 +289,7 @@ impl LevelBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mode_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -304,7 +312,7 @@ impl LevelBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_value_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

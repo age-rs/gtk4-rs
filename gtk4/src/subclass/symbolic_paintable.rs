@@ -1,14 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the
-//! [`SymbolicPaintable`](crate::SymbolicPaintable) interface.
+//! Traits intended for implementing the [`SymbolicPaintable`] interface.
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, SymbolicPaintable};
+use crate::{ffi, prelude::*, subclass::prelude::*, SymbolicPaintable};
 
-pub trait SymbolicPaintableImpl: PaintableImpl {
+pub trait SymbolicPaintableImpl:
+    PaintableImpl + ObjectSubclass<Type: IsA<SymbolicPaintable>>
+{
     fn snapshot_symbolic(
         &self,
         snapshot: &gdk::Snapshot,
@@ -20,12 +21,7 @@ pub trait SymbolicPaintableImpl: PaintableImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::SymbolicPaintableImplExt> Sealed for T {}
-}
-
-pub trait SymbolicPaintableImplExt: sealed::Sealed + ObjectSubclass {
+pub trait SymbolicPaintableImplExt: SymbolicPaintableImpl {
     fn parent_snapshot_symbolic(
         &self,
         snapshot: &gdk::Snapshot,

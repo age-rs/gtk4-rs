@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{DeviceTool, Display, InputSource, ModifierType, Seat, Surface};
+use crate::{ffi, DeviceTool, Display, InputSource, ModifierType, Seat, Surface};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -30,14 +30,10 @@ impl std::fmt::Display for Device {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Device>> Sealed for T {}
-}
-
-pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
+pub trait DeviceExt: IsA<Device> + 'static {
     #[doc(alias = "gdk_device_get_caps_lock_state")]
     #[doc(alias = "get_caps_lock_state")]
+    #[doc(alias = "caps-lock-state")]
     fn is_caps_locked(&self) -> bool {
         unsafe {
             from_glib(ffi::gdk_device_get_caps_lock_state(
@@ -48,6 +44,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_device_tool")]
     #[doc(alias = "get_device_tool")]
+    #[doc(alias = "tool")]
     fn device_tool(&self) -> Option<DeviceTool> {
         unsafe {
             from_glib_none(ffi::gdk_device_get_device_tool(
@@ -74,6 +71,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_has_cursor")]
     #[doc(alias = "get_has_cursor")]
+    #[doc(alias = "has-cursor")]
     fn has_cursor(&self) -> bool {
         unsafe {
             from_glib(ffi::gdk_device_get_has_cursor(
@@ -84,6 +82,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_modifier_state")]
     #[doc(alias = "get_modifier_state")]
+    #[doc(alias = "modifier-state")]
     fn modifier_state(&self) -> ModifierType {
         unsafe {
             from_glib(ffi::gdk_device_get_modifier_state(
@@ -100,6 +99,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_num_lock_state")]
     #[doc(alias = "get_num_lock_state")]
+    #[doc(alias = "num-lock-state")]
     fn is_num_locked(&self) -> bool {
         unsafe {
             from_glib(ffi::gdk_device_get_num_lock_state(
@@ -110,12 +110,14 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_num_touches")]
     #[doc(alias = "get_num_touches")]
+    #[doc(alias = "num-touches")]
     fn num_touches(&self) -> u32 {
         unsafe { ffi::gdk_device_get_num_touches(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gdk_device_get_product_id")]
     #[doc(alias = "get_product_id")]
+    #[doc(alias = "product-id")]
     fn product_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gdk_device_get_product_id(
@@ -126,6 +128,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_scroll_lock_state")]
     #[doc(alias = "get_scroll_lock_state")]
+    #[doc(alias = "scroll-lock-state")]
     fn is_scroll_locked(&self) -> bool {
         unsafe {
             from_glib(ffi::gdk_device_get_scroll_lock_state(
@@ -171,6 +174,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gdk_device_get_vendor_id")]
     #[doc(alias = "get_vendor_id")]
+    #[doc(alias = "vendor-id")]
     fn vendor_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gdk_device_get_vendor_id(
@@ -180,6 +184,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gdk_device_has_bidi_layouts")]
+    #[doc(alias = "has-bidi-layouts")]
     fn has_bidi_layouts(&self) -> bool {
         unsafe {
             from_glib(ffi::gdk_device_has_bidi_layouts(
@@ -211,7 +216,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -240,7 +245,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tool-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tool_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -266,7 +271,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps-lock-state\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_caps_lock_state_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -289,7 +294,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_direction_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -315,7 +320,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-bidi-layouts\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_bidi_layouts_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -341,7 +346,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modifier-state\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_modifier_state_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -364,7 +369,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-axes\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_n_axes_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -390,7 +395,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::num-lock-state\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_num_lock_state_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -416,7 +421,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scroll-lock-state\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_scroll_lock_state_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -439,7 +444,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::seat\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_seat_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -462,7 +467,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tool\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tool_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

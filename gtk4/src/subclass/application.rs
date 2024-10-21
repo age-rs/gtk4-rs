@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`Application`](crate::Application).
+//! Traits intended for subclassing [`Application`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Application, Window};
+use crate::{ffi, prelude::*, subclass::prelude::*, Application, Window};
 
-pub trait GtkApplicationImpl: GtkApplicationImplExt + ApplicationImpl {
+pub trait GtkApplicationImpl: ApplicationImpl + ObjectSubclass<Type: IsA<Application>> {
     fn window_added(&self, window: &Window) {
         self.parent_window_added(window)
     }
@@ -17,12 +17,7 @@ pub trait GtkApplicationImpl: GtkApplicationImplExt + ApplicationImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::GtkApplicationImplExt> Sealed for T {}
-}
-
-pub trait GtkApplicationImplExt: sealed::Sealed + ObjectSubclass {
+pub trait GtkApplicationImplExt: GtkApplicationImpl {
     fn parent_window_added(&self, window: &Window) {
         unsafe {
             let data = Self::type_data();

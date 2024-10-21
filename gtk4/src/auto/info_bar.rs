@@ -4,7 +4,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, Button, ConstraintTarget, LayoutManager,
+    ffi, Accessible, AccessibleRole, Align, Buildable, Button, ConstraintTarget, LayoutManager,
     MessageType, Overflow, ResponseType, Widget,
 };
 use glib::{
@@ -79,6 +79,7 @@ impl InfoBar {
     #[allow(deprecated)]
     #[doc(alias = "gtk_info_bar_get_message_type")]
     #[doc(alias = "get_message_type")]
+    #[doc(alias = "message-type")]
     pub fn message_type(&self) -> MessageType {
         unsafe { from_glib(ffi::gtk_info_bar_get_message_type(self.to_glib_none().0)) }
     }
@@ -87,6 +88,7 @@ impl InfoBar {
     #[allow(deprecated)]
     #[doc(alias = "gtk_info_bar_get_revealed")]
     #[doc(alias = "get_revealed")]
+    #[doc(alias = "revealed")]
     pub fn is_revealed(&self) -> bool {
         unsafe { from_glib(ffi::gtk_info_bar_get_revealed(self.to_glib_none().0)) }
     }
@@ -95,6 +97,7 @@ impl InfoBar {
     #[allow(deprecated)]
     #[doc(alias = "gtk_info_bar_get_show_close_button")]
     #[doc(alias = "get_show_close_button")]
+    #[doc(alias = "show-close-button")]
     pub fn shows_close_button(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_info_bar_get_show_close_button(
@@ -145,6 +148,7 @@ impl InfoBar {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_info_bar_set_message_type")]
+    #[doc(alias = "message-type")]
     pub fn set_message_type(&self, message_type: MessageType) {
         unsafe {
             ffi::gtk_info_bar_set_message_type(self.to_glib_none().0, message_type.into_glib());
@@ -167,6 +171,7 @@ impl InfoBar {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_info_bar_set_revealed")]
+    #[doc(alias = "revealed")]
     pub fn set_revealed(&self, revealed: bool) {
         unsafe {
             ffi::gtk_info_bar_set_revealed(self.to_glib_none().0, revealed.into_glib());
@@ -176,6 +181,7 @@ impl InfoBar {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_info_bar_set_show_close_button")]
+    #[doc(alias = "show-close-button")]
     pub fn set_show_close_button(&self, setting: bool) {
         unsafe {
             ffi::gtk_info_bar_set_show_close_button(self.to_glib_none().0, setting.into_glib());
@@ -196,7 +202,7 @@ impl InfoBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     close_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -223,7 +229,7 @@ impl InfoBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"response\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     response_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -246,7 +252,7 @@ impl InfoBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-type\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_message_type_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -269,7 +275,7 @@ impl InfoBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::revealed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_revealed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -295,7 +301,7 @@ impl InfoBar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-close-button\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_close_button_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

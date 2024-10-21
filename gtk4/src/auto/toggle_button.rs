@@ -4,7 +4,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, AccessibleRole, Actionable, Align, Buildable, Button, ConstraintTarget,
+    ffi, Accessible, AccessibleRole, Actionable, Align, Buildable, Button, ConstraintTarget,
     LayoutManager, Overflow, Widget,
 };
 use glib::{
@@ -343,14 +343,10 @@ impl ToggleButtonBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ToggleButton>> Sealed for T {}
-}
-
-pub trait ToggleButtonExt: IsA<ToggleButton> + sealed::Sealed + 'static {
+pub trait ToggleButtonExt: IsA<ToggleButton> + 'static {
     #[doc(alias = "gtk_toggle_button_get_active")]
     #[doc(alias = "get_active")]
+    #[doc(alias = "active")]
     fn is_active(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_toggle_button_get_active(
@@ -360,6 +356,7 @@ pub trait ToggleButtonExt: IsA<ToggleButton> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_toggle_button_set_active")]
+    #[doc(alias = "active")]
     fn set_active(&self, is_active: bool) {
         unsafe {
             ffi::gtk_toggle_button_set_active(
@@ -370,6 +367,7 @@ pub trait ToggleButtonExt: IsA<ToggleButton> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_toggle_button_set_group")]
+    #[doc(alias = "group")]
     fn set_group(&self, group: Option<&impl IsA<ToggleButton>>) {
         unsafe {
             ffi::gtk_toggle_button_set_group(
@@ -402,7 +400,7 @@ pub trait ToggleButtonExt: IsA<ToggleButton> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggled\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     toggled_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -425,7 +423,7 @@ pub trait ToggleButtonExt: IsA<ToggleButton> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_active_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -448,7 +446,7 @@ pub trait ToggleButtonExt: IsA<ToggleButton> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::group\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_group_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

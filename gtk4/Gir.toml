@@ -18,13 +18,19 @@ trust_return_value_nullability = true
 generate = [
     # "Gtk.RequestedSize", a record
     # "Gtk.PrintBackend", a record without a gtype
+    "Gtk.AccessibleAnnouncementPriority",
     "Gtk.AccessibleAutocomplete",
     "Gtk.AccessibleInvalidState",
     "Gtk.AccessiblePlatformState",
     "Gtk.AccessibleProperty",
     "Gtk.AccessibleRange",
     "Gtk.AccessibleRelation",
+    "Gtk.AccessibleRole",
     "Gtk.AccessibleSort",
+    "Gtk.AccessibleState",
+    "Gtk.AccessibleText",
+    "Gtk.AccessibleTextContentChange",
+    "Gtk.AccessibleTextGranularity",
     "Gtk.AccessibleTristate",
     "Gtk.ActionBar",
     "Gtk.ActivateAction",
@@ -118,6 +124,7 @@ generate = [
     "Gtk.FontChooserLevel",
     "Gtk.FontChooserWidget",
     "Gtk.FontLevel",
+    "Gtk.FontRendering",
     "Gtk.Frame",
     "Gtk.GestureClick",
     "Gtk.GestureDrag",
@@ -126,7 +133,7 @@ generate = [
     "Gtk.GestureRotate",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
-    "Gtk.GraphicsOffload",
+    "Gtk.GraphicsOffloadEnabled",
     "Gtk.Grid",
     "Gtk.GridLayout",
     "Gtk.GridView",
@@ -248,6 +255,7 @@ generate = [
     "Gtk.SymbolicColor",
     "Gtk.SymbolicPaintable",
     "Gtk.SystemSetting",
+    "Gtk.TextBufferNotifyFlags",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
     "Gtk.TextExtendSelection",
@@ -366,6 +374,7 @@ manual = [
     "Gsk.Shadow",
     "Gsk.Stroke",
     "Gsk.Transform",
+    "Gtk.AccessibleTextRange", # a plain struct
     "Gtk.Align", # as we need to handle baseline_fill = baseline for gtk >= 4.11
     "Gtk.BitsetIter",
     "Gtk.Border",
@@ -608,24 +617,6 @@ status = "generate"
         const = true
 
 [[object]]
-name = "Gtk.AccessibleRole"
-status = "generate"
-    [[object.member]]
-    name = "toggle_button"
-    version = "4.10"
-    [[object.member]]
-    name = "application"
-    version = "4.12"
-
-
-[[object]]
-name = "Gtk.AccessibleState"
-status = "generate"
-    [[object.member]]
-    name = "visited"
-    version = "4.12"
-
-[[object]]
 name = "Gtk.Actionable"
 status = "generate"
 manual_traits = ["ActionableExtManual"]
@@ -721,6 +712,9 @@ status = "generate"
     [[object.function]]
     name = "get_day_is_marked"
     rename = "day_is_marked"
+    [[object.property]]
+    pattern = "(day|month|year)"
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.CallbackAction"
@@ -1032,6 +1026,9 @@ generate_builder  = false # use glib::Priority
 name = "Gtk.DragIcon"
 status = "generate"
 generate_builder = false
+    [[object.function]]
+    name = "get_for_drag"
+    rename = "for_drag"
 
 [[object]]
 name = "Gtk.DrawingArea"
@@ -1382,9 +1379,12 @@ status = "generate"
         nullable = true
 
 [[object]]
-name = "Gtk.GraphicsOffloadEnabled"
+name = "Gtk.GraphicsOffload"
 status = "generate"
-version = "4.14"
+    [[object.property]]
+    name = "black-background"
+    generate = ["notify"] # already has a getter/setter
+
 
 [[object]]
 name = "Gtk.GridLayoutChild"
@@ -1430,6 +1430,18 @@ status = "generate"
         [[object.function.parameter]]
         name = "pixbuf"
         nullable = false
+    # The following are more idiomatic, set_from_x are the actual setters and
+    # gir no longer generates Object::set_property("prop-name", _) setters when
+    # there is a setter in the gir annotation.
+    [[object.function]]
+    name = "set_from_paintable"
+    rename = "set_paintable"
+    [[object.function]]
+    name = "set_from_icon_name"
+    rename = "set_icon_name"
+    [[object.function]]
+    name = "set_from_resource"
+    rename = "set_resource"
 
 
 [[object]]
@@ -2183,6 +2195,9 @@ manual_traits = ["TextBufferExtManual"]
     [[object.function]]
     name = "insert_with_tags_by_name"
     manual = true
+    [[object.function]]
+    name = "add_commit_notify"
+    manual = true # Ends up using from_glib_borrow for a TextBufferNotifyFlags
 
 [[object]]
 name = "Gtk.TextIter"

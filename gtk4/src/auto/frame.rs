@@ -3,7 +3,8 @@
 // DO NOT EDIT
 
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow, Widget,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, LayoutManager, Overflow,
+    Widget,
 };
 use glib::{
     prelude::*,
@@ -279,12 +280,7 @@ impl FrameBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Frame>> Sealed for T {}
-}
-
-pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
+pub trait FrameExt: IsA<Frame> + 'static {
     #[doc(alias = "gtk_frame_get_child")]
     #[doc(alias = "get_child")]
     fn child(&self) -> Option<Widget> {
@@ -299,12 +295,14 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_frame_get_label_align")]
     #[doc(alias = "get_label_align")]
+    #[doc(alias = "label-xalign")]
     fn label_align(&self) -> f32 {
         unsafe { ffi::gtk_frame_get_label_align(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gtk_frame_get_label_widget")]
     #[doc(alias = "get_label_widget")]
+    #[doc(alias = "label-widget")]
     fn label_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_frame_get_label_widget(
@@ -314,6 +312,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_frame_set_child")]
+    #[doc(alias = "child")]
     fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_frame_set_child(
@@ -324,6 +323,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_frame_set_label")]
+    #[doc(alias = "label")]
     fn set_label(&self, label: Option<&str>) {
         unsafe {
             ffi::gtk_frame_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
@@ -331,6 +331,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_frame_set_label_align")]
+    #[doc(alias = "label-xalign")]
     fn set_label_align(&self, xalign: f32) {
         unsafe {
             ffi::gtk_frame_set_label_align(self.as_ref().to_glib_none().0, xalign);
@@ -338,6 +339,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_frame_set_label_widget")]
+    #[doc(alias = "label-widget")]
     fn set_label_widget(&self, label_widget: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_frame_set_label_widget(
@@ -345,16 +347,6 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
                 label_widget.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
-    }
-
-    #[doc(alias = "label-xalign")]
-    fn label_xalign(&self) -> f32 {
-        ObjectExt::property(self.as_ref(), "label-xalign")
-    }
-
-    #[doc(alias = "label-xalign")]
-    fn set_label_xalign(&self, label_xalign: f32) {
-        ObjectExt::set_property(self.as_ref(), "label-xalign", label_xalign)
     }
 
     #[doc(alias = "child")]
@@ -372,7 +364,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -395,7 +387,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -418,7 +410,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -441,7 +433,7 @@ pub trait FrameExt: IsA<Frame> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-xalign\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_label_xalign_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

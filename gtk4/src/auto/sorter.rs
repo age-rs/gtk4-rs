@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{Ordering, SorterChange, SorterOrder};
+use crate::{ffi, Ordering, SorterChange, SorterOrder};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -23,12 +23,7 @@ impl Sorter {
     pub const NONE: Option<&'static Sorter> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Sorter>> Sealed for T {}
-}
-
-pub trait SorterExt: IsA<Sorter> + sealed::Sealed + 'static {
+pub trait SorterExt: IsA<Sorter> + 'static {
     #[doc(alias = "gtk_sorter_changed")]
     fn changed(&self, change: SorterChange) {
         unsafe {
@@ -74,7 +69,7 @@ pub trait SorterExt: IsA<Sorter> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

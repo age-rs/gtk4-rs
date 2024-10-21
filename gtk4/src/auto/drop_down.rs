@@ -6,7 +6,7 @@
 #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
 use crate::StringFilterMatchMode;
 use crate::{
-    Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, Expression, LayoutManager,
+    ffi, Accessible, AccessibleRole, Align, Buildable, ConstraintTarget, Expression, LayoutManager,
     ListItemFactory, Overflow, Widget,
 };
 use glib::{
@@ -65,6 +65,7 @@ impl DropDown {
 
     #[doc(alias = "gtk_drop_down_get_enable_search")]
     #[doc(alias = "get_enable_search")]
+    #[doc(alias = "enable-search")]
     pub fn enables_search(&self) -> bool {
         unsafe { from_glib(ffi::gtk_drop_down_get_enable_search(self.to_glib_none().0)) }
     }
@@ -85,12 +86,14 @@ impl DropDown {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_drop_down_get_header_factory")]
     #[doc(alias = "get_header_factory")]
+    #[doc(alias = "header-factory")]
     pub fn header_factory(&self) -> Option<ListItemFactory> {
         unsafe { from_glib_none(ffi::gtk_drop_down_get_header_factory(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_drop_down_get_list_factory")]
     #[doc(alias = "get_list_factory")]
+    #[doc(alias = "list-factory")]
     pub fn list_factory(&self) -> Option<ListItemFactory> {
         unsafe { from_glib_none(ffi::gtk_drop_down_get_list_factory(self.to_glib_none().0)) }
     }
@@ -105,6 +108,7 @@ impl DropDown {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_drop_down_get_search_match_mode")]
     #[doc(alias = "get_search_match_mode")]
+    #[doc(alias = "search-match-mode")]
     pub fn search_match_mode(&self) -> StringFilterMatchMode {
         unsafe {
             from_glib(ffi::gtk_drop_down_get_search_match_mode(
@@ -121,6 +125,7 @@ impl DropDown {
 
     #[doc(alias = "gtk_drop_down_get_selected_item")]
     #[doc(alias = "get_selected_item")]
+    #[doc(alias = "selected-item")]
     pub fn selected_item(&self) -> Option<glib::Object> {
         unsafe { from_glib_none(ffi::gtk_drop_down_get_selected_item(self.to_glib_none().0)) }
     }
@@ -129,11 +134,13 @@ impl DropDown {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_6")))]
     #[doc(alias = "gtk_drop_down_get_show_arrow")]
     #[doc(alias = "get_show_arrow")]
+    #[doc(alias = "show-arrow")]
     pub fn shows_arrow(&self) -> bool {
         unsafe { from_glib(ffi::gtk_drop_down_get_show_arrow(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_drop_down_set_enable_search")]
+    #[doc(alias = "enable-search")]
     pub fn set_enable_search(&self, enable_search: bool) {
         unsafe {
             ffi::gtk_drop_down_set_enable_search(self.to_glib_none().0, enable_search.into_glib());
@@ -141,6 +148,7 @@ impl DropDown {
     }
 
     #[doc(alias = "gtk_drop_down_set_expression")]
+    #[doc(alias = "expression")]
     pub fn set_expression(&self, expression: Option<impl AsRef<Expression>>) {
         unsafe {
             ffi::gtk_drop_down_set_expression(
@@ -151,6 +159,7 @@ impl DropDown {
     }
 
     #[doc(alias = "gtk_drop_down_set_factory")]
+    #[doc(alias = "factory")]
     pub fn set_factory(&self, factory: Option<&impl IsA<ListItemFactory>>) {
         unsafe {
             ffi::gtk_drop_down_set_factory(
@@ -163,6 +172,7 @@ impl DropDown {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_drop_down_set_header_factory")]
+    #[doc(alias = "header-factory")]
     pub fn set_header_factory(&self, factory: Option<&impl IsA<ListItemFactory>>) {
         unsafe {
             ffi::gtk_drop_down_set_header_factory(
@@ -173,6 +183,7 @@ impl DropDown {
     }
 
     #[doc(alias = "gtk_drop_down_set_list_factory")]
+    #[doc(alias = "list-factory")]
     pub fn set_list_factory(&self, factory: Option<&impl IsA<ListItemFactory>>) {
         unsafe {
             ffi::gtk_drop_down_set_list_factory(
@@ -183,6 +194,7 @@ impl DropDown {
     }
 
     #[doc(alias = "gtk_drop_down_set_model")]
+    #[doc(alias = "model")]
     pub fn set_model(&self, model: Option<&impl IsA<gio::ListModel>>) {
         unsafe {
             ffi::gtk_drop_down_set_model(
@@ -195,6 +207,7 @@ impl DropDown {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_drop_down_set_search_match_mode")]
+    #[doc(alias = "search-match-mode")]
     pub fn set_search_match_mode(&self, search_match_mode: StringFilterMatchMode) {
         unsafe {
             ffi::gtk_drop_down_set_search_match_mode(
@@ -205,6 +218,7 @@ impl DropDown {
     }
 
     #[doc(alias = "gtk_drop_down_set_selected")]
+    #[doc(alias = "selected")]
     pub fn set_selected(&self, position: u32) {
         unsafe {
             ffi::gtk_drop_down_set_selected(self.to_glib_none().0, position);
@@ -214,6 +228,7 @@ impl DropDown {
     #[cfg(feature = "v4_6")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_6")))]
     #[doc(alias = "gtk_drop_down_set_show_arrow")]
+    #[doc(alias = "show-arrow")]
     pub fn set_show_arrow(&self, show_arrow: bool) {
         unsafe {
             ffi::gtk_drop_down_set_show_arrow(self.to_glib_none().0, show_arrow.into_glib());
@@ -236,7 +251,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -265,7 +280,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-search\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_search_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -288,7 +303,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expression\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_expression_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -311,7 +326,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::factory\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_factory_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -336,7 +351,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::header-factory\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_header_factory_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -359,7 +374,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::list-factory\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_list_factory_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -382,7 +397,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_model_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -410,7 +425,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-match-mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_search_match_mode_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -433,7 +448,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selected\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selected_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -456,7 +471,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selected-item\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_selected_item_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -481,7 +496,7 @@ impl DropDown {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-arrow\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_arrow_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

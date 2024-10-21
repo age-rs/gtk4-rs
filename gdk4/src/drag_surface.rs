@@ -7,17 +7,12 @@ use glib::{
     translate::*,
 };
 
-use crate::{prelude::*, DragSurface, DragSurfaceSize};
-
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DragSurface>> Sealed for T {}
-}
+use crate::{ffi, prelude::*, DragSurface, DragSurfaceSize};
 
 // rustdoc-stripper-ignore-next
 /// Trait containing manually implemented methods of
 /// [`DragSurface`](crate::DragSurface).
-pub trait DragSurfaceExtManual: sealed::Sealed + IsA<DragSurface> {
+pub trait DragSurfaceExtManual: IsA<DragSurface> {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "compute-size")]
@@ -43,7 +38,7 @@ pub trait DragSurfaceExtManual: sealed::Sealed + IsA<DragSurface> {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"compute-size\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     compute_size_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

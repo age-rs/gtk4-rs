@@ -41,6 +41,7 @@ generate = [
     "Gsk.PathMeasure",
     "Gsk.PathOperation",
     "Gsk.RadialGradientNode",
+    "Gsk.RenderNodeType",
     "Gsk.RepeatingLinearGradientNode",
     "Gsk.RepeatingRadialGradientNode",
     "Gsk.RepeatNode",
@@ -78,7 +79,6 @@ manual = [
     "Graphene.Vec4",
     "Gsk.NglRenderer",
     "Gsk.ParseLocation",
-    "Gsk.RoundedRect",
     "Gsk.Shadow",
     "Gtk.Snapshot", # docs specific
     "Pango.Font",
@@ -209,11 +209,14 @@ status = "generate"
         const = true
 
 [[object]]
-name = "Gsk.RenderNodeType"
-status = "generate"
-    [[object.member]]
-    pattern = "(fill|stroke)_node"
-    version = "4.14"
+name = "Gsk.RoundedRect"
+status = "manual"
+    [[object.function]]
+    name = "init"
+    rename = "new"
+    [[object.function]]
+    name = "init_from_rect"
+    rename = "from_rect"
 
 [[object]]
 name = "Gsk.ShaderArgsBuilder"

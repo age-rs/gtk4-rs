@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{FileFilter, Window};
+use crate::{ffi, FileFilter, Window};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -36,12 +36,14 @@ impl FileDialog {
 
     #[doc(alias = "gtk_file_dialog_get_accept_label")]
     #[doc(alias = "get_accept_label")]
+    #[doc(alias = "accept-label")]
     pub fn accept_label(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gtk_file_dialog_get_accept_label(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_file_dialog_get_default_filter")]
     #[doc(alias = "get_default_filter")]
+    #[doc(alias = "default-filter")]
     pub fn default_filter(&self) -> Option<FileFilter> {
         unsafe {
             from_glib_none(ffi::gtk_file_dialog_get_default_filter(
@@ -58,12 +60,14 @@ impl FileDialog {
 
     #[doc(alias = "gtk_file_dialog_get_initial_file")]
     #[doc(alias = "get_initial_file")]
+    #[doc(alias = "initial-file")]
     pub fn initial_file(&self) -> Option<gio::File> {
         unsafe { from_glib_none(ffi::gtk_file_dialog_get_initial_file(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_file_dialog_get_initial_folder")]
     #[doc(alias = "get_initial_folder")]
+    #[doc(alias = "initial-folder")]
     pub fn initial_folder(&self) -> Option<gio::File> {
         unsafe {
             from_glib_none(ffi::gtk_file_dialog_get_initial_folder(
@@ -74,12 +78,14 @@ impl FileDialog {
 
     #[doc(alias = "gtk_file_dialog_get_initial_name")]
     #[doc(alias = "get_initial_name")]
+    #[doc(alias = "initial-name")]
     pub fn initial_name(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gtk_file_dialog_get_initial_name(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_file_dialog_get_modal")]
     #[doc(alias = "get_modal")]
+    #[doc(alias = "modal")]
     pub fn is_modal(&self) -> bool {
         unsafe { from_glib(ffi::gtk_file_dialog_get_modal(self.to_glib_none().0)) }
     }
@@ -435,6 +441,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_accept_label")]
+    #[doc(alias = "accept-label")]
     pub fn set_accept_label(&self, accept_label: Option<&str>) {
         unsafe {
             ffi::gtk_file_dialog_set_accept_label(
@@ -445,6 +452,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_default_filter")]
+    #[doc(alias = "default-filter")]
     pub fn set_default_filter(&self, filter: Option<&FileFilter>) {
         unsafe {
             ffi::gtk_file_dialog_set_default_filter(self.to_glib_none().0, filter.to_glib_none().0);
@@ -452,6 +460,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_filters")]
+    #[doc(alias = "filters")]
     pub fn set_filters(&self, filters: Option<&impl IsA<gio::ListModel>>) {
         unsafe {
             ffi::gtk_file_dialog_set_filters(
@@ -462,6 +471,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_initial_file")]
+    #[doc(alias = "initial-file")]
     pub fn set_initial_file(&self, file: Option<&impl IsA<gio::File>>) {
         unsafe {
             ffi::gtk_file_dialog_set_initial_file(
@@ -472,6 +482,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_initial_folder")]
+    #[doc(alias = "initial-folder")]
     pub fn set_initial_folder(&self, folder: Option<&impl IsA<gio::File>>) {
         unsafe {
             ffi::gtk_file_dialog_set_initial_folder(
@@ -482,6 +493,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_initial_name")]
+    #[doc(alias = "initial-name")]
     pub fn set_initial_name(&self, name: Option<&str>) {
         unsafe {
             ffi::gtk_file_dialog_set_initial_name(self.to_glib_none().0, name.to_glib_none().0);
@@ -489,6 +501,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_modal")]
+    #[doc(alias = "modal")]
     pub fn set_modal(&self, modal: bool) {
         unsafe {
             ffi::gtk_file_dialog_set_modal(self.to_glib_none().0, modal.into_glib());
@@ -496,6 +509,7 @@ impl FileDialog {
     }
 
     #[doc(alias = "gtk_file_dialog_set_title")]
+    #[doc(alias = "title")]
     pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_file_dialog_set_title(self.to_glib_none().0, title.to_glib_none().0);
@@ -519,7 +533,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accept-label\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_accept_label_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -544,7 +558,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-filter\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_filter_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -569,7 +583,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::filters\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_filters_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -594,7 +608,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::initial-file\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_initial_file_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -619,7 +633,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::initial-folder\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_initial_folder_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -644,7 +658,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::initial-name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_initial_name_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -669,7 +683,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_modal_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -694,7 +708,7 @@ impl FileDialog {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

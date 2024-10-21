@@ -1,24 +1,19 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`ToggleButton`](crate::ToggleButton).
+//! Traits intended for subclassing [`ToggleButton`].
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, ToggleButton};
+use crate::{ffi, prelude::*, subclass::prelude::*, ToggleButton};
 
-pub trait ToggleButtonImpl: ToggleButtonImplExt + ButtonImpl {
+pub trait ToggleButtonImpl: ButtonImpl + ObjectSubclass<Type: IsA<ToggleButton>> {
     fn toggled(&self) {
         self.parent_toggled()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ToggleButtonImplExt> Sealed for T {}
-}
-
-pub trait ToggleButtonImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ToggleButtonImplExt: ToggleButtonImpl {
     fn parent_toggled(&self) {
         unsafe {
             let data = Self::type_data();

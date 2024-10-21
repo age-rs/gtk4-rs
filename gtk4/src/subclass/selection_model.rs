@@ -1,14 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for implementing the
-//! [`SelectionModel`](crate::SelectionModel) interface.
+//! Traits intended for implementing the [`SelectionModel`] interface.
 
 use glib::translate::*;
 
-use crate::{prelude::*, subclass::prelude::*, Bitset, SelectionModel};
+use crate::{ffi, prelude::*, subclass::prelude::*, Bitset, SelectionModel};
 
-pub trait SelectionModelImpl: ListModelImpl {
+pub trait SelectionModelImpl: ListModelImpl + ObjectSubclass<Type: IsA<SelectionModel>> {
     #[doc(alias = "get_selection_in_range")]
     fn selection_in_range(&self, position: u32, n_items: u32) -> Bitset {
         self.parent_selection_in_range(position, n_items)
@@ -47,12 +46,7 @@ pub trait SelectionModelImpl: ListModelImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::SelectionModelImplExt> Sealed for T {}
-}
-
-pub trait SelectionModelImplExt: sealed::Sealed + ObjectSubclass {
+pub trait SelectionModelImplExt: SelectionModelImpl {
     fn parent_selection_in_range(&self, position: u32, n_items: u32) -> Bitset {
         unsafe {
             let type_data = Self::type_data();

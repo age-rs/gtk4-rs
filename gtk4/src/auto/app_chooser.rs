@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{Accessible, Buildable, ConstraintTarget, Widget};
+use crate::{ffi, Accessible, Buildable, ConstraintTarget, Widget};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -19,12 +19,7 @@ impl AppChooser {
     pub const NONE: Option<&'static AppChooser> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AppChooser>> Sealed for T {}
-}
-
-pub trait AppChooserExt: IsA<AppChooser> + sealed::Sealed + 'static {
+pub trait AppChooserExt: IsA<AppChooser> + 'static {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_app_chooser_get_app_info")]
@@ -41,6 +36,7 @@ pub trait AppChooserExt: IsA<AppChooser> + sealed::Sealed + 'static {
     #[allow(deprecated)]
     #[doc(alias = "gtk_app_chooser_get_content_type")]
     #[doc(alias = "get_content_type")]
+    #[doc(alias = "content-type")]
     fn content_type(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gtk_app_chooser_get_content_type(

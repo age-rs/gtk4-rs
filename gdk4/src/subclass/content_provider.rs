@@ -1,15 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`ContentProvider`](crate::ContentProvider).
+//! Traits intended for subclassing [`ContentProvider`].
 
 use std::{future::Future, pin::Pin};
 
 use glib::{translate::*, Value};
 
-use crate::{prelude::*, subclass::prelude::*, Clipboard, ContentFormats, ContentProvider};
+use crate::{ffi, prelude::*, subclass::prelude::*, Clipboard, ContentFormats, ContentProvider};
 
-pub trait ContentProviderImpl: ContentProviderImplExt + ObjectImpl {
+pub trait ContentProviderImpl: ObjectImpl + ObjectSubclass<Type: IsA<ContentProvider>> {
     fn content_changed(&self) {
         self.parent_content_changed()
     }
@@ -44,12 +44,7 @@ pub trait ContentProviderImpl: ContentProviderImplExt + ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ContentProviderImplExt> Sealed for T {}
-}
-
-pub trait ContentProviderImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ContentProviderImplExt: ContentProviderImpl {
     fn parent_content_changed(&self) {
         unsafe {
             let data = Self::type_data();
@@ -382,7 +377,9 @@ unsafe extern "C" fn content_provider_write_mime_type_finish(
             true.into_glib()
         }
         Err(e) => {
-            *error_ptr = e.into_glib_ptr();
+            if !error_ptr.is_null() {
+                *error_ptr = e.into_glib_ptr();
+            }
             false.into_glib()
         }
     }
@@ -404,7 +401,9 @@ unsafe extern "C" fn content_provider_get_value<T: ContentProviderImpl>(
             true.into_glib()
         }
         Err(e) => {
-            *error_ptr = e.into_glib_ptr();
+            if !error_ptr.is_null() {
+                *error_ptr = e.into_glib_ptr();
+            }
             false.into_glib()
         }
     }

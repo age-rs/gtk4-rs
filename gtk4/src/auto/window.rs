@@ -4,8 +4,8 @@
 #![allow(deprecated)]
 
 use crate::{
-    Accessible, AccessibleRole, Align, Application, Buildable, ConstraintTarget, LayoutManager,
-    Native, Overflow, Root, ShortcutManager, Widget, WindowGroup,
+    ffi, Accessible, AccessibleRole, Align, Application, Buildable, ConstraintTarget,
+    LayoutManager, Native, Overflow, Root, ShortcutManager, Widget, WindowGroup,
 };
 use glib::{
     prelude::*,
@@ -455,12 +455,7 @@ impl WindowBuilder {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Window>> Sealed for T {}
-}
-
-pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
+pub trait GtkWindowExt: IsA<Window> + 'static {
     #[doc(alias = "gtk_window_close")]
     fn close(&self) {
         unsafe {
@@ -510,6 +505,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_decorated")]
     #[doc(alias = "get_decorated")]
+    #[doc(alias = "decorated")]
     fn is_decorated(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_decorated(
@@ -535,6 +531,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_default_widget")]
     #[doc(alias = "get_default_widget")]
+    #[doc(alias = "default-widget")]
     fn default_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_window_get_default_widget(
@@ -545,6 +542,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_deletable")]
     #[doc(alias = "get_deletable")]
+    #[doc(alias = "deletable")]
     fn is_deletable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_deletable(
@@ -555,6 +553,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_destroy_with_parent")]
     #[doc(alias = "get_destroy_with_parent")]
+    #[doc(alias = "destroy-with-parent")]
     fn must_destroy_with_parent(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_destroy_with_parent(
@@ -565,12 +564,14 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_focus")]
     #[doc(alias = "get_focus")]
+    #[doc(alias = "focus-widget")]
     fn focus(&self) -> Option<Widget> {
         unsafe { from_glib_none(ffi::gtk_window_get_focus(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_window_get_focus_visible")]
     #[doc(alias = "get_focus_visible")]
+    #[doc(alias = "focus-visible")]
     fn gets_focus_visible(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_focus_visible(
@@ -589,6 +590,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_2")))]
     #[doc(alias = "gtk_window_get_handle_menubar_accel")]
     #[doc(alias = "get_handle_menubar_accel")]
+    #[doc(alias = "handle-menubar-accel")]
     fn is_handle_menubar_accel(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_handle_menubar_accel(
@@ -599,6 +601,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_hide_on_close")]
     #[doc(alias = "get_hide_on_close")]
+    #[doc(alias = "hide-on-close")]
     fn hides_on_close(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_hide_on_close(
@@ -609,6 +612,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_icon_name")]
     #[doc(alias = "get_icon_name")]
+    #[doc(alias = "icon-name")]
     fn icon_name(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gtk_window_get_icon_name(
@@ -619,6 +623,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_mnemonics_visible")]
     #[doc(alias = "get_mnemonics_visible")]
+    #[doc(alias = "mnemonics-visible")]
     fn is_mnemonics_visible(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_mnemonics_visible(
@@ -629,12 +634,14 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_modal")]
     #[doc(alias = "get_modal")]
+    #[doc(alias = "modal")]
     fn is_modal(&self) -> bool {
         unsafe { from_glib(ffi::gtk_window_get_modal(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_window_get_resizable")]
     #[doc(alias = "get_resizable")]
+    #[doc(alias = "resizable")]
     fn is_resizable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_resizable(
@@ -657,6 +664,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
 
     #[doc(alias = "gtk_window_get_transient_for")]
     #[doc(alias = "get_transient_for")]
+    #[doc(alias = "transient-for")]
     #[must_use]
     fn transient_for(&self) -> Option<Window> {
         unsafe {
@@ -672,11 +680,13 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_is_active")]
+    #[doc(alias = "is-active")]
     fn is_active(&self) -> bool {
         unsafe { from_glib(ffi::gtk_window_is_active(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gtk_window_is_fullscreen")]
+    #[doc(alias = "fullscreened")]
     fn is_fullscreen(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_is_fullscreen(
@@ -686,6 +696,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_is_maximized")]
+    #[doc(alias = "maximized")]
     fn is_maximized(&self) -> bool {
         unsafe { from_glib(ffi::gtk_window_is_maximized(self.as_ref().to_glib_none().0)) }
     }
@@ -693,6 +704,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     #[cfg(feature = "v4_12")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_12")))]
     #[doc(alias = "gtk_window_is_suspended")]
+    #[doc(alias = "suspended")]
     fn is_suspended(&self) -> bool {
         unsafe { from_glib(ffi::gtk_window_is_suspended(self.as_ref().to_glib_none().0)) }
     }
@@ -728,6 +740,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_application")]
+    #[doc(alias = "application")]
     fn set_application(&self, application: Option<&impl IsA<Application>>) {
         unsafe {
             ffi::gtk_window_set_application(
@@ -738,6 +751,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_child")]
+    #[doc(alias = "child")]
     fn set_child(&self, child: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_window_set_child(
@@ -748,6 +762,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_decorated")]
+    #[doc(alias = "decorated")]
     fn set_decorated(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_decorated(self.as_ref().to_glib_none().0, setting.into_glib());
@@ -762,6 +777,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_default_widget")]
+    #[doc(alias = "default-widget")]
     fn set_default_widget(&self, default_widget: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_window_set_default_widget(
@@ -772,6 +788,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_deletable")]
+    #[doc(alias = "deletable")]
     fn set_deletable(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_deletable(self.as_ref().to_glib_none().0, setting.into_glib());
@@ -779,6 +796,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_destroy_with_parent")]
+    #[doc(alias = "destroy-with-parent")]
     fn set_destroy_with_parent(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_destroy_with_parent(
@@ -789,6 +807,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_display")]
+    #[doc(alias = "display")]
     fn set_display(&self, display: &impl IsA<gdk::Display>) {
         unsafe {
             ffi::gtk_window_set_display(
@@ -799,6 +818,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_focus")]
+    #[doc(alias = "focus-widget")]
     fn set_focus(&self, focus: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_window_set_focus(
@@ -809,6 +829,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_focus_visible")]
+    #[doc(alias = "focus-visible")]
     fn set_focus_visible(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_focus_visible(self.as_ref().to_glib_none().0, setting.into_glib());
@@ -818,6 +839,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     #[cfg(feature = "v4_2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v4_2")))]
     #[doc(alias = "gtk_window_set_handle_menubar_accel")]
+    #[doc(alias = "handle-menubar-accel")]
     fn set_handle_menubar_accel(&self, handle_menubar_accel: bool) {
         unsafe {
             ffi::gtk_window_set_handle_menubar_accel(
@@ -828,6 +850,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_hide_on_close")]
+    #[doc(alias = "hide-on-close")]
     fn set_hide_on_close(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_hide_on_close(self.as_ref().to_glib_none().0, setting.into_glib());
@@ -835,6 +858,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_icon_name")]
+    #[doc(alias = "icon-name")]
     fn set_icon_name(&self, name: Option<&str>) {
         unsafe {
             ffi::gtk_window_set_icon_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
@@ -842,6 +866,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_mnemonics_visible")]
+    #[doc(alias = "mnemonics-visible")]
     fn set_mnemonics_visible(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_mnemonics_visible(
@@ -852,6 +877,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_modal")]
+    #[doc(alias = "modal")]
     fn set_modal(&self, modal: bool) {
         unsafe {
             ffi::gtk_window_set_modal(self.as_ref().to_glib_none().0, modal.into_glib());
@@ -859,6 +885,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_resizable")]
+    #[doc(alias = "resizable")]
     fn set_resizable(&self, resizable: bool) {
         unsafe {
             ffi::gtk_window_set_resizable(self.as_ref().to_glib_none().0, resizable.into_glib());
@@ -866,6 +893,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_startup_id")]
+    #[doc(alias = "startup-id")]
     fn set_startup_id(&self, startup_id: &str) {
         unsafe {
             ffi::gtk_window_set_startup_id(
@@ -876,6 +904,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_title")]
+    #[doc(alias = "title")]
     fn set_title(&self, title: Option<&str>) {
         unsafe {
             ffi::gtk_window_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
@@ -883,6 +912,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_titlebar")]
+    #[doc(alias = "titlebar")]
     fn set_titlebar(&self, titlebar: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_window_set_titlebar(
@@ -893,6 +923,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gtk_window_set_transient_for")]
+    #[doc(alias = "transient-for")]
     fn set_transient_for(&self, parent: Option<&impl IsA<Window>>) {
         unsafe {
             ffi::gtk_window_set_transient_for(
@@ -943,20 +974,6 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
         ObjectExt::set_property(self.as_ref(), "default-width", default_width)
     }
 
-    #[doc(alias = "focus-widget")]
-    fn focus_widget(&self) -> Option<Widget> {
-        ObjectExt::property(self.as_ref(), "focus-widget")
-    }
-
-    #[doc(alias = "focus-widget")]
-    fn set_focus_widget<P: IsA<Widget>>(&self, focus_widget: Option<&P>) {
-        ObjectExt::set_property(self.as_ref(), "focus-widget", focus_widget)
-    }
-
-    fn is_fullscreened(&self) -> bool {
-        ObjectExt::property(self.as_ref(), "fullscreened")
-    }
-
     fn set_fullscreened(&self, fullscreened: bool) {
         ObjectExt::set_property(self.as_ref(), "fullscreened", fullscreened)
     }
@@ -979,7 +996,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-default\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_default_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1005,7 +1022,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-focus\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     activate_focus_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1037,7 +1054,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close-request\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     close_request_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1070,7 +1087,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"enable-debugging\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     enable_debugging_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1097,7 +1114,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"keys-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     keys_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1120,7 +1137,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::application\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_application_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1143,7 +1160,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1166,7 +1183,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::decorated\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_decorated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1192,7 +1209,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-height\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_height_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1218,7 +1235,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1244,7 +1261,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_default_width_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1267,7 +1284,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::deletable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_deletable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1293,7 +1310,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::destroy-with-parent\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_destroy_with_parent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1316,7 +1333,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::display\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_display_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1342,7 +1359,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_focus_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1365,7 +1382,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_focus_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1388,7 +1405,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fullscreened\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_fullscreened_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1416,7 +1433,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::handle-menubar-accel\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_handle_menubar_accel_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1442,7 +1459,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hide-on-close\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hide_on_close_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1465,7 +1482,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_icon_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1488,7 +1505,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-active\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_active_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1511,7 +1528,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::maximized\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_maximized_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1537,7 +1554,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mnemonics-visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mnemonics_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1560,7 +1577,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_modal_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1583,7 +1600,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resizable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_resizable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1606,7 +1623,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::startup-id\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_startup_id_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1631,7 +1648,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::suspended\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_suspended_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1654,7 +1671,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1679,7 +1696,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::titlebar\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_titlebar_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1705,7 +1722,7 @@ pub trait GtkWindowExt: IsA<Window> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transient-for\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transient_for_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

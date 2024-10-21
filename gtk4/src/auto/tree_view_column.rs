@@ -4,7 +4,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Buildable, CellArea, CellLayout, CellRenderer, SortType, TreeIter, TreeModel,
+    ffi, Buildable, CellArea, CellLayout, CellRenderer, SortType, TreeIter, TreeModel,
     TreeViewColumnSizing, Widget,
 };
 use glib::{
@@ -212,6 +212,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_clickable")]
     #[doc(alias = "get_clickable")]
+    #[doc(alias = "clickable")]
     pub fn is_clickable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_tree_view_column_get_clickable(
@@ -224,6 +225,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_expand")]
     #[doc(alias = "get_expand")]
+    #[doc(alias = "expand")]
     pub fn expands(&self) -> bool {
         unsafe { from_glib(ffi::gtk_tree_view_column_get_expand(self.to_glib_none().0)) }
     }
@@ -232,6 +234,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_fixed_width")]
     #[doc(alias = "get_fixed_width")]
+    #[doc(alias = "fixed-width")]
     pub fn fixed_width(&self) -> i32 {
         unsafe { ffi::gtk_tree_view_column_get_fixed_width(self.to_glib_none().0) }
     }
@@ -240,6 +243,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_max_width")]
     #[doc(alias = "get_max_width")]
+    #[doc(alias = "max-width")]
     pub fn max_width(&self) -> i32 {
         unsafe { ffi::gtk_tree_view_column_get_max_width(self.to_glib_none().0) }
     }
@@ -248,6 +252,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_min_width")]
     #[doc(alias = "get_min_width")]
+    #[doc(alias = "min-width")]
     pub fn min_width(&self) -> i32 {
         unsafe { ffi::gtk_tree_view_column_get_min_width(self.to_glib_none().0) }
     }
@@ -256,6 +261,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_reorderable")]
     #[doc(alias = "get_reorderable")]
+    #[doc(alias = "reorderable")]
     pub fn is_reorderable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_tree_view_column_get_reorderable(
@@ -268,6 +274,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_resizable")]
     #[doc(alias = "get_resizable")]
+    #[doc(alias = "resizable")]
     pub fn is_resizable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_tree_view_column_get_resizable(
@@ -288,6 +295,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_sort_column_id")]
     #[doc(alias = "get_sort_column_id")]
+    #[doc(alias = "sort-column-id")]
     pub fn sort_column_id(&self) -> i32 {
         unsafe { ffi::gtk_tree_view_column_get_sort_column_id(self.to_glib_none().0) }
     }
@@ -296,6 +304,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_sort_indicator")]
     #[doc(alias = "get_sort_indicator")]
+    #[doc(alias = "sort-indicator")]
     pub fn is_sort_indicator(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_tree_view_column_get_sort_indicator(
@@ -308,6 +317,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_sort_order")]
     #[doc(alias = "get_sort_order")]
+    #[doc(alias = "sort-order")]
     pub fn sort_order(&self) -> SortType {
         unsafe {
             from_glib(ffi::gtk_tree_view_column_get_sort_order(
@@ -348,6 +358,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_visible")]
     #[doc(alias = "get_visible")]
+    #[doc(alias = "visible")]
     pub fn is_visible(&self) -> bool {
         unsafe { from_glib(ffi::gtk_tree_view_column_get_visible(self.to_glib_none().0)) }
     }
@@ -372,6 +383,7 @@ impl TreeViewColumn {
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_get_x_offset")]
     #[doc(alias = "get_x_offset")]
+    #[doc(alias = "x-offset")]
     pub fn x_offset(&self) -> i32 {
         unsafe { ffi::gtk_tree_view_column_get_x_offset(self.to_glib_none().0) }
     }
@@ -414,6 +426,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_alignment")]
+    #[doc(alias = "alignment")]
     pub fn set_alignment(&self, xalign: f32) {
         unsafe {
             ffi::gtk_tree_view_column_set_alignment(self.to_glib_none().0, xalign);
@@ -471,6 +484,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_clickable")]
+    #[doc(alias = "clickable")]
     pub fn set_clickable(&self, clickable: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_clickable(self.to_glib_none().0, clickable.into_glib());
@@ -480,6 +494,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_expand")]
+    #[doc(alias = "expand")]
     pub fn set_expand(&self, expand: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_expand(self.to_glib_none().0, expand.into_glib());
@@ -489,6 +504,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_fixed_width")]
+    #[doc(alias = "fixed-width")]
     pub fn set_fixed_width(&self, fixed_width: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_fixed_width(self.to_glib_none().0, fixed_width);
@@ -498,6 +514,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_max_width")]
+    #[doc(alias = "max-width")]
     pub fn set_max_width(&self, max_width: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_max_width(self.to_glib_none().0, max_width);
@@ -507,6 +524,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_min_width")]
+    #[doc(alias = "min-width")]
     pub fn set_min_width(&self, min_width: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_min_width(self.to_glib_none().0, min_width);
@@ -516,6 +534,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_reorderable")]
+    #[doc(alias = "reorderable")]
     pub fn set_reorderable(&self, reorderable: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_reorderable(
@@ -528,6 +547,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_resizable")]
+    #[doc(alias = "resizable")]
     pub fn set_resizable(&self, resizable: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_resizable(self.to_glib_none().0, resizable.into_glib());
@@ -537,6 +557,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_sizing")]
+    #[doc(alias = "sizing")]
     pub fn set_sizing(&self, type_: TreeViewColumnSizing) {
         unsafe {
             ffi::gtk_tree_view_column_set_sizing(self.to_glib_none().0, type_.into_glib());
@@ -546,6 +567,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_sort_column_id")]
+    #[doc(alias = "sort-column-id")]
     pub fn set_sort_column_id(&self, sort_column_id: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_sort_column_id(self.to_glib_none().0, sort_column_id);
@@ -555,6 +577,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_sort_indicator")]
+    #[doc(alias = "sort-indicator")]
     pub fn set_sort_indicator(&self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_sort_indicator(
@@ -567,6 +590,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_sort_order")]
+    #[doc(alias = "sort-order")]
     pub fn set_sort_order(&self, order: SortType) {
         unsafe {
             ffi::gtk_tree_view_column_set_sort_order(self.to_glib_none().0, order.into_glib());
@@ -576,6 +600,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_spacing")]
+    #[doc(alias = "spacing")]
     pub fn set_spacing(&self, spacing: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_spacing(self.to_glib_none().0, spacing);
@@ -585,6 +610,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_title")]
+    #[doc(alias = "title")]
     pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_tree_view_column_set_title(self.to_glib_none().0, title.to_glib_none().0);
@@ -594,6 +620,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_visible")]
+    #[doc(alias = "visible")]
     pub fn set_visible(&self, visible: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_visible(self.to_glib_none().0, visible.into_glib());
@@ -603,6 +630,7 @@ impl TreeViewColumn {
     #[cfg_attr(feature = "v4_10", deprecated = "Since 4.10")]
     #[allow(deprecated)]
     #[doc(alias = "gtk_tree_view_column_set_widget")]
+    #[doc(alias = "widget")]
     pub fn set_widget(&self, widget: Option<&impl IsA<Widget>>) {
         unsafe {
             ffi::gtk_tree_view_column_set_widget(
@@ -631,7 +659,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clicked\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clicked_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -654,7 +682,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alignment\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alignment_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -677,7 +705,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::clickable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_clickable_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -700,7 +728,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expand\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_expand_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -723,7 +751,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fixed-width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_fixed_width_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -746,7 +774,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_width_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -769,7 +797,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_width_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -792,7 +820,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reorderable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_reorderable_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -815,7 +843,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resizable\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_resizable_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -838,7 +866,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sizing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sizing_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -861,7 +889,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-column-id\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sort_column_id_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -884,7 +912,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-indicator\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sort_indicator_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -907,7 +935,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-order\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sort_order_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -930,7 +958,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_spacing_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -953,7 +981,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_title_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -976,7 +1004,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_visible_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -999,7 +1027,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::widget\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_widget_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1022,7 +1050,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_width_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1045,7 +1073,7 @@ impl TreeViewColumn {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::x-offset\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_x_offset_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

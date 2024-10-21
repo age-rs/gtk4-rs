@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{Buildable, TextTag};
+use crate::{ffi, Buildable, TextTag};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -96,7 +96,7 @@ impl TextTagTable {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tag_added_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -129,7 +129,7 @@ impl TextTagTable {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tag_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -152,7 +152,7 @@ impl TextTagTable {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     tag_removed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

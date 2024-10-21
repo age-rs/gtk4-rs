@@ -3,7 +3,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{EventController, EventSequenceState};
+use crate::{ffi, EventController, EventSequenceState};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -24,12 +24,7 @@ impl Gesture {
     pub const NONE: Option<&'static Gesture> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Gesture>> Sealed for T {}
-}
-
-pub trait GestureExt: IsA<Gesture> + sealed::Sealed + 'static {
+pub trait GestureExt: IsA<Gesture> + 'static {
     #[doc(alias = "gtk_gesture_get_bounding_box")]
     #[doc(alias = "get_bounding_box")]
     fn bounding_box(&self) -> Option<gdk::Rectangle> {
@@ -250,7 +245,7 @@ pub trait GestureExt: IsA<Gesture> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"begin\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     begin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -284,7 +279,7 @@ pub trait GestureExt: IsA<Gesture> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     cancel_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -318,7 +313,7 @@ pub trait GestureExt: IsA<Gesture> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     end_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -356,7 +351,7 @@ pub trait GestureExt: IsA<Gesture> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"sequence-state-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     sequence_state_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -390,7 +385,7 @@ pub trait GestureExt: IsA<Gesture> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"update\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     update_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

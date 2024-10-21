@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{EventController, Gesture, PropagationLimit, PropagationPhase};
+use crate::{ffi, EventController, Gesture, PropagationLimit, PropagationPhase};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -44,7 +44,7 @@ impl GestureZoom {
     pub fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn scale_changed_trampoline<F: Fn(&GestureZoom, f64) + 'static>(
             this: *mut ffi::GtkGestureZoom,
-            scale: libc::c_double,
+            scale: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -55,7 +55,7 @@ impl GestureZoom {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"scale-changed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     scale_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

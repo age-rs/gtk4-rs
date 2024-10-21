@@ -9,15 +9,11 @@ use glib::{
 use libc::{c_char, c_int, c_uchar};
 
 use crate::{prelude::*, Editable};
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Editable>> Sealed for T {}
-}
 
 // rustdoc-stripper-ignore-next
 /// Trait containing manually implemented methods of
 /// [`Editable`](crate::Editable).
-pub trait EditableExtManual: sealed::Sealed + IsA<Editable> + 'static {
+pub trait EditableExtManual: IsA<Editable> + 'static {
     fn connect_insert_text<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self, &str, &mut i32) + 'static,
@@ -27,7 +23,9 @@ pub trait EditableExtManual: sealed::Sealed + IsA<Editable> + 'static {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"insert-text\0".as_ptr() as *mut _,
-                Some(transmute(insert_text_trampoline::<Self, F> as usize)),
+                Some(transmute::<usize, unsafe extern "C" fn()>(
+                    insert_text_trampoline::<Self, F> as usize,
+                )),
                 Box::into_raw(f),
             )
         }
@@ -37,7 +35,7 @@ pub trait EditableExtManual: sealed::Sealed + IsA<Editable> + 'static {
 impl<O: IsA<Editable>> EditableExtManual for O {}
 
 unsafe extern "C" fn insert_text_trampoline<T, F: Fn(&T, &str, &mut i32) + 'static>(
-    this: *mut ffi::GtkEditable,
+    this: *mut crate::ffi::GtkEditable,
     new_text: *mut c_char,
     new_text_length: c_int,
     position: *mut c_int,

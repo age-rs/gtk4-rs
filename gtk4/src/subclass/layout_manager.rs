@@ -1,17 +1,17 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! Traits intended for subclassing [`LayoutManager`](crate::LayoutManager).
+//! Traits intended for subclassing [`LayoutManager`].
 
 use glib::translate::*;
 use libc::c_int;
 
 use crate::{
-    prelude::*, subclass::prelude::*, LayoutChild, LayoutManager, Orientation, SizeRequestMode,
-    Widget,
+    ffi, prelude::*, subclass::prelude::*, LayoutChild, LayoutManager, Orientation,
+    SizeRequestMode, Widget,
 };
 
-pub trait LayoutManagerImpl: LayoutManagerImplExt + ObjectImpl {
+pub trait LayoutManagerImpl: ObjectImpl + ObjectSubclass<Type: IsA<LayoutManager>> {
     fn allocate(&self, widget: &Widget, width: i32, height: i32, baseline: i32) {
         self.parent_allocate(widget, width, height, baseline)
     }
@@ -48,12 +48,7 @@ pub trait LayoutManagerImpl: LayoutManagerImplExt + ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::LayoutManagerImplExt> Sealed for T {}
-}
-
-pub trait LayoutManagerImplExt: sealed::Sealed + ObjectSubclass {
+pub trait LayoutManagerImplExt: LayoutManagerImpl {
     fn parent_allocate(&self, widget: &Widget, width: i32, height: i32, baseline: i32) {
         unsafe {
             let data = Self::type_data();
